@@ -16,12 +16,13 @@ class HeaderBar extends React.Component {
     // <FlatButton primary={true} label="Consumer App" />
     // <FlatButton primary={true} label="Retailer App" />
     const linkStyle = {
-      color: 'white'
+      color: 'white',
+      textDecoration: 'none'
     }
     return (
       <header style = {st}>
         <span>
-         <Link style={linkStyle} to='/consumer'>Foot Wastage Statistics/Impacts </Link>
+         <Link style={linkStyle} to='/wastage'>Foot Wastage Statistics/Impacts </Link>
          <span style={{'paddingRight':'20px'}}></span>
           <Link style={linkStyle} to='/consumer'>Consumer App </Link>
           <span style={{'paddingRight':'20px'}}></span>
