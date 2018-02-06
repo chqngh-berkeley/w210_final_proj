@@ -7,6 +7,7 @@ import WebApp from './reducers'
 import AppComponent from './components/Main';
 import Retailer from './components/retailer/Retailer';
 import FAQ from './components/common/FAQ';
+import FoodWastage from './components/common/foodwastage';
 import Consumer from './components/consumer/Consumer';
 import { createStore, applyMiddleware, combineReducers} from 'redux';
 import thunk from 'redux-thunk'
@@ -41,17 +42,18 @@ const history = syncHistoryWithStore(createBrowserHistory(), store);
 // Render the main component into the dom
 ReactDOM.render(
   <Provider store = {store}>
-    
+
     <Router history={history}>
       <AppComponent>
         <Switch>
+          <Route  path="/wastage" component={FoodWastage}/>
           <Route  path="/consumer" component={Consumer}/>
           <Route  path="/retailer" component={Retailer}/>
           <Route  path="/faq" component={FAQ}/>
         </Switch>
       </AppComponent>
    </Router>
-    
+
   </Provider>,
   document.getElementById('app')
 );

@@ -57,7 +57,7 @@ export default class VerifyTable extends Component {
     enableSelectAll: false,
     deselectOnClickaway: true,
     showCheckboxes: true,
-    height: '300px',
+    height: '250x',
   };
 
   handleToggle = (event, toggled) => {

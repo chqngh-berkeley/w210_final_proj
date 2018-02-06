@@ -38,8 +38,8 @@ export default class RetailerTabOption extends React.Component {
       value: value,
     });
   };
-  
-  
+
+
   handleChangeMinDate = (event, date) => {
     this.setState({
       minDate: date,
