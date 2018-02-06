@@ -81,7 +81,7 @@ export default class WastageTable extends Component {
           >
             <TableRow>
               <TableHeaderColumn colSpan="2" tooltip="Super Header" style={{textAlign: 'center'}}>
-                Verify the Receipt data
+                Foot Wastage Table
               </TableHeaderColumn>
             </TableRow>
             <TableRow>
@@ -107,7 +107,7 @@ export default class WastageTable extends Component {
           >
           </TableFooter>
         </Table>
-        
+
       </div>
     );
   }

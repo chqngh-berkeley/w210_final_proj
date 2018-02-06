@@ -1,12 +1,16 @@
 # w210_final_proj
 
 ## Remote Servers
+
 Master: `ssh root@50.97.219.169`
+
 Slave1: `ssh root@50.97.219.173`
+
 Master: `ssh root@50.97.219.174`
 
 ## Frontend
-Install packages, install node and npm if it's not already available(https://nodejs.org/en/)
+
+Navigate to the frontend folder using Terminal. First, install node and npm if it's not already available(https://nodejs.org/en/). Install packages using:
 
 `npm install`
 

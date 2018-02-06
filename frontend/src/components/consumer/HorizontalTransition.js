@@ -19,7 +19,7 @@ const uploadFileboxCss = {
   paddingTop: '50px',
   color: '#898989',
   border: '2px dashed #B8B8B8'
-  
+
 }
 
 class HorizontalTransition extends React.Component {
@@ -56,9 +56,9 @@ class HorizontalTransition extends React.Component {
       }));
     }
   };
-  
+
   handleUpload = () => {
-    
+
   }
 
   getStepContent(stepIndex) {
@@ -67,7 +67,7 @@ class HorizontalTransition extends React.Component {
         return (
           <div style={uploadFileboxCss}>
             <div style={{'marginBottom': '20px'}}> Drag/Drop your receipt here or use the Upload button</div>
-            
+
             <RaisedButton
               label={'Upload'}
               primary={true}
@@ -83,26 +83,13 @@ class HorizontalTransition extends React.Component {
         return (
           <div>
             <WastageTable />
-            <hr />
-            <br/>
-            <br/>
-            <h3> TBD: Tableau Analytics </h3>
-            <hr />
-            <br/>
-            <br/>
-            <h3> TBD: Tableau Analytics </h3>
-            <hr />
-            <br/>
-            <br/>
-            <h3> TBD: Tableau Analytics </h3>
-            <hr/>
           </div>
         );
       default:
         return 'You\'re a long way from home sonny jim!';
     }
   }
-
+  
   renderContent() {
     const {finished, stepIndex} = this.state;
     const contentStyle = {margin: '0 16px', overflow: 'hidden'};
@@ -110,6 +97,20 @@ class HorizontalTransition extends React.Component {
     if (finished) {
       return (
         <div style={contentStyle}>
+          <h2>Analytic/Results</h2>
+          <hr />
+          <br/>
+          <br/>
+          <h3> TBD: Tableau Analytics </h3>
+          <hr />
+          <br/>
+          <br/>
+          <h3> TBD: Tableau Analytics </h3>
+          <hr />
+          <br/>
+          <br/>
+          <h3> TBD: Tableau Analytics </h3>
+          <hr/>
           <p>
             <a
               href="#"
@@ -119,7 +120,7 @@ class HorizontalTransition extends React.Component {
               }}
             >
               Click here
-            </a> to reset the example.
+            </a> to start over.
           </p>
         </div>
       );
@@ -155,10 +156,10 @@ class HorizontalTransition extends React.Component {
             <StepLabel>Upload Receipt</StepLabel>
           </Step>
           <Step>
-            <StepLabel>Verify Info</StepLabel>
+            <StepLabel>Verify Receipt Items</StepLabel>
           </Step>
           <Step>
-            <StepLabel>Analytics</StepLabel>
+            <StepLabel>Food Wastage Approximation</StepLabel>
           </Step>
         </Stepper>
         <ExpandTransition loading={loading} open={true}>
