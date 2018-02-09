@@ -10,6 +10,7 @@ import ExpandTransition from 'material-ui/internal/ExpandTransition';
 import TextField from 'material-ui/TextField';
 import VerifyTable from './VerifyTable'
 import WastageTable from './WastageTable'
+import {CRUD} from './../../util/CRUD';
 
 const uploadFileboxCss = {
   // width: '100%',
@@ -19,7 +20,6 @@ const uploadFileboxCss = {
   paddingTop: '50px',
   color: '#898989',
   border: '2px dashed #B8B8B8'
-
 }
 
 class HorizontalTransition extends React.Component {
@@ -27,6 +27,7 @@ class HorizontalTransition extends React.Component {
   state = {
     loading: false,
     finished: false,
+    file : null,
     stepIndex: 0,
   };
 
@@ -57,7 +58,18 @@ class HorizontalTransition extends React.Component {
     }
   };
 
-  handleUpload = () => {
+  handleFileUpload = (e) => {
+    console.log('file',e.target.files)
+    this.setState({file: e.target.files[0]})
+    //
+  }
+
+  submitFileUpload = (e) => {
+    if(CRUD) {
+      let data = new FormData();
+      data.append('upload', this.state.file);
+      CRUD.postFile('http://localhost:8090/upload_receipt', data)
+    }
 
   }
 
@@ -67,11 +79,14 @@ class HorizontalTransition extends React.Component {
         return (
           <div style={uploadFileboxCss}>
             <div style={{'marginBottom': '20px'}}> Drag/Drop your receipt here or use the Upload button</div>
-
+              <div className='file-upload-container'>
+                Select a file: <input type="file" name="upload" onChange={this.handleFileUpload.bind(this)}/>
+              <br/>
+              </div>
             <RaisedButton
               label={'Upload'}
               primary={true}
-              onClick={this.handleUpload}
+              onClick={this.submitFileUpload}
             />
           </div>
         );
@@ -89,9 +104,9 @@ class HorizontalTransition extends React.Component {
         return 'You\'re a long way from home sonny jim!';
     }
   }
-  
-  renderContent() {
-    const {finished, stepIndex} = this.state;
+
+  renderContent = () => {
+    const {finished, stepIndex, file} = this.state;
     const contentStyle = {margin: '0 16px', overflow: 'hidden'};
 
     if (finished) {

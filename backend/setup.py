@@ -16,8 +16,8 @@ setup(
     description = (""),
     license = "BSD",
     keywords = "example documentation tutorial",
-    packages=['consumer_app', 'retailer_app'],
-    long_description=read('README'),
+    packages=['consumer_module', 'retailer_module','ocr','endpoints'],
+
     classifiers=[
         "Development Status :: 3 - Alpha",
         "License :: OSI Approved :: BSD License",
