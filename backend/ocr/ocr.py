@@ -7,6 +7,10 @@ import os
 import pandas as pd
 import requests
 import json
+import difflib
+import re
+from operator import itemgetter
+from itertools import groupby
 
 # walmart api key
 key = '4vdmcj2gwqvd7fg74ddu7e99'
@@ -41,7 +45,6 @@ cv2.imwrite(filename, gray)
 # the temporary file
 text = pytesseract.image_to_string(Image.open(filename))
 os.remove(filename)
-
 
 # split up text based on each row in the receipt
 text_list = []
@@ -91,9 +94,12 @@ for item in items:
 					product = request.json()
 					items = product['items']
 					food_name = items[0]['name']
+					category = items[0]['categoryPath']
 					row_grouping.append(food_name)
+					row_grouping.append(category)
 				else:
 					row_grouping.append(food)
+					row_grouping.append('Unknown Category')
 				row_grouping.append(upc_final)
 				row_grouping.append(food_code)
 				row_grouping.append(price)
@@ -101,9 +107,46 @@ for item in items:
 				food_items.append(row_grouping)
 
 # put into pandas dataframe
-columns = ['food_name', 'upc', 'food_code', 'price', 'tax_code']
+columns = ['food_name', 'category', 'upc', 'food_code', 'price', 'tax_code']
 receipt_df = pd.DataFrame(data = food_items, columns = columns)
 
+food_categories = pd.read_csv('food_categories.csv')
+
+categories = food_categories['DURATION CATEGORY'].tolist()
+
+closest_category = []
+stop_words = ['Food', 'Baking', 'Meal', 'Meals', 'Fresh', 'Bakery', 'Breakfast']
+for index, row in receipt_df.iterrows():
+	words = row['category'].rsplit('/', 2)[-2:]
+	words = ' '.join(words)
+	words = re.sub("[^\w]", " ",  words).split()
+	words = [x for x in words if x not in stop_words]
+	original_words = re.sub("[^\w]", " ",  row['food_name']).split()
+	word_score = []
+	if words == ['Unknown', 'Category']:
+		for word in original_words:
+			if not difflib.get_close_matches(word.upper(), categories, cutoff = 0.6):
+				pass
+			else:
+				best_match = difflib.get_close_matches(word.upper(), categories, cutoff = 0.6)[0]
+				score = difflib.SequenceMatcher(None, word, best_match).ratio()
+				word_score.append([best_match, score])
+	else:
+		for word in words:
+			if not difflib.get_close_matches(word.upper(), categories, cutoff = 0.6):
+				pass
+			else:
+				best_match = difflib.get_close_matches(word.upper(), categories, cutoff = 0.6)[0]
+				score = difflib.SequenceMatcher(None, word, best_match).ratio()
+				word_score.append([best_match, score])
+	if not sorted(word_score, key=lambda x: x[1]):
+		closest_category.append('UNKNOWN')
+	else:
+		closest_category.append(sorted(word_score, key=lambda x: x[1], reverse = True)[0][0])
+
+receipt_df['closest_category'] = closest_category
+
+pd.set_option('display.expand_frame_repr', False)
 print(receipt_df)
 
 # show the output images
