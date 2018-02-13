@@ -66,6 +66,7 @@ for item in text_list:
 
 # filter for food items and run walmart open api to get exact name of food item
 food_items = []
+category_group = []
 for item in items:
 	row_grouping = []
 	for i in range(0, len(item) - 12):
@@ -99,7 +100,7 @@ for item in items:
 					row_grouping.append(category)
 				else:
 					row_grouping.append(food)
-					row_grouping.append('Unknown Category')
+					row_grouping.append(food) # Can be marked as unknown category as well
 				row_grouping.append(upc_final)
 				row_grouping.append(food_code)
 				row_grouping.append(price)
@@ -148,6 +149,7 @@ receipt_df['closest_category'] = closest_category
 
 pd.set_option('display.expand_frame_repr', False)
 print(receipt_df)
+print(receipt_df.to_json(orient='records'))
 
 # show the output images
 #cv2.imshow("Image", image)
