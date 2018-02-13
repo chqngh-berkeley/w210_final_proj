@@ -3,7 +3,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 import MySQLdb
 import datetime
-import mysql.connector 
+import mysql.connector
 #from sqlalchemy import create_engine
 
 
@@ -11,7 +11,6 @@ import mysql.connector
 class DBController(object):
     def __init__(self):
         pass
-
     # save to db
     def save(self, receiptData):
       	df = pd.read_json(receiptData)
@@ -21,4 +20,3 @@ class DBController(object):
 		## Update User, Password, Hostname, PortName and Schema Name
 		engine = create_engine('mysql+mysqlconnector://[user]:[pass]@[host]:[port]/[db_schema]', echo=False)
 		df.to_sql(name='table_name', con=engine, if_exists = 'append', index=False)
-

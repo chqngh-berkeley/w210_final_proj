@@ -10,7 +10,7 @@ import ExpandTransition from 'material-ui/internal/ExpandTransition';
 import TextField from 'material-ui/TextField';
 import VerifyTable from './VerifyTable'
 import WastageTable from './WastageTable'
-import {CRUD} from './../../util/CRUD';
+import {api} from './../../util/api';
 
 const uploadFileboxCss = {
   // width: '100%',
@@ -65,12 +65,12 @@ class HorizontalTransition extends React.Component {
   }
 
   submitFileUpload = (e) => {
-    if(CRUD) {
-      let data = new FormData();
-      data.append('upload', this.state.file);
-      CRUD.postFile('http://localhost:8090/upload_receipt', data)
-    }
-
+    api.submitFileUpload(this.state.file)
+    // if(CRUD) {
+    //   let data = new FormData();
+    //   data.append('upload', this.state.file);
+    //   CRUD.postFile('http://localhost:8090/upload_receipt', data)
+    // }
   }
 
   getStepContent(stepIndex) {

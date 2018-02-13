@@ -7,6 +7,7 @@ import WebApp from './reducers'
 import AppComponent from './components/Main';
 import Retailer from './components/retailer/Retailer';
 import FAQ from './components/common/FAQ';
+import Login from './components/common/Login';
 import FoodWastage from './components/common/foodwastage';
 import Consumer from './components/consumer/Consumer';
 import { createStore, applyMiddleware, combineReducers} from 'redux';
@@ -50,6 +51,7 @@ ReactDOM.render(
           <Route  path="/consumer" component={Consumer}/>
           <Route  path="/retailer" component={Retailer}/>
           <Route  path="/faq" component={FAQ}/>
+          <Route  path="/login" component={Login}/>
         </Switch>
       </AppComponent>
    </Router>

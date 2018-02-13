@@ -1,4 +1,3 @@
-from gevent import monkey; monkey.patch_all()
 from bottle import Bottle, route, run, request, response, install, HTTPResponse, hook, error, static_file
 from bottle import static_file
 
@@ -9,12 +8,10 @@ import sys
 from datetime import datetime
 import uuid
 import base64
-
-sys.path.append('/Users/chu/Documents/sc/W210/w210_final_proj/backend/')
-print(sys.path)
-# sys.path.append("...")
-
-
+#
+# sys.path.append('/Users/chu/Documents/sc/W210/w210_final_proj/backend/')
+# print(sys.path)
+# # sys.path.append("...")
 from consumer_module import consumer_controller
 from retailer_module import retailer_controller
 from db import db_controller
@@ -33,16 +30,29 @@ def enable_cors(fn):
             return fn(*args, **kwargs)
     return _enable_cors
 
-app = Bottle()
-retailer_c = retailer_controller.RetailerController()
-consumer_c = consumer_controller.ConsumerController()
+user_app = Bottle()
 db_c = db_controller.DBController()
 
-@app.route('/test')
-def test():
-    return 'working'
+@user_app.route(path='/user/test', method='GET')
+@enable_cors
+def userTest():
+    try:
+        return {'result': 'user test'}
+    except Exception as e:
+        print e
+        return e
 
-@app.route(path='/user/login', method='POST')
+@user_app.route(path='/user/all', method='GET')
+@enable_cors
+def getAllUsers():
+    try:
+        users = db_c.getAllUser()
+        return {'result': users}
+    except Exception as e:
+        print e
+        return e
+
+@user_app.route(path='/user/login', method='POST')
 @enable_cors
 def userLogin():
     try:
@@ -55,7 +65,7 @@ def userLogin():
         print e
         return e
 
-@app.route(path='/user/save', method='POST')
+@user_app.route(path='/user/save', method='POST')
 @enable_cors
 def userCreation():
     try:
@@ -68,20 +78,3 @@ def userCreation():
     except Exception as e:
         print e
         return e
-
-
-
-
-
-
-if __name__ == '__main__':
-    from optparse import OptionParser
-
-    parser = OptionParser()
-    parser.add_option("--host", dest="host", default="localhost",
-                      help="hostname or ip address", metavar="host")
-    parser.add_option("--port", dest="port", default=8090,
-                      help="port number", metavar="port")
-    (options, args) = parser.parse_args()
-
-    run(app,  server='gevent', host=options.host, port=int(options.port))

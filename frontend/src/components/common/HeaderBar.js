@@ -1,6 +1,8 @@
 import React from 'react';
 import FlatButton from 'material-ui/FlatButton';
 import { Link } from 'react-router-dom'
+import {connect} from 'react-redux';
+
 
 const st = {
   backgroundColor : 'black',
@@ -9,6 +11,12 @@ const st = {
   margin: '0 auto',
   padding: '15px 0'
 }
+
+const mapStateToProps = function(state){
+  return {
+    loggedIn : state.loginReducer.loggedIn
+  };
+};
 
 
 class HeaderBar extends React.Component {
@@ -19,16 +27,27 @@ class HeaderBar extends React.Component {
       color: 'white',
       textDecoration: 'none'
     }
+    var el = <span></span>
+    if(this.props.loggedIn) {
+      el = (<span>
+          <Link style={linkStyle} to='/consumer'>Consumer App </Link>
+          <span style={{'paddingRight':'20px'}}></span>
+          <Link style={linkStyle} to='/retailer'>Retailer App </Link>
+
+        </span>)
+    } else {
+      el = (<span>
+        <Link style={linkStyle} to='/login'>Login</Link>
+        </span>)
+    }
     return (
       <header style = {st}>
         <span>
          <Link style={linkStyle} to='/wastage'>Foot Wastage Statistics/Impacts </Link>
          <span style={{'paddingRight':'20px'}}></span>
-          <Link style={linkStyle} to='/consumer'>Consumer App </Link>
-          <span style={{'paddingRight':'20px'}}></span>
-          <Link style={linkStyle} to='/retailer'>Retailer App </Link>
-          <span style={{'paddingRight':'20px'}}></span>
-          <Link style={linkStyle} to='/faq'>FAQ</Link>
+         <Link style={linkStyle} to='/faq'>FAQ</Link>
+         <span style={{'paddingRight':'20px'}}></span>
+          {el}
           <span style={{'paddingRight':'20px'}}></span>
         </span>
 
@@ -37,4 +56,4 @@ class HeaderBar extends React.Component {
   }
 }
 
-export default HeaderBar;
+export default connect(mapStateToProps)(HeaderBar)
