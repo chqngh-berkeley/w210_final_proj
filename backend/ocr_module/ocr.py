@@ -15,13 +15,6 @@ from itertools import groupby
 # walmart api key
 key = '4vdmcj2gwqvd7fg74ddu7e99'
 
-# construct the argument parse and parse the arguments
-ap = argparse.ArgumentParser()
-ap.add_argument("-i", "--image", required=True,
-    help="path to input image to be OCR'd")
-ap.add_argument("-p", "--preprocess", type=str, default="thresh",
-    help="type of preprocessing to be done")
-args = vars(ap.parse_args())
 
 def ocr(args):
     # load the example image and convert it to grayscale
@@ -112,7 +105,7 @@ def ocr(args):
     columns = ['food_name', 'category', 'upc', 'food_code', 'price', 'tax_code']
     receipt_df = pd.DataFrame(data = food_items, columns = columns)
 
-    food_categories = pd.read_csv('food_categories.csv')
+    food_categories = pd.read_csv('./ocr_module/food_categories.csv')
 
     categories = food_categories['DURATION CATEGORY'].tolist()
 
@@ -156,3 +149,15 @@ def ocr(args):
 #cv2.imshow("Image", image)
 #cv2.imshow("Output", gray)
 #cv2.waitKey(0)
+
+
+if __name__ == '__main__':
+    
+    # construct the argument parse and parse the arguments
+    ap = argparse.ArgumentParser()
+    ap.add_argument("-i", "--image", required=True,
+        help="path to input image to be OCR'd")
+    ap.add_argument("-p", "--preprocess", type=str, default="thresh",
+        help="type of preprocessing to be done")
+    args = vars(ap.parse_args())
+    ocr(args)

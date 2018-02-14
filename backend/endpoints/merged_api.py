@@ -12,8 +12,9 @@ from datetime import datetime
 import uuid
 import base64
 
-
-sys.path.append('/Users/chu/Documents/sc/W210/w210_final_proj/backend/')
+path = '/Users/chu/Documents/sc/W210/w210_final_proj/backend/'
+sys.path.append(path)
+os.chdir(path)
 print(sys.path)
 # sys.path.append("...")
 

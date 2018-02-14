@@ -9,8 +9,8 @@ from datetime import datetime
 import uuid
 import base64
 
-# sys.path.append('/Users/chu/Documents/sc/W210/w210_final_proj/backend/')
-# print(sys.path)
+sys.path.append('/Users/chu/Documents/sc/W210/w210_final_proj/backend/')
+
 # # sys.path.append("...")
 #
 
@@ -48,12 +48,12 @@ def receiptTest():
         return e
 
 
-@consumer_app.route(path='/receipt/<id>', method='GET')
+@consumer_app.route(path='/receipt/<id>', method=['GET', 'OPTIONS'])
 @enable_cors
 def receiptData(id):
     try:
         receipt_id = id
-        print(receipt_id)
+        print('receipt id:', receipt_id)
         # return {'result': receipt_id}
         res = db_c._useOCR(receipt_id)
         return {'result': res}

@@ -13,6 +13,9 @@ export const api = {
   submitFileUpload : function(f) {
     let data = new FormData();
     data.append('upload', f);
-    return CRUD.postFile(BASE_URL+'/receipt/upload_receipt', data)
+    return CRUD.postFile(BASE_URL+'/receipt/upload_receipt', data).then(res => res.json())
+  },
+  getReceiptDataById : function(receiptId) {
+    return CRUD.get(BASE_URL+'/receipt/'+receiptId).then(res => res.json())
   }
 }

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import FlatButton from 'material-ui/FlatButton';
 import {
   Table,
   TableBody,
@@ -10,6 +11,9 @@ import {
 } from 'material-ui/Table';
 import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
+import {api} from './../../util/api';
+import {connect} from 'react-redux';
+import {setReceiptData} from './../../actions/receiptAction';
 
 const styles = {
   propContainer: {
@@ -43,22 +47,47 @@ const tableData = [
   }
 ];
 
+const mapStateToProps = function(state){
+  return {
+    receiptId : state.receiptReducer.receiptId,
+    tableData : state.receiptReducer.receiptData
+  };
+};
+
+const mapDispatchToProps =(dispatch) => {
+  return {
+    getReceiptData : (receipt_id) => {
+      api.getReceiptDataById(receipt_id).then(function(res) {
+        console.log('receipt data:', res);
+        dispatch(setReceiptData(res['result']));
+      });
+    }
+  };
+};
 /**
  * A more complex example, allowing the table height to be set, and key boolean properties to be toggled.
  */
-export default class VerifyTable extends Component {
+class VerifyTable extends Component {
+  constructor(props) {
+    super(props);
+
+  }
   state = {
     fixedHeader: true,
     fixedFooter: true,
     stripedRows: false,
-    showRowHover: false,
-    selectable: true,
+    showRowHover: true,
+    selectable: false,
     multiSelectable: false,
     enableSelectAll: false,
     deselectOnClickaway: true,
-    showCheckboxes: true,
+    showCheckboxes: false,
     height: '250x',
   };
+
+  componentDidMount() {
+    // this.props.getReceiptData(this.props.receiptId)
+  }
 
   handleToggle = (event, toggled) => {
     this.setState({
@@ -73,6 +102,13 @@ export default class VerifyTable extends Component {
   render() {
     return (
       <div>
+      <TextField
+        onChange = {(e) => {this.setState({'receipt_id': e.target.value})}}
+        floatingLabelText="Receipt Id" />
+      <FlatButton primary={true} onClick={() => {this.props.getReceiptData(this.state.receipt_id)}}
+      label = 'Get Receipt Data'>
+      </FlatButton>
+      <br />
         <Table
           height={this.state.height}
           fixedHeader={this.state.fixedHeader}
@@ -86,15 +122,16 @@ export default class VerifyTable extends Component {
             enableSelectAll={this.state.enableSelectAll}
           >
             <TableRow>
-              <TableHeaderColumn colSpan="4" tooltip="Super Header" style={{textAlign: 'center'}}>
-                Verify the Receipt data
+              <TableHeaderColumn colSpan="4" tooltip="Receipt Data" style={{textAlign: 'center'}}>
+                Receipt data
               </TableHeaderColumn>
             </TableRow>
             <TableRow>
-            <TableHeaderColumn tooltip="item">Item</TableHeaderColumn>
-            <TableHeaderColumn tooltip="price">Price</TableHeaderColumn>
-            <TableHeaderColumn tooltip="quantity">Quantity</TableHeaderColumn>
+            <TableHeaderColumn tooltip="item">Food Name</TableHeaderColumn>
+
+            <TableHeaderColumn tooltip="price">Price($)</TableHeaderColumn>
             <TableHeaderColumn tooltip="category">Category</TableHeaderColumn>
+            <TableHeaderColumn tooltip="closest_category">Closest Category</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody
@@ -103,12 +140,14 @@ export default class VerifyTable extends Component {
             showRowHover={this.state.showRowHover}
             stripedRows={this.state.stripedRows}
           >
-            {tableData.map( (row, index) => (
+            {this.props.tableData && this.props.tableData.length > 0 &&
+              this.props.tableData.map( (row, index) => (
               <TableRow key={index}>
-                <TableRowColumn>{row.name}</TableRowColumn>
-                <TableRowColumn>{row.cost}</TableRowColumn>
-                <TableRowColumn>{row.quantity}</TableRowColumn>
-                <TableRowColumn>{row.category}</TableRowColumn>
+                <TableRowColumn tooltip={row.food_name}>{row.food_name}</TableRowColumn>
+
+                <TableRowColumn tooltip={row.price}>{row.price}</TableRowColumn>
+                <TableRowColumn tooltip={row.category}>{row.category}</TableRowColumn>
+                <TableRowColumn tooltip={row.closest_category}>{row.closest_category}</TableRowColumn>
               </TableRow>
               ))}
           </TableBody>
@@ -117,8 +156,10 @@ export default class VerifyTable extends Component {
           >
           </TableFooter>
         </Table>
-        
+
       </div>
     );
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(VerifyTable)

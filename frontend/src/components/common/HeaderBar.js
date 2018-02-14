@@ -28,12 +28,13 @@ class HeaderBar extends React.Component {
       textDecoration: 'none'
     }
     var el = <span></span>
-    if(this.props.loggedIn) {
+    if(true || this.props.loggedIn) {
       el = (<span>
-          <Link style={linkStyle} to='/consumer'>Consumer App </Link>
-          <span style={{'paddingRight':'20px'}}></span>
-          <Link style={linkStyle} to='/retailer'>Retailer App </Link>
-
+        <Link style={linkStyle} to='/consumer'>Consumer App </Link>
+        <span style={{'paddingRight':'20px'}}></span>
+        <Link style={linkStyle} to='/retailer'>Retailer App </Link>
+        <span style={{'paddingRight':'20px'}}></span>
+        <Link style={linkStyle} to='/login'>Login</Link>
         </span>)
     } else {
       el = (<span>
@@ -45,9 +46,14 @@ class HeaderBar extends React.Component {
         <span>
          <Link style={linkStyle} to='/wastage'>Foot Wastage Statistics/Impacts </Link>
          <span style={{'paddingRight':'20px'}}></span>
-         <Link style={linkStyle} to='/faq'>FAQ</Link>
+
+         <Link style={linkStyle} to='/consumer'>Consumer App </Link>
          <span style={{'paddingRight':'20px'}}></span>
-          {el}
+         <Link style={linkStyle} to='/retailer'>Retailer App </Link>
+         <span style={{'paddingRight':'20px'}}></span>
+         <Link style={linkStyle} to='/login'>Login</Link>
+          <span style={{'paddingRight':'20px'}}></span>
+          <Link style={linkStyle} to='/faq'>FAQ</Link>
           <span style={{'paddingRight':'20px'}}></span>
         </span>
 

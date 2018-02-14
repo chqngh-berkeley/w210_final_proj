@@ -11,6 +11,9 @@ import TextField from 'material-ui/TextField';
 import VerifyTable from './VerifyTable'
 import WastageTable from './WastageTable'
 import {api} from './../../util/api';
+import {setReceiptId, setReceiptData} from './../../actions/receiptAction';
+
+import {connect} from 'react-redux';
 
 const uploadFileboxCss = {
   // width: '100%',
@@ -21,6 +24,28 @@ const uploadFileboxCss = {
   color: '#898989',
   border: '2px dashed #B8B8B8'
 }
+
+
+const mapStateToProps = function(state){
+  return {
+
+  };
+};
+
+const mapDispatchToProps =(dispatch) => {
+  return {
+    uploadReceiptData : (data) => {
+      api.submitFileUpload(data).then(function(json_res) {
+        console.log('res:', json_res)
+        dispatch(setReceiptId(json_res['result']));
+        api.getReceiptDataById(json_res['result']).then(function(res) {
+          console.log('receipt data:', res);
+          dispatch(setReceiptData(res['result']));
+        });
+      });
+    }
+  };
+};
 
 class HorizontalTransition extends React.Component {
 
@@ -65,12 +90,8 @@ class HorizontalTransition extends React.Component {
   }
 
   submitFileUpload = (e) => {
-    api.submitFileUpload(this.state.file)
-    // if(CRUD) {
-    //   let data = new FormData();
-    //   data.append('upload', this.state.file);
-    //   CRUD.postFile('http://localhost:8090/upload_receipt', data)
-    // }
+    this.props.uploadReceiptData(this.state.file);
+    this.handleNext()
   }
 
   getStepContent(stepIndex) {
@@ -165,7 +186,7 @@ class HorizontalTransition extends React.Component {
     const {loading, stepIndex} = this.state;
 
     return (
-      <div style={{width: '100%', maxWidth: 700, margin: 'auto'}}>
+      <div style={{width: '100%', margin: 'auto'}}>
         <Stepper activeStep={stepIndex}>
           <Step>
             <StepLabel>Upload Receipt</StepLabel>
@@ -184,5 +205,4 @@ class HorizontalTransition extends React.Component {
     );
   }
 }
-
-export default HorizontalTransition;
+export default connect(mapStateToProps, mapDispatchToProps)(HorizontalTransition);
