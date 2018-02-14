@@ -52,7 +52,7 @@ def getAllUsers():
         print e
         return e
 
-@user_app.route(path='/user/login', method='POST')
+@user_app.route(path='/user/login', method=['POST', 'OPTIONS'])
 @enable_cors
 def userLogin():
     try:
@@ -65,7 +65,7 @@ def userLogin():
         print e
         return e
 
-@user_app.route(path='/user/save', method='POST')
+@user_app.route(path='/user/save', method=['POST', 'OPTIONS'])
 @enable_cors
 def userCreation():
     try:

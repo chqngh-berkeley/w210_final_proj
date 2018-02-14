@@ -3,11 +3,10 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import {connect} from 'react-redux';
 import TextField from 'material-ui/TextField';
-import {loginUser} from '../../actions/loginAction'
+import {signUpUser} from '../../actions/loginAction'
 import { push } from 'react-router-redux';
 import {api} from './../../util/api';
 import { Link } from 'react-router-dom'
-import { Redirect } from 'react-router'
 
 const st = {
   backgroundColor : '#FAFAFA',
@@ -19,24 +18,23 @@ const st = {
 
 const mapStateToProps = function(state){
   return {
-    isLoggedIn: state.loginReducer.loggedIn
+
   };
 };
 
 const mapDispatchToProps =(dispatch) => {
   return {
-    loginUser : (username, password) => {
-      api.loginUser(username, password).then(function(res) {
-        dispatch(loginUser(username, password));
-        dispatch(push('/consumer'));
+    signupUser : (username, password, email) => {
+      api.signup(username, password, email).then(function(res) {
+        dispatch(signUpUser(username))
       });
-      //
+      // dispatch(push('/consumer'));
     }
   };
 };
 
 
-class Login extends React.Component {
+class Signup extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -45,16 +43,14 @@ class Login extends React.Component {
     }
   }
 
-  onLogin(e) {
+  onSignup(e) {
     let username = this.state.username;
     let password = this.state.password;
-    this.props.loginUser(username, password)
+    let email = this.state.email;
+    this.props.signupUser(username, password, email)
   }
 
   render() {
-    if (this.props.isLoggedIn) {
-      return <Redirect to="/consumer" push={true} />
-    }
     return (
       <div>
       <h1>
@@ -72,12 +68,15 @@ class Login extends React.Component {
           floatingLabelText="Password"
           type="password" />
       <br />
-      <RaisedButton primary={true} onClick={this.onLogin.bind(this)} label = 'Login'></RaisedButton>
-      <span style={{'paddingRight':'20px'}}></span>
-      <Link to='/signup'>Sign up</Link>
+          <TextField
+            onChange = {(e) => {this.setState({email: e.target.value})}}
+            hintText="Email Address"
+            floatingLabelText="Email Address"/>
+      <br />
+      <RaisedButton primary={true} onClick={this.onSignup.bind(this)} label = 'Signup'></RaisedButton>
       </div>
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login)
+export default connect(mapStateToProps, mapDispatchToProps)(Signup)

@@ -8,7 +8,15 @@ export const api = {
       username : username,
       password: password
     }
-    return CRUD.post(BASE_URL+'/login', d)
+    return CRUD.post(BASE_URL+'/user/login', d)
+  },
+  signup : function(username, password, email) {
+    var d = {
+      username : username,
+      password: password,
+      email: email
+    }
+    return CRUD.post(BASE_URL+'/user/save', d).then(res => res.json())
   },
   submitFileUpload : function(f) {
     let data = new FormData();

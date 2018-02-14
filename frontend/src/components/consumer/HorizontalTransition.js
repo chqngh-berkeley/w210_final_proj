@@ -99,11 +99,11 @@ class HorizontalTransition extends React.Component {
       case 0:
         return (
           <div style={uploadFileboxCss}>
-            <div style={{'marginBottom': '20px'}}> Drag/Drop your receipt here or use the Upload button</div>
+            <div style={{'marginBottom': '20px'}}> Upload your receipt here</div>
               <div className='file-upload-container'>
                 Select a file: <input type="file" name="upload" onChange={this.handleFileUpload.bind(this)}/>
-              <br/>
               </div>
+            <br/>
             <RaisedButton
               label={'Upload'}
               primary={true}
