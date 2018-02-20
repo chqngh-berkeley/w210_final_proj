@@ -53,7 +53,7 @@ class FoodWastage extends React.Component {
     // <iframe src="http://people.ischool.berkeley.edu/~varadarajan/informational-analytics/" style={iframe_st}></iframe>
     return (
       <div>
-        <iframe src="http://localhost:8585" style={iframe_st}></iframe>
+        <iframe src="http://50.97.219.169:8585/" style={iframe_st}></iframe>
         <br />
         <br />
         <br />
