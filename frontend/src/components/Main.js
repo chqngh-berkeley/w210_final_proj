@@ -14,7 +14,7 @@ export default class AppComponent extends React.Component {
       <MuiThemeProvider>
         <div>
           <HeaderBar />
-          <div className='content'>
+          <div>
             {this.props.children}
           </div>
           <br />

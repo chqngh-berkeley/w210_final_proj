@@ -48,11 +48,13 @@ ReactDOM.render(
       <AppComponent>
         <Switch>
           <Route  path="/wastage" component={FoodWastage}/>
+          <div className='content'>
           <Route  path="/consumer" component={Consumer}/>
           <Route  path="/retailer" component={Retailer}/>
           <Route  path="/faq" component={FAQ}/>
           <Route  path="/login" component={Login}/>
           <Route  path="/signup" component={Signup}/>
+          </div>
         </Switch>
       </AppComponent>
    </Router>
