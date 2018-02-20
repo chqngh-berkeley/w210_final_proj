@@ -98,11 +98,14 @@ for item in items:
 					items = product['items']
 					food_name = items[0]['name']
 					category = items[0]['categoryPath']
+					size = items[0]['size']
 					row_grouping.append(food_name)
 					row_grouping.append(category)
+					row_grouping.append(size)
 				else:
 					row_grouping.append(food)
 					row_grouping.append('Unknown Category')
+					row_grouping.append('Unknown Size')
 				row_grouping.append(upc_final)
 				row_grouping.append(food_code)
 				row_grouping.append(price)
@@ -110,12 +113,12 @@ for item in items:
 				food_items.append(row_grouping)
 
 # put into pandas dataframe
-columns = ['food_name', 'category', 'upc', 'food_code', 'price', 'tax_code']
+columns = ['food_name', 'category', 'size', 'upc', 'food_code', 'price', 'tax_code']
 receipt_df = pd.DataFrame(data = food_items, columns = columns)
 
-food_categories = pd.read_csv('food_categories.csv')
+food_categories = pd.read_csv('food_categories.csv', delimiter = '\t')
 
-categories = food_categories['DURATION CATEGORY'].tolist()
+categories = food_categories['ITEM DESCRIPTION'].tolist()
 
 closest_category = []
 category_stop_words = ['Food', 'Baking', 'Meal', 'Meals', 'Fresh', 'Bakery', 'Breakfast', 'Cereal']
@@ -161,6 +164,11 @@ for index, row in receipt_df.iterrows():
 	closest_category.append(best_word_score[0])
 
 receipt_df['closest_category'] = closest_category
+
+food_waste_df = food_categories[['ITEM DESCRIPTION', 'CONSUMER LOSS', 'AVG DURATION']]
+
+receipt_df = receipt_df.merge(food_waste_df, left_on='closest_category', right_on='ITEM DESCRIPTION', how='left')
+receipt_df = receipt_df.drop(['ITEM DESCRIPTION'], axis=1)
 
 pd.set_option('display.expand_frame_repr', False)
 print(receipt_df)
