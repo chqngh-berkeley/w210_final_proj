@@ -24,6 +24,9 @@ class HeaderBar extends React.Component {
   render() {
     // <FlatButton primary={true} label="Consumer App" />
     // <FlatButton primary={true} label="Retailer App" />
+    // <Link style={linkStyle} to='/retailer'>Retailer Waste Reduction Solutions</Link>
+    // <span style={{'paddingRight':'20px'}}></span>
+
     const linkStyle = {
       color: 'white',
       textDecoration: 'none'
@@ -33,9 +36,6 @@ class HeaderBar extends React.Component {
       el = (<span>
               <Link style={linkStyle} to='/consumer'>Consumer Waste Reduction Solutions </Link>
               <span style={{'paddingRight':'20px'}}></span>
-              <Link style={linkStyle} to='/retailer'>Retailer Waste Reduction Solutions</Link>
-              <span style={{'paddingRight':'20px'}}></span>
-
         </span>)
     } else {
       // <span style={{color: 'white'}}>Logout</span>

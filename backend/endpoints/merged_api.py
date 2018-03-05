@@ -12,9 +12,9 @@ from datetime import datetime
 import uuid
 import base64
 
-path = '/Users/chu/Documents/sc/W210/w210_final_proj/backend/'
-sys.path.append(path)
-os.chdir(path)
+# path = '/Users/chu/Documents/sc/W210/w210_final_proj/backend/'
+# sys.path.append(path)
+# os.chdir(path)
 print(sys.path)
 # sys.path.append("...")
 
@@ -33,7 +33,7 @@ if __name__ == '__main__':
     from optparse import OptionParser
 
     parser = OptionParser()
-    parser.add_option("--host", dest="host", default="localhost",
+    parser.add_option("--host", dest="host", default="0.0.0.0",
                       help="hostname or ip address", metavar="host")
     parser.add_option("--port", dest="port", default=8090,
                       help="port number", metavar="port")

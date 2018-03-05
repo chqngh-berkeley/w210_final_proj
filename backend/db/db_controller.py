@@ -3,6 +3,7 @@ import sys
 import os
 import numpy as np
 from ocr_module import ocr
+import logging
 
 class DBController(object):
     def __init__(self):
@@ -57,7 +58,7 @@ class DBController(object):
             fname = str(np.random.randint(10000)) + ext
             file_path = "{path}/{file}".format(path=UPLOAD_DIR, file=fname)
             upload.save(file_path)
-            print(file_path)
+            logging.info(file_path)
             # res = self._useOCR(file_path)
             return fname
 
@@ -68,7 +69,7 @@ class DBController(object):
 
         fname = self.IMAGE_FOLDER + '/' + str(receipt_id)
         try:
-            print(fname)
+            logging.info(fname)
             if os.path.exists(fname):
                 args = {
                     'image' : fname,
@@ -77,21 +78,21 @@ class DBController(object):
                 df = ocr.ocr(args)
                 return df.to_dict(orient='records')
         except Exception as e:
-            print('error...', e)
-            return 'error...'
+            logging.error('error...', e)
+            return {'error':True, 'e': e}
     def _readJsonDF(self, path):
         try:
             with open(path, 'r') as f:
                 df = pd.read_json(f, orient='records')
                 return df
         except Exception as e:
-            print(e)
-            return None
+            logging.error(e)
+            return {'error':True, 'e': e}
     def _saveJsonDF(self, path, df):
         try:
             with open(path, 'wb') as f:
                 df.to_json(f, orient='records')
                 return df
         except Exception as e:
-            print(e)
-            return None
+            logging.error(e)
+            return {'error':True, 'e': e}

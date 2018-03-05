@@ -1,7 +1,7 @@
 import {CRUD} from './CRUD';
 
-const BASE_URL = 'http://localhost:8090'
-
+const BASE_URL = 'http://0.0.0.0:8090'
+// const BASE_URL = 'http://50.97.219.169'
 export const api = {
   loginUser : function(username, password) {
     var d = {
