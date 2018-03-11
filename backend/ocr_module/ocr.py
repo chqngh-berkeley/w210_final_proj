@@ -163,6 +163,9 @@ def ocr(args):
     receipt_df = receipt_df.merge(food_waste_df, left_on='closest_category', right_on='ITEM DESCRIPTION', how='left')
     receipt_df = receipt_df.drop(['ITEM DESCRIPTION'], axis=1)
 
+    receipt_id = str(pd.to_numeric(receipt_df['upc']).sum()) + str(round(pd.to_numeric(receipt_df['price']).sum()))
+    receipt_df.insert(0, 'receipt_id', receipt_id)
+    
     pd.set_option('display.expand_frame_repr', False)
     print(receipt_df)
     return receipt_df
