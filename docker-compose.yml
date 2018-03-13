@@ -10,10 +10,10 @@ services:
     build: ./frontend
     ports:
       - "8000:8000"
-  backend:
-    build: ./backend
-    ports:
-      - "8090:8090"
+  # backend:
+    # build: ./backend
+    # ports:
+      # - "8090:8090"
   infomatics:
     build: ./informational-analytics
     ports:

@@ -1,0 +1,68 @@
+import * as c from '../constants/constants'
+
+let groceryRecommendationData = {
+
+  defaultList : [
+    {food_name : 'Apple',
+     price : '5$',
+     count : '5',
+     category : 'Fruit',
+     closest_category : 'Fruit'},
+    {food_name : 'Orange',
+     price : '5$',
+     count : '5',
+     category : 'Fruit',
+     closest_category : 'Fruit'},
+    {food_name : 'Banana',
+     price : '5$',
+     count : '5',
+     category : 'Fruit',
+     closest_category : 'Fruit'
+   }
+  ],
+  suggestedList : [
+    {food_name : 'Pork',
+     price : '5$',
+     count : '5',
+     category : 'Fruit',
+     closest_category : 'Fruit'},
+    {food_name : 'Beef',
+     price : '5$',
+     count : '5',
+     category : 'Fruit',
+     closest_category : 'Fruit'},
+    {food_name : 'Banana',
+     price : '5$',
+     count : '5',
+     category : 'Fruit',
+     closest_category : 'Fruit'
+   }
+  ]
+}
+
+export function groceryRecReducer(state=groceryRecommendationData, action) {
+  switch(action.type) {
+      case c.SET_RECOMMENDED_GROCERY_LIST:
+        return Object.assign({}, state,action.recommendations);
+      case c.ADD_TO_DEFAULT:
+        let d = Object.assign({}, state)
+        d.defaultList.push(action.item)
+        return d;
+      case c.REMOVE_FROM_SUGGESTED:
+        let s = Object.assign({}, state)
+        var food_name = action.item.food_name;
+        s.suggestedList.filter((item) => (item.food_name != food_name))
+        return s;
+      case c.REMOVE_FROM_DEFAULT:
+        let f = Object.assign({}, state)
+        var food_name = action.item.food_name;
+        f.defaultList.filter((item) => (item.food_name != food_name))
+        return d;
+      case c.UPDATE_DEFAULT_ITEM:
+        let g = Object.assign({}, state)
+        var food_name = action.item.food_name;
+        return g;
+      default:
+        return state;
+  }
+}

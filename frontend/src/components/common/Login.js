@@ -62,19 +62,19 @@ class Login extends React.Component {
       </h1>
       <TextField
         onChange = {(e) => {this.setState({username: e.target.value})}}
-        hintText="Username"
         floatingLabelText="Username"
+        floatingLabelFixed = {true}
       />
       <br />
-          <TextField
-          onChange = {(e) => {this.setState({password: e.target.value})}}
-          hintText="Password"
-          floatingLabelText="Password"
-          type="password" />
+      <TextField
+        onChange = {(e) => {this.setState({password: e.target.value})}}
+        floatingLabelText="Password"
+        floatingLabelFixed = {true}
+        type="password" />
       <br />
-      <RaisedButton primary={true} onClick={this.onLogin.bind(this)} label = 'Login'></RaisedButton>
-      <span style={{'paddingRight':'20px'}}></span>
       <Link to='/signup'>Sign up</Link>
+      <span style={{'paddingRight':'20px'}}></span>
+      <RaisedButton primary={true} onClick={this.onLogin.bind(this)} label = 'Login'></RaisedButton>
       </div>
     );
   }

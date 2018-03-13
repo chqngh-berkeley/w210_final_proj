@@ -3,11 +3,12 @@ import 'core-js/fn/object/assign';
 // import injectTapEventPlugin from 'react-tap-event-plugin';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import WebApp from './reducers'
+import WebApp from './reducers/'
 import AppComponent from './components/Main';
 import Retailer from './components/retailer/Retailer';
 import FAQ from './components/common/FAQ';
 import Login from './components/common/Login';
+import ReceiptInfo from './components/consumer/grocery_history/receipt_info';
 import Signup from './components/common/Signup';
 import FoodWastage from './components/common/foodwastage';
 import Consumer from './components/consumer/Consumer';
@@ -51,6 +52,7 @@ ReactDOM.render(
           <div className='content'>
           <Route  path="/consumer" component={Consumer}/>
           <Route  path="/retailer" component={Retailer}/>
+          <Route  path="/receiptInfo" component={ReceiptInfo}/>
           <Route  path="/faq" component={FAQ}/>
           <Route  path="/login" component={Login}/>
           <Route  path="/signup" component={Signup}/>

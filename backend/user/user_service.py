@@ -1,0 +1,111 @@
+import sys
+from db import db_connection_cls
+import hashlib
+
+'''
+Schema: USER_PROFILE
+
+USER_ID bigint primary key,
+ USERNAME varchar(128) ,
+ EMAIL varchar(128) ,
+ PASSWORD varchar(128) ,
+ USER_NM varchar(128) ,
+ USER_AGE integer,
+ FAMILY_MBR_ID bigint,
+ FAMILY_SIZE integer,
+ NUM_ADULTS integer,
+ NUM_KIDS integer,
+ ANNUAL_HOUSEHOLD_INCOME DECIMAL UNSIGNED,
+ SHOP_TRIP_FREQ INTEGER
+'''
+
+class UserService(object):
+    def __init__(self):
+        self.sql_ = db_connection_cls.MysqlDBPython()
+    '''
+    CREATE_USER
+
+    url query param: none
+    body json :
+    {
+        "username" : "abc@abc.com",
+        "password" : "randompassword",
+        "name": "bob",
+        "age" : "35",
+        "family_size" : 3,
+        "num_adults" : 3,
+        "num_kids" : 0,
+        "income" : 100000,
+        "shop_trip_freq": 3
+    }
+    '''
+    def createUser(self, request_json):
+        username = request_json['username']
+        uid = int(hashlib.sha1(username).hexdigest(), 16) % (10 ** 8)
+        email = request_json['email']
+        password = request_json['password']
+        name = request_json['lastname'] + ',' + request_json['firstname']
+        age = request_json['age']
+        family_size = request_json['family_size']
+        num_adults = request_json['num_adults']
+        num_kids = request_json['num_kids']
+        income = request_json['income']
+        shop_trip_freq = request_json['shop_trip_freq']
+        data = self.sql_.insert('USER_PROFILE', \
+        USER_ID = uid, USERNAME=username, PASSWORD= password, EMAIL= email, USER_NM= name, USER_AGE=age, \
+        FAMILY_SIZE = family_size, NUM_ADULTS=num_adults, \
+        NUM_KIDS=num_kids, ANNUAL_HOUSEHOLD_INCOME=income,  \
+        SHOP_TRIP_FREQ=shop_trip_freq)
+        return data
+
+    '''
+    UPDATE_USER
+
+    url query param: id
+    body json :
+    {
+        "username" : "abc@abc.com",
+        "password" : "randompassword",
+        "name": "bob",
+        "age" : "35",
+        "family_size" : 3,
+        "num_adults" : 2,
+        "num_kids" : 1,
+        "income" : 150000,
+        "shop_trip_freq": 3
+    }
+    '''
+    def updateUser(self, user_id, user):
+        # conditional_query = 'USER_ID = %s'
+        # data = MySQLDBPython.update('USER_PROFILE', conditional_query, user_id, USER_NM=name, USER_AGE=age, FAMILY_SIZE=family_size, NUM_ADULTS=num_adults, NUM_KIDS=num_kids, ANNUAL_HOUSEHOLD_INCOME=income,SHOP_TRIP_FREQ=shop_trip_freq)
+        pass
+    '''
+    GET_USER
+
+    url query param: id
+    body json : none
+    '''
+    def getUser(self, user_id):
+        conditional_query = 'USER_ID = '+user_id
+        fields = ['USER_ID', 'USERNAME','USER_NM','USER_AGE','EMAIL','FAMILY_SIZE', \
+        'NUM_ADULTS','NUM_KIDS','ANNUAL_HOUSEHOLD_INCOME','SHOP_TRIP_FREQ']
+        data = self.sql_.selectFields('USER_PROFILE', conditional_query, \
+        fields)
+        return data
+    '''
+    LOGIN_USER
+
+    url query param: none
+    body json :
+    {
+        "username" : "abc@abc.com",
+        "password" : "randompassword"
+    }
+    '''
+    def getUserViaLogin(self, username, password):
+        conditional_query = 'USERNAME="%s" AND PASSWORD="%s"' % (username, password)
+        fields = ['USER_ID', 'USERNAME','USER_NM','USER_AGE','EMAIL','FAMILY_SIZE', \
+        'NUM_ADULTS','NUM_KIDS','ANNUAL_HOUSEHOLD_INCOME','SHOP_TRIP_FREQ']
+        data = self.sql_.selectFields('USER_PROFILE', conditional_query, \
+        fields)
+        return data

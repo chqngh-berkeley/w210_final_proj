@@ -10,7 +10,7 @@ class DBController(object):
         # connected to DB
         self.connected = False
         self.USER_DF_PATH = 'data/users.json'
-        self.IMAGE_FOLDER = 'images'
+        self.IMAGE_FOLDER = '/backend/images'
     # save to db
     def save(self, receiptData):
         pass
@@ -58,7 +58,7 @@ class DBController(object):
             fname = str(np.random.randint(10000)) + ext
             file_path = "{path}/{file}".format(path=UPLOAD_DIR, file=fname)
             upload.save(file_path)
-            logging.info(file_path)
+            logging.log(file_path)
             # res = self._useOCR(file_path)
             return fname
 
@@ -69,13 +69,14 @@ class DBController(object):
 
         fname = self.IMAGE_FOLDER + '/' + str(receipt_id)
         try:
-            logging.info(fname)
+            logging.log(fname)
             if os.path.exists(fname):
                 args = {
                     'image' : fname,
                     'preprocess' :  None
                 }
                 df = ocr.ocr(args)
+                logger.log(df)
                 return df.to_dict(orient='records')
         except Exception as e:
             logging.error('error...', e)

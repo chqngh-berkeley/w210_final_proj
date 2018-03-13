@@ -37,23 +37,23 @@ class FoodWastage extends React.Component {
     // <iframe src='https://public.tableau.com/shared/7MGG6C86Z?:display_count=yes:embed=y' width='600px' height='400px'></iframe>
     // <span dangerouslySetInnerHTML={template}></span>
     let iframe_st = {
-      "position": "fixed",
-      "top": "40px",
-      "left": "0px",
-      "bottom": "40px",
-      "right": "0px",
-      "width": "100%",
-      "height": "100%",
-      "border": "none",
-      "margin": "0",
-      "padding": "0",
-      "overflow": "scroll",
-      "z-index": "999999"
+      // "position": "fixed",
+      // "top": "40px",
+      // "left": "0px",
+      // "bottom": "40px",
+      // "right": "0px",
+      // "width": "100%",
+      // "height": "100%",
+      // "border": "none",
+      // "margin": "0",
+      // "padding": "0",
+      // "overflow": "scroll",
+      // "z-index": "999999"
     }
     // <iframe src="http://people.ischool.berkeley.edu/~varadarajan/informational-analytics/" style={iframe_st}></iframe>
     return (
       <div>
-        <iframe src="http://0.0.0.0:8585/" style={iframe_st}></iframe>
+        <iframe src="http://0.0.0.0:8585/" width='100%' height='700px' style={iframe_st}></iframe>
         <br />
         <br />
         <br />

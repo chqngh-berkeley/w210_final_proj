@@ -8,13 +8,8 @@ import sys
 from datetime import datetime
 import uuid
 import base64
-#
-# sys.path.append('/Users/chu/Documents/sc/W210/w210_final_proj/backend/')
-# print(sys.path)
-# # sys.path.append("...")
-from consumer_module import consumer_controller
-from retailer_module import retailer_controller
-from db import db_controller
+
+from receipt import receipt_service
 import bottle
 bottle.BaseRequest.MEMFILE_MAX = 1024 * 1024
 
@@ -30,51 +25,53 @@ def enable_cors(fn):
             return fn(*args, **kwargs)
     return _enable_cors
 
-user_app = Bottle()
-db_c = db_controller.DBController()
+receipt_app = Bottle()
+receipt_serv = receipt_service.ReceiptService()
 
-@user_app.route(path='/user/test', method='GET')
+
+@receipt_app.route(path='/receipt/test', method=['GET','OPTIONS'])
 @enable_cors
-def userTest():
+def receiptTest():
     try:
-        return {'result': 'user test'}
+        return {'result': 'receipt test'}
     except Exception as e:
         print e
         return e
 
-@user_app.route(path='/user/all', method='GET')
+
+@receipt_app.route(path='/receipt/<id>', method=['GET', 'OPTIONS'])
 @enable_cors
-def getAllUsers():
+def receiptData(receipt_id):
     try:
-        users = db_c.getAllUser()
-        return {'result': users}
+        user_id = request.get_header('user_id')
+        print('receipt id:', receipt_id)
+        data = receipt_serv.getReceipt(receipt_id)
+        return {'result': data}
     except Exception as e:
         print e
         return e
 
-@user_app.route(path='/user/login', method=['POST', 'OPTIONS'])
+@receipt_app.route(path='/receipt/<id>', method=['PUT','OPTIONS'])
 @enable_cors
-def userLogin():
+def receiptVerify(receipt_id):
     try:
+        user_id = request.get_header('user_id')
+        print('receipt id:', receipt_id)
         request_json = dict(request.json)
-        username = request_json['username']
-        password = request_json['password']
-        user = db_c.getUser(username, password)
-        return {'result': user}
+        data = receipt_serv.updateReceipt(receipt_id, request_json)
+        return {'result': data}
     except Exception as e:
         print e
         return e
 
-@user_app.route(path='/user/save', method=['POST', 'OPTIONS'])
+@receipt_app.route(path='/receipt/upload_receipt', method=['POST','OPTIONS'])
 @enable_cors
-def userCreation():
+def upload_receipt():
     try:
-        request_json = dict(request.json)
-        username = request_json['username']
-        password = request_json['password']
-        email = request_json['email']
-        db_c.createUser(username, password, email)
-        return {'result': request_json}
+        user_id = request.get_header('user_id')
+        upload = request.files.get('upload')
+        data = receipt_serv.storeReceipt(upload)
+        return {'result': data}
     except Exception as e:
         print e
         return e

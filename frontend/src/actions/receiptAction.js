@@ -14,3 +14,10 @@ export const setReceiptData = (receiptData) => {
     receiptData
   }
 }
+
+export const removeReceiptFromHistory = (item) => {
+  return {
+    type: c.REMOVE_RECEIPT,
+    item : item
+  }
+}

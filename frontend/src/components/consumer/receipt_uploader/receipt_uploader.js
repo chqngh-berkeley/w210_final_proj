@@ -9,9 +9,8 @@ import FlatButton from 'material-ui/FlatButton';
 import ExpandTransition from 'material-ui/internal/ExpandTransition';
 import TextField from 'material-ui/TextField';
 import VerifyTable from './VerifyTable'
-import WastageTable from './WastageTable'
-import {api} from './../../util/api';
-import {setReceiptId, setReceiptData} from './../../actions/receiptAction';
+import {api} from './../../../util/api';
+import {setReceiptId, setReceiptData} from './../../../actions/receiptAction';
 
 import {connect} from 'react-redux';
 
@@ -47,7 +46,7 @@ const mapDispatchToProps =(dispatch) => {
   };
 };
 
-class HorizontalTransition extends React.Component {
+class ReceiptUploader extends React.Component {
 
   state = {
     loading: false,
@@ -173,7 +172,7 @@ class HorizontalTransition extends React.Component {
             style={{marginRight: 12}}
           />
           <RaisedButton
-            label={stepIndex === 2 ? 'Finish' : 'Next'}
+            label={stepIndex === 1 ? 'Finish' : 'Next'}
             primary={true}
             onClick={this.handleNext}
           />
@@ -187,15 +186,20 @@ class HorizontalTransition extends React.Component {
 
     return (
       <div style={{width: '100%', margin: 'auto'}}>
+        <h1>
+          Upload Receipt
+        </h1>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vulputate cursus scelerisque. Phasellus at laoreet mi. Morbi non nibh facilisis, viverra dui luctus, vestibulum metus. Aliquam suscipit mauris dui, quis hendrerit tellus sagittis ut. Nam leo mi, dignissim sit amet dapibus eget, pharetra at neque. Integer ut facilisis purus. Aliquam erat volutpat.</p>
+          <p>Nulla semper at enim eget sodales. Donec ac iaculis dolor, ac tincidunt nunc. Nulla scelerisque massa non libero interdum sollicitudin. Suspendisse tempus purus dolor, a tincidunt lacus pharetra a. Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce sed eleifend ipsum. Curabitur at augue arcu. Duis efficitur mauris sit amet ipsum porttitor semper. Phasellus magna ex, auctor vitae eros eu, efficitur dictum lacus. Nulla posuere tortor ante. Etiam a augue libero. Maecenas eget sagittis erat. Sed ullamcorper vulputate nulla commodo posuere.</p>
+          <div style={{'textAlign' : 'left'}}>
+
+          </div>
         <Stepper activeStep={stepIndex}>
           <Step>
             <StepLabel>Upload Receipt</StepLabel>
           </Step>
           <Step>
             <StepLabel>Verify Receipt Items</StepLabel>
-          </Step>
-          <Step>
-            <StepLabel>Food Wastage Approximation</StepLabel>
           </Step>
         </Stepper>
         <ExpandTransition loading={loading} open={true}>
@@ -205,4 +209,4 @@ class HorizontalTransition extends React.Component {
     );
   }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(HorizontalTransition);
+export default connect(mapStateToProps, mapDispatchToProps)(ReceiptUploader);

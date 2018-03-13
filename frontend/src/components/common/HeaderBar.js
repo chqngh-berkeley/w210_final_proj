@@ -32,7 +32,7 @@ class HeaderBar extends React.Component {
       textDecoration: 'none'
     }
     var el = <span></span>
-    if(this.props.loggedIn || true) {
+    if(this.props.loggedIn) {
       el = (<span>
               <Link style={linkStyle} to='/consumer'>Consumer Waste Reduction Solutions </Link>
               <span style={{'paddingRight':'20px'}}></span>

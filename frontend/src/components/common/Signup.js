@@ -7,7 +7,8 @@ import {signUpUser} from '../../actions/loginAction'
 import { push } from 'react-router-redux';
 import {api} from './../../util/api';
 import { Link } from 'react-router-dom'
-
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 const st = {
   backgroundColor : '#FAFAFA',
   // color: 'black',
@@ -24,9 +25,10 @@ const mapStateToProps = function(state){
 
 const mapDispatchToProps =(dispatch) => {
   return {
-    signupUser : (username, password, email) => {
-      api.signup(username, password, email).then(function(res) {
-        dispatch(signUpUser(username))
+    signupUser : (info) => {
+      api.signup(info).then(function(res) {
+        dispatch(signUpUser(info))
+        dispatch(push('/login'))
       });
       // dispatch(push('/consumer'));
     }
@@ -39,40 +41,102 @@ class Signup extends React.Component {
     super(props)
     this.state = {
       username : '',
-      password : ''
-    }
+      password : '',
+      email : '',
+      firstname : '',
+      lastname : '',
+      age : '',
+      income : '',
+      family_size : '',
+      num_adults : '',
+      num_kids : '',
+      shop_trip_freq : ''
+     }
   }
 
   onSignup(e) {
-    let username = this.state.username;
-    let password = this.state.password;
-    let email = this.state.email;
-    this.props.signupUser(username, password, email)
+    let info = this.state;
+    this.props.signupUser(info)
   }
 
   render() {
+    let spacer = {
+      marginLeft : '10px'
+    }
     return (
       <div>
       <h1>
-        Login
+        Signup
       </h1>
+      <div>
       <TextField
         onChange = {(e) => {this.setState({username: e.target.value})}}
-        hintText="Username"
+        floatingLabelFixed = {true}
         floatingLabelText="Username"
       />
-      <br />
-          <TextField
+      <TextField
           onChange = {(e) => {this.setState({password: e.target.value})}}
-          hintText="Password"
+          floatingLabelFixed = {true}
+          style={spacer}
           floatingLabelText="Password"
           type="password" />
+      </div>
       <br />
+      <div>
+      <TextField
+          onChange = {(e) => {this.setState({firstname: e.target.value})}}
+          floatingLabelFixed = {true}
+          floatingLabelText="Firstname" />
           <TextField
-            onChange = {(e) => {this.setState({email: e.target.value})}}
-            hintText="Email Address"
-            floatingLabelText="Email Address"/>
+          onChange = {(e) => {this.setState({lastname: e.target.value})}}
+          floatingLabelFixed = {true}
+          style={spacer}
+          floatingLabelText="Lastname" />
+      </div>
+      <div>
+        <TextField
+        onChange = {(e) => {this.setState({age: e.target.value})}}
+        floatingLabelFixed = {true}
+        floatingLabelText="Age" />
+        <TextField
+        onChange = {(e) => {this.setState({income: e.target.value})}}
+        floatingLabelFixed = {true}
+        style={spacer}
+        floatingLabelText="Income in $" />
+      </div>
+      <div>
+        <TextField
+          onChange = {(e) => {this.setState({email: e.target.value})}}
+          floatingLabelFixed = {true}
+          floatingLabelText="Email Address"/>
+          <TextField
+            onChange = {(e) => {this.setState({shop_trip_freq: e.target.value})}}
+            floatingLabelFixed = {true}
+            style = {spacer}
+            floatingLabelText="Shopping frequency"/>
+      </div>
       <br />
+      <h4>Family Details</h4>
+      <div>
+        <TextField
+          onChange = {(e) => {this.setState({family_size: e.target.value})}}
+          floatingLabelFixed = {true}
+          floatingLabelText="Family Size"
+        />
+        <TextField
+            onChange = {(e) => {this.setState({num_adults: e.target.value})}}
+            floatingLabelFixed = {true}
+            style={spacer}
+            floatingLabelText="Number of Adults"/>
+        <TextField
+            onChange = {(e) => {this.setState({num_kids: e.target.value})}}
+            floatingLabelFixed = {true}
+            style={spacer}
+            floatingLabelText="Number of Kids"/>
+      </div>
+      <br />
+      <Link to='/login'>Back to Login</Link>
+      <span style={{'paddingRight':'20px'}}></span>
       <RaisedButton primary={true} onClick={this.onSignup.bind(this)} label = 'Signup'></RaisedButton>
       </div>
     );

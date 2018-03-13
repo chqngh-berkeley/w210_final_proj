@@ -1,8 +1,10 @@
 import React from 'react';
 import FlatButton from 'material-ui/FlatButton';
-import HorizontalTransition from './HorizontalTransition';
+import ReceiptHistory from './grocery_history/receipt_history';
+import  GroceryListRecommender from './grocery_list/grocery_list_recommender';
+import ReceiptUploader from './receipt_uploader/receipt_uploader';
 import {connect} from 'react-redux';
-
+import {Tabs, Tab} from 'material-ui/Tabs';
 const st = {
   backgroundColor : '#FAFAFA',
   // color: 'black',
@@ -18,17 +20,29 @@ const mapStateToProps = function(state){
 };
 
 class Consumer extends React.Component {
+
+  getTabs() {
+    return (
+    <Tabs>
+
+
+     <Tab label="Grocery Receipt History" value="b">
+       <ReceiptHistory />
+     </Tab>
+     <Tab label="Grocery List Recommender" value="c">
+       <GroceryListRecommender />
+     </Tab>
+     <Tab label="Receipt Uploader" value="a">
+        <div>
+          <ReceiptUploader />
+        </div>
+      </Tab>
+  </Tabs>)
+  }
   render() {
     return (
       <div>
-      <h1>
-        Consumer App
-      </h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vulputate cursus scelerisque. Phasellus at laoreet mi. Morbi non nibh facilisis, viverra dui luctus, vestibulum metus. Aliquam suscipit mauris dui, quis hendrerit tellus sagittis ut. Nam leo mi, dignissim sit amet dapibus eget, pharetra at neque. Integer ut facilisis purus. Aliquam erat volutpat.</p>
-        <p>Nulla semper at enim eget sodales. Donec ac iaculis dolor, ac tincidunt nunc. Nulla scelerisque massa non libero interdum sollicitudin. Suspendisse tempus purus dolor, a tincidunt lacus pharetra a. Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce sed eleifend ipsum. Curabitur at augue arcu. Duis efficitur mauris sit amet ipsum porttitor semper. Phasellus magna ex, auctor vitae eros eu, efficitur dictum lacus. Nulla posuere tortor ante. Etiam a augue libero. Maecenas eget sagittis erat. Sed ullamcorper vulputate nulla commodo posuere.</p>
-        <div style={{'textAlign' : 'left'}}>
-          <HorizontalTransition />
-        </div>
+        {this.getTabs()}
       </div>
     );
   }

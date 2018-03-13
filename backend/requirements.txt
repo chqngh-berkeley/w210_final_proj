@@ -5,4 +5,3 @@ pytesseract
 fuzzywuzzy
 psycopg2
 gevent
-sqlalchemy

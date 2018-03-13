@@ -1,9 +1,6 @@
 from gevent import monkey; monkey.patch_all()
 from bottle import Bottle, route, run, request, response, install, HTTPResponse, hook, error, static_file
 from bottle import static_file
-from consumer_api import consumer_app
-from retailer_api import retailer_app
-from user_api import user_app
 import re
 import json
 import os
@@ -12,21 +9,13 @@ from datetime import datetime
 import uuid
 import base64
 
-# path = '/Users/chu/Documents/sc/W210/w210_final_proj/backend/'
-# sys.path.append(path)
-# os.chdir(path)
-print(sys.path)
-# sys.path.append("...")
+from user_api_new import user_app
+from receipt_api import receipt_app
 
-
-from consumer_module import consumer_controller
-from retailer_module import retailer_controller
-from db import db_controller
 import bottle
 
-consumer_app.merge(retailer_app)
-consumer_app.merge(user_app)
-app = consumer_app
+user_app.merge(receipt_app)
+app = user_app
 print(app)
 
 if __name__ == '__main__':
