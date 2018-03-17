@@ -16,6 +16,8 @@ import {
   TableRowColumn,
 } from 'material-ui/Table';
 import Toggle from 'material-ui/Toggle';
+import Slider from 'material-ui/Slider';
+
 import {addToDefaultList,removeFromDefaultList, updateItemFromDefault, removeFromSuggestedList} from './../../../actions/receiptAction'
 const st = {
   backgroundColor : '#FAFAFA',
@@ -58,12 +60,12 @@ class GroceryListRecommender extends React.Component {
     fixedFooter: true,
     stripedRows: false,
     showRowHover: false,
-    selectable: true,
+    selectable: false,
     multiSelectable: false,
     enableSelectAll: false,
     deselectOnClickaway: true,
-    showCheckboxes: true,
-    height: '150px'
+    showCheckboxes: false,
+    height: '250px'
     };
   }
   handleToggle = (event, toggled) => {
@@ -84,13 +86,17 @@ class GroceryListRecommender extends React.Component {
   removeFromDefaultList = (event, item) => {
     this.props.removeFromDefaultList(item);
   }
-
+  updateDefaultListItem = (item, e, newVal) => {
+    console.log(newVal, item)
+  }
   render() {
     return (
       <div>
         <h1> Grocery List Recommender </h1>
         <br />
+
         <h3>Frequently Purchased Items</h3>
+
         <Table
           height={this.state.height}
           fixedHeader={this.state.fixedHeader}
@@ -104,7 +110,7 @@ class GroceryListRecommender extends React.Component {
             enableSelectAll={this.state.enableSelectAll}
           >
             <TableRow>
-              <TableHeaderColumn colSpan="5" tooltip="Super Header" style={{textAlign: 'center'}}>
+              <TableHeaderColumn colSpan="6" tooltip="Super Header" style={{textAlign: 'center'}}>
                 Frequently Purchased
               </TableHeaderColumn>
             </TableRow>
@@ -113,6 +119,7 @@ class GroceryListRecommender extends React.Component {
               <TableHeaderColumn tooltip="Count">Recommended Count</TableHeaderColumn>
               <TableHeaderColumn tooltip="Size">Recommended Size</TableHeaderColumn>
               <TableHeaderColumn tooltip="Category">Category</TableHeaderColumn>
+              <TableHeaderColumn tooltip="wastage">Wastage Threshold</TableHeaderColumn>
               <TableHeaderColumn tooltip="Actions">Actions</TableHeaderColumn>
             </TableRow>
           </TableHeader>
@@ -126,12 +133,25 @@ class GroceryListRecommender extends React.Component {
               <TableRow key={index}>
                 <TableRowColumn>{row.food_name}</TableRowColumn>
                 <TableRowColumn>
-                  <TextField value = {row.count} />
+                  <TextField value = {row.count ? row.count : '-N/A-'} />
                 </TableRowColumn>
                 <TableRowColumn>
                   <TextField value = {row.size ? row.size : '-N/A-'} />
                 </TableRowColumn>
-                <TableRowColumn>{row.category}</TableRowColumn>
+
+                <TableRowColumn>
+                  {row.category}
+                </TableRowColumn>
+                <TableRowColumn>
+                  <div style={{position : 'relative'}}>
+                    <div style={{display : 'inline-block', position: 'absolute', top: -15}}>
+                      {row.wastage ? row.wastage*100 : 50}%
+                    </div>
+                    <Slider sliderStyle={{marginBottom : 20}}
+                      value ={row.wastage ? row.wastage : 0.5}
+                      onChange={this.updateDefaultListItem.bind(this, row)} />
+                  </div>
+                </TableRowColumn>
                 <TableRowColumn>
                   <FlatButton onClick={this.removeFromDefaultList.bind(this, row)} secondary = {true} label = 'Remove'></FlatButton>
                 </TableRowColumn>
@@ -156,7 +176,7 @@ class GroceryListRecommender extends React.Component {
               >
                 <TableRow>
                   <TableHeaderColumn colSpan="4" tooltip="Super Header" style={{textAlign: 'center'}}>
-                    Suggested Grocery List
+                    Suggested Grocery Items
                   </TableHeaderColumn>
                 </TableRow>
                 <TableRow>

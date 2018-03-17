@@ -26,10 +26,10 @@ class Consumer extends React.Component {
     <Tabs>
 
 
-     <Tab label="Grocery Receipt History" value="b">
+     <Tab label="Receipt History" value="b">
        <ReceiptHistory />
      </Tab>
-     <Tab label="Grocery List Recommender" value="c">
+     <Tab label="Grocery Recommender" value="c">
        <GroceryListRecommender />
      </Tab>
      <Tab label="Receipt Uploader" value="a">

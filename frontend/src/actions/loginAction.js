@@ -8,6 +8,11 @@ export const loginUser = (username, password) => {
     password
   }
 }
+export const logoutUser = () => {
+  return {
+    type: c.LOGOUT_USER
+  }
+}
 
 export const signUpUser = (username) => {
   return {

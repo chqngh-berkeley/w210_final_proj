@@ -4,7 +4,7 @@ let receiptHistoryInitData =[
     {
       'id' : 1,
       'timestamp' : 1520812333157,
-      'wastageInfo' : '10%'
+      'wastageInfo' : '10'
     },
     {
       'id' : 2,
@@ -13,12 +13,12 @@ let receiptHistoryInitData =[
     {
       'id' : 3,
       'timestamp' : 1520612331157,
-      'wastageInfo' : '15%'
+      'wastageInfo' : '15'
     },
     {
       'id' : 4,
       'timestamp' : 1520512330157,
-      'wastageInfo' : '15%'
+      'wastageInfo' : '15'
     }
   ]
 

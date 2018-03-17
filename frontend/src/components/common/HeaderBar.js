@@ -2,7 +2,8 @@ import React from 'react';
 import FlatButton from 'material-ui/FlatButton';
 import { Link } from 'react-router-dom'
 import {connect} from 'react-redux';
-
+import { push } from 'react-router-redux';
+import {logoutUser} from '../../actions/loginAction'
 
 const st = {
   backgroundColor : 'black',
@@ -20,6 +21,15 @@ const mapStateToProps = function(state){
 };
 
 
+const mapDispatchToProps =(dispatch) => {
+  return {
+    logoutUser : () => {
+        dispatch(logoutUser());
+      //
+    }
+  };
+};
+
 class HeaderBar extends React.Component {
   render() {
     // <FlatButton primary={true} label="Consumer App" />
@@ -36,9 +46,11 @@ class HeaderBar extends React.Component {
       el = (<span>
               <Link style={linkStyle} to='/consumer'>Consumer Waste Reduction Solutions </Link>
               <span style={{'paddingRight':'20px'}}></span>
+              <Link style={linkStyle} to='/login' onClick={this.props.logoutUser}>Logout</Link>
+              <span style={{'paddingRight':'20px'}}></span>
         </span>)
     } else {
-      // <span style={{color: 'white'}}>Logout</span>
+      //
       el = (<span>
         <Link style={linkStyle} to='/login'>Login</Link>
         </span>)
@@ -60,4 +72,4 @@ class HeaderBar extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(HeaderBar)
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderBar)

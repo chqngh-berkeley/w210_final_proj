@@ -90,12 +90,16 @@ class ReceiptInfo extends React.Component {
           height={this.state.height}
           fixedHeader={this.state.fixedHeader}
           fixedFooter={this.state.fixedFooter}
-
+          selectable = {false}
         >
-          <TableHeader>
+          <TableHeader
+            displaySelectAll={false}
+            adjustForCheckbox={false}
+            enableSelectAll={false}
+            >
             <TableRow>
-              <TableHeaderColumn colSpan="3" style={{textAlign: 'left'}}>
-                Grocery Wastage Info
+              <TableHeaderColumn colSpan="6" style={{textAlign: 'left'}}>
+                Grocery Info
               </TableHeaderColumn>
             </TableRow>
             <TableRow>
@@ -108,6 +112,7 @@ class ReceiptInfo extends React.Component {
             </TableRow>
           </TableHeader>
           <TableBody
+            displayRowCheckbox={false}
             showRowHover={this.state.showRowHover}
             stripedRows={this.state.stripedRows}
           >

@@ -2,18 +2,24 @@ version: '3'
 services:
   db:
     image: mariadb:latest
+    # build: ./sql
     ports:
       - '3306:3306'
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    # command:
+      # - script.sh
   frontend:
     build: ./frontend
     ports:
       - "8000:8000"
   # backend:
-    # build: ./backend
-    # ports:
-      # - "8090:8090"
+  #   build: ./backend
+  #   ports:
+  #     - "8090:8090"
+  #   depends_on:
+  #     db:
+  #       condition: service_started
   infomatics:
     build: ./informational-analytics
     ports:

@@ -47,3 +47,24 @@ sample jupyter notebook
 
 ## SQL
 MariaDB is setup on the master server
+
+
+Notes:
+
+https://www.docker.com/get-docker  
+
+https://en.wikipedia.org/wiki/Create,_read,_update_and_delete  
+
+All hostnames are: 0.0.0.0  
+
+1 ) Frontend/Infomatics/DB  
+docker-compose build  
+docker-compose up  
+
+2. Backend:  
+go into backend folder -> docker build -t backend ./ -> docker run backend  
+
+3. SQL:  
+go into sql folder -> run sh script.sh after 3.  
+mysql -h 0.0.0.0 -P 3306 -u root FOOD_WASTE_CONSUMER_DB  
+sample queries: select * from USER_PROFILE;  

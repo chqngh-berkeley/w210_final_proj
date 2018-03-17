@@ -107,13 +107,14 @@ class VerifyTable extends Component {
     );
   }
   getUploadReceipt() {
+    // <TextField
+    //   onChange = {(e) => {this.setState({'receipt_id': e.target.value})}}
+    //   floatingLabelText="Receipt Id" />
+    // <FlatButton primary={true} onClick={() => {this.props.getReceiptData(this.state.receipt_id)}}
+    // label = 'Get Receipt Data'>
+    // </FlatButton>
     return (<div>
-    <TextField
-      onChange = {(e) => {this.setState({'receipt_id': e.target.value})}}
-      floatingLabelText="Receipt Id" />
-    <FlatButton primary={true} onClick={() => {this.props.getReceiptData(this.state.receipt_id)}}
-    label = 'Get Receipt Data'>
-    </FlatButton>
+
     <br />
       <Table
         height={this.state.height}
@@ -128,7 +129,7 @@ class VerifyTable extends Component {
           enableSelectAll={this.state.enableSelectAll}
         >
           <TableRow>
-            <TableHeaderColumn colSpan="4" tooltip="Receipt Data" style={{textAlign: 'center'}}>
+            <TableHeaderColumn colSpan="4" tooltip="Receipt Data" style={{textAlign: 'left'}}>
               Receipt data
             </TableHeaderColumn>
           </TableRow>

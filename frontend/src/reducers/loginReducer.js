@@ -35,6 +35,8 @@ export function loginReducer(state=loginInitState, action) {
           num_kids : action.num_kids,
           shopping_freq : action.shopping_freq
         };
+      case c.LOGOUT_USER:
+        return Object.assign({}, state, {loggedIn : false})
       default:
         return state;
   }

@@ -6,7 +6,6 @@ import TextField from 'material-ui/TextField';
 import { push } from 'react-router-redux';
 import { Link } from 'react-router-dom'
 import { Redirect } from 'react-router'
-
 import {setReceiptData, removeReceiptFromHistory} from './../../../actions/receiptAction'
 import {
   Table,
@@ -105,32 +104,46 @@ class ReceiptHistory extends React.Component {
   componentDidMount() {
 
   }
+
+  getSlider() {
+  return (<div>
+        <Slider />
+      </div>
+    );
+  }
   render() {
 
     return (
       <div>
-        <h1> Grocery List Recommender </h1>
+        <h1> Past Grocery Receipts </h1>
+        <br />
+
         <br />
         <Table
           height={this.state.height}
+          selectable = {false}
           fixedHeader={this.state.fixedHeader}
           fixedFooter={this.state.fixedFooter}
-
         >
-          <TableHeader>
+          <TableHeader
+            displaySelectAll={false}
+            adjustForCheckbox={false}
+            enableSelectAll={false}
+            >
             <TableRow>
-              <TableHeaderColumn colSpan="3" style={{textAlign: 'left'}}>
+              <TableHeaderColumn colSpan="4" style={{textAlign: 'left'}}>
                 Receipt List History
               </TableHeaderColumn>
             </TableRow>
             <TableRow>
               <TableHeaderColumn tooltip="item">Receipt ID</TableHeaderColumn>
               <TableHeaderColumn tooltip="timestamp">Date</TableHeaderColumn>
-              <TableHeaderColumn tooltip="action">Wastage Info</TableHeaderColumn>
+              <TableHeaderColumn tooltip="action">Wastage in $</TableHeaderColumn>
               <TableHeaderColumn tooltip="action">Edit</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody
+            displayRowCheckbox={false}
             showRowHover={this.state.showRowHover}
             stripedRows={this.state.stripedRows}
           >

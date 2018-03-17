@@ -1,5 +1,6 @@
 import sys
 from db import db_connection_cls
+from ocr_module import ocr
 import hashlib
 
 
