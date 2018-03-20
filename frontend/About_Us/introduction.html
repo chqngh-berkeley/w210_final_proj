@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<title>Predicting Food Purchase and Consumption Patterns to Prevent Waste Capstone</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif;}
+body, html {
+    height: 100%;
+    color: #777;
+    line-height: 1.8;
+}
+
+/* Create Hover Effect on Image */
+.imageContainer > img:hover {
+  transform:scale(2);
+}
+
+/* Create a Parallax Effect */
+.bgimg-1, .bgimg-2, .bgimg-3, .bgimg-4, .bgimg-5, .bgimg-6, .bgimg-7, .bgimg-8 {
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* First image */
+.bgimg-1 {
+    background-image: url('images/title_background.jpeg');
+    min-height: 100%;
+}
+
+/* Second image (Inroduction) */
+.bgimg-2 {
+    background-image: url("images/intro.jpg");
+    min-height: 200px;
+}
+
+/* Seventh image (Data) */
+.bgimg-7 {
+    background-image: url("images/data.jpg");
+    min-height: 200px;
+}
+
+/* Eighth image (About Us) */
+.bgimg-8 {
+    background-image: url("images/about_us.jpg");
+    min-height: 200px;
+}
+
+.w3-wide {letter-spacing: 10px;}
+.w3-hover-opacity {cursor: pointer;}
+
+/* Turn off parallax scrolling for tablets and phones */
+@media only screen and (max-device-width: 1024px) {
+    .bgimg-1, .bgimg-2, .bgimg-3 {
+        background-attachment: scroll;
+    }
+}
+</style>
+<body>
+
+<!-- Navbar (sit on top) -->
+<div class="w3-top">
+  <div class="w3-bar w3-white" id="myNavbar">
+    <a class="w3-bar-item w3-button w3-hover-black w3-hide-medium w3-hide-large w3-right" href="javascript:void(0);" onclick="toggleFunction()" title="Toggle Navigation Menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <a href="#home" class="w3-bar-item w3-button"><i class="fa fa-home"></i> Home</a>
+    <a href="#introduction" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-circle"></i> Introduction</a>
+    <a href="#data" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-database"></i> The Data</a>
+    <a href="#about" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-user"></i> About Us</a>
+  </div>
+</div>
+
+<!-- First Parallax Image with Project Title -->
+<div class="bgimg-1 w3-display-container w3-opacity-min" id="home">
+  <div class="w3-display-middle" style="white-space:nowrap;">
+    <span class="w3-center w3-padding-large w3-black w3-xxlarge w3-wide w3-animate-opacity">Predicting Food Purchase and Consumption Patterns to Prevent Waste <span class="w3-hide-small"></span>
+  </div>
+</div>
+
+<!-- Second Parallax Image for Introduction Section1 -->
+<div class="bgimg-2 w3-display-container w3-opacity-min" id="introduction">
+  <div class="w3-display-middle">
+    <span class="w3-center w3-padding-large w3-gray w3-xlarge w3-wide w3-animate-opacity w3-opacity-min"><b>INTRODUCTION</b></span>
+  </div>
+</div>
+
+<!-- Introduction section -->
+<div class="w3-content w3-container w3-padding-large">
+  <div style="margin-left:90px; margin-right:90px; margin-top:30px">
+    <p class="w3-center w3-large"><em><font face = 'times' size = '5px' color="#F1C40F">The Problem</font></em></p>
+    <p class="w3-large" style="text-align:justify">insert food waste problem</p>
+    <p class="w3-center w3-large"><em><font face = 'times' size = '5px' color="#F1C40F">Our Product</font></em></p>
+    <p class="w3-large">insert overview of our product</p>
+    <p class="w3-center w3-large"><em><font face = 'times' size = '5px' color="#F1C40F">Potential Impact</font></em></p>
+    <p class="w3-large" style="text-align:justify">insert paragraph about impact</p>
+  </div>
+</div>
+
+<!-- Data Section -->
+<div class="bgimg-7 w3-display-container w3-opacity-min" id="data">
+  <div class="w3-display-middle" style="white-space:nowrap;">
+    <span class="w3-center w3-padding-large w3-white w3-xlarge w3-wide w3-animate-opacity w3-opacity-min">
+      <b>THE DATA</b></span>
+  </div>
+</div>
+
+<div class="w3-content w3-container w3-padding-64">
+  <div style="margin-left:80px; margin-right:80px;">
+    <p class="w3-center w3-large"><em><font face = 'times' size = '5px' color="#F1C40F">The Data</font></em></p>
+    <p class="w3-large" style="text-align:justify">blurb about how we used Dunhumby dataset along with our survey and created our own mock dataset out of that. 
+      Also include blurb about creating a mechanism for collecting wastage data</p>
+  </div>
+</div>
+
+<!-- About Us Section -->
+<div class="bgimg-8 w3-display-container w3-opacity-min" id="about">
+  <div class="w3-display-middle" style="white-space:nowrap;">
+    <span class="w3-center w3-padding-large w3-white w3-xlarge w3-wide w3-animate-opacity w3-opacity-min">
+      <b>ABOUT US</b></span>
+  </div>
+</div>
+
+<div class="w3-content w3-container w3-padding-64">
+  <div class="w3-quarter m8 w3-panel">
+    <img src="images/chuqing.jpeg" style="width:100">
+    <div class="w3-large w3-margin-top">
+      <i class="fa fa-user fa-fw w3-large w3-margin-right"></i><font size = "2"><b>Chuqing He</font></b><br>
+      <i class="fa fa-map-marker fa-fw w3-large w3-margin-right"></i><font size = "2">San Francisco, CA</font><br>
+      <a href="mailto:chqngh@berkeley.edu">
+        <i class="fa fa-envelope fa-fw w3-hover-text-black w3-large w3-margin-right"></i>
+        <font size = "2">chqngh@berkeley.edu</font><br>
+      </a>
+      <div class="w3-col s11">
+        <p class="w3-medium">Chuqing is a senior software engineer with extensive experience in startup environments. He 
+          has a B.S. in Mathematics and Computer Science from Vanderbilt</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="w3-quarter m8 w3-panel">
+    <img src="images/adam.jpg" style="width:100">
+    <div class="w3-large w3-margin-top">
+      <i class="fa fa-user fa-fw w3-large w3-margin-right"></i><font size = "2"><b>Adam Reilly</font></b><br>
+      <i class="fa fa-map-marker fa-fw w3-large w3-margin-right"></i><font size = "2">Los Angeles, CA</font><br>
+      <a href="mailto:adam.reilly@ischool.berkeley.edu">
+        <i class="fa fa-envelope fa-fw w3-hover-text-black w3-large w3-margin-right"></i>
+        <font size = "2">adam.reilly@ischool.berkeley.edu</font><br>
+      </a>
+      <div class="w3-col s11">
+        <p class="w3-medium">Adam comes to Berkeley with experience in the real estate finance industry. Prior to that 
+          he studied at Occidental College</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="w3-quarter m8 w3-panel">
+    <img src="images/raj.jpeg" style="width:100">
+    <div class="w3-large w3-margin-top">
+      <i class="fa fa-user fa-fw w3-large w3-margin-right"></i><font size = "2"><b>Varadarajan Srinivasan</font></b><br>
+      <i class="fa fa-map-marker fa-fw w3-large w3-margin-right"></i><font size = "2">Raleigh, NC</font><br>
+      <a href="mailto:svaradarajan1982@berkeley.edu">
+        <i class="fa fa-envelope fa-fw w3-hover-text-black w3-large w3-margin-right"></i>
+        <font size = "2">svaradarajan1982@berkeley.edu</font><br>
+      </a>
+      <div class="w3-col s11">
+        <p class="w3-medium">Raj is a director of data engineering at LexisNexis. He has a MS in Electrical Engineering 
+          rahfrom Vanderbilt</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="w3-quarter m8 w3-panel">
+    <img src="images/peter.jpg" style="width:100">
+    <div class="w3-large w3-margin-top">
+      <i class="fa fa-user fa-fw w3-large w3-margin-right"></i><font size = "2"><b>Peter Zhou</font></b><br>
+      <i class="fa fa-map-marker fa-fw w3-large w3-margin-right"></i><font size = "2">Los Angeles, CA</font><br>
+      <a href="mailto:pzhou11@berkeley.edu">
+        <i class="fa fa-envelope fa-fw w3-hover-text-black w3-large w3-margin-right"></i>
+        <font size = "2">pzhou11@berkeley.edu</font><br>
+      </a>
+      <div class="w3-col s11">
+        <p class="w3-medium">Peter is a consultant in hospital operations and finance. He has a B.A. in Business 
+        Economics from UC Irvine</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
