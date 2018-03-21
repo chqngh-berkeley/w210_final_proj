@@ -1,23 +1,23 @@
 import * as c from '../constants/constants'
 
 
-export const setReceiptId = (r_id) => {
+export const setReceipt = (receipt) => {
   return {
-    type: c.SET_RECEIPT_ID,
-    receiptId : r_id
+    type: c.SET_RECEIPT,
+    receipt
   }
 }
 
-export const setReceiptData = (receiptData) => {
+export const setReceiptItem = (item) => {
   return {
-    type: c.NEW_RECEIPT_DATA,
-    receiptData
+    type: c.SET_RECEIPT_ITEM,
+    item
   }
 }
 
-export const removeReceiptFromHistory = (item) => {
+export const setAllReceipts = (receipts) => {
   return {
-    type: c.REMOVE_RECEIPT,
-    item : item
+    type: c.SET_RECEIPT_HISTORY,
+    receipts
   }
 }

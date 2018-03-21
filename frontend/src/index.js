@@ -55,6 +55,7 @@ ReactDOM.render(
           <Route  path="/receiptInfo" component={ReceiptInfo}/>
           <Route  path="/faq" component={FAQ}/>
           <Route  path="/login" component={Login}/>
+          <Route  path="/userinfo" component={Signup}/>
           <Route  path="/signup" component={Signup}/>
           </div>
         </Switch>

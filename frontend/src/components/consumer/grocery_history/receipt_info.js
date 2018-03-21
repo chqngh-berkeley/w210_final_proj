@@ -6,8 +6,8 @@ import TextField from 'material-ui/TextField';
 import { push } from 'react-router-redux';
 import { Link } from 'react-router-dom'
 import { Redirect } from 'react-router'
-
-import {removeReceiptFromHistory} from './../../../actions/receiptAction'
+import {api} from './../../../util/api';
+import {setReceiptItem} from './../../../actions/receiptAction'
 import {
   Table,
   TableBody,
@@ -28,20 +28,18 @@ const st = {
 }
 
 const mapStateToProps = function(state){
-  console.log(state)
   return {
-    receiptReducerData : state.receiptReducer.receiptData
+    currentReceipt : state.receiptReducer.current_receipt
   };
 };
 
 const mapDispatchToProps =(dispatch) => {
   return {
-      removeReceiptFromHistory :(item) => {
-        dispatch(removeReceiptFromHistory(item));
+      setReceiptItem :(item) => {
+        dispatch(setReceiptItem(item));
       }
     }
 };
-
 
 class ReceiptInfo extends React.Component {
   constructor(props) {
@@ -69,17 +67,17 @@ class ReceiptInfo extends React.Component {
     this.setState({height: event.target.value});
   };
 
-  handleOnReceiptEdit = (event, idx) => {
-    console.log('Edit data...', idx, this.props.receiptHistoryData[idx])
+  handleOnReceiptEdit = (event, item) => {
+    this.props.setReceiptItem(item);
   }
-  handleOnReceiptRemove = (event, idx) => {
-    console.log('remove data...', idx, this.props.receiptHistoryData[idx])
-    this.props.removeReceiptFromHistory(this.props.receiptHistoryData[idx])
+  handleOnReceiptRemove = (event, item) => {
+    console.log('remove data...', item)
   }
 
   componentDidMount() {
 
   }
+
   render() {
 
     return (
@@ -104,7 +102,8 @@ class ReceiptInfo extends React.Component {
             </TableRow>
             <TableRow>
             <TableHeaderColumn tooltip="item">Food Name</TableHeaderColumn>
-            <TableHeaderColumn tooltip="count">Count</TableHeaderColumn>
+            <TableHeaderColumn tooltip="quantity">Quantity</TableHeaderColumn>
+            <TableHeaderColumn tooltip="unit">Unit</TableHeaderColumn>
             <TableHeaderColumn tooltip="price">Price($)</TableHeaderColumn>
             <TableHeaderColumn tooltip="category">Category</TableHeaderColumn>
             <TableHeaderColumn tooltip="closest_category">Closest Category</TableHeaderColumn>
@@ -116,15 +115,16 @@ class ReceiptInfo extends React.Component {
             showRowHover={this.state.showRowHover}
             stripedRows={this.state.stripedRows}
           >
-            {this.props.receiptReducerData && this.props.receiptReducerData.map( (row, index) => (
+            {this.props.currentReceipt && this.props.currentReceipt.map( (row, index) => (
               <TableRow key={index}>
-                <TableRowColumn>{row.food_name}</TableRowColumn>
-                <TableRowColumn>{row.count}</TableRowColumn>
+                <TableRowColumn>{row.name}</TableRowColumn>
+                <TableRowColumn>{row.quantity}</TableRowColumn>
+                <TableRowColumn>{row.unit}</TableRowColumn>
                 <TableRowColumn tooltip={row.price}>{row.price}</TableRowColumn>
                 <TableRowColumn tooltip={row.category}>{row.category}</TableRowColumn>
                 <TableRowColumn tooltip={row.closest_category}>{row.closest_category}</TableRowColumn>
                 <TableRowColumn>
-                  <TextField value={row.wastage} />
+                  <TextField value={row.wastage} onChange={this.handleOnReceiptEdit.bind(this, null, row)} />
                 </TableRowColumn>
               </TableRow>
               ))}

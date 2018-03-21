@@ -4,6 +4,7 @@ function getCRUDSetting(type) {
   return {
     headers:{
      'Content-Type': 'application/json',
+     'user_id': 'blarg'
     },
     method: type,
     // mode: 'cors',

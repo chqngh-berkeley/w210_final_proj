@@ -46,6 +46,8 @@ class HeaderBar extends React.Component {
       el = (<span>
               <Link style={linkStyle} to='/consumer'>Consumer Waste Reduction Solutions </Link>
               <span style={{'paddingRight':'20px'}}></span>
+              <Link style={linkStyle} to='/userinfo'>Info</Link>
+              <span style={{'paddingRight':'20px'}}></span>
               <Link style={linkStyle} to='/login' onClick={this.props.logoutUser}>Logout</Link>
               <span style={{'paddingRight':'20px'}}></span>
         </span>)

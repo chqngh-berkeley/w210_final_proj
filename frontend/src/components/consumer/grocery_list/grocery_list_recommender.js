@@ -6,6 +6,7 @@ import TextField from 'material-ui/TextField';
 import { push } from 'react-router-redux';
 import { Link } from 'react-router-dom'
 import { Redirect } from 'react-router'
+import {api} from './../../../util/api';
 import {
   Table,
   TableBody,
@@ -18,7 +19,13 @@ import {
 import Toggle from 'material-ui/Toggle';
 import Slider from 'material-ui/Slider';
 
-import {addToDefaultList,removeFromDefaultList, updateItemFromDefault, removeFromSuggestedList} from './../../../actions/receiptAction'
+import {addToDefaultList,
+  removeFromDefaultList,
+  updateItemFromDefault,
+  removeFromSuggestedList,
+  setRecommendedGroceryList,
+  setSuggestedItemsList
+} from './../../../actions/receiptAction'
 const st = {
   backgroundColor : '#FAFAFA',
   // color: 'black',
@@ -48,6 +55,16 @@ const mapDispatchToProps =(dispatch) => {
       removeFromSuggestedList : (item) => {
         dispatch(removeFromSuggestedList(item))
       },
+      getRecommendations : () => {
+        api.getGroceryListRecommendations().then(function(res) {
+          dispatch(setRecommendedGroceryList(res['data']))
+        })
+      },
+      getItemSuggestion : () => {
+        api.getGroceryItemSuggestions().then(function(res) {
+          dispatch(setSuggestedItemsList(res['data']))
+        })
+      },
     }
 };
 
@@ -68,6 +85,12 @@ class GroceryListRecommender extends React.Component {
     height: '250px'
     };
   }
+
+  componentDidMount() {
+    this.props.getRecommendations();
+    this.props.getItemSuggestion();
+  }
+
   handleToggle = (event, toggled) => {
     this.setState({
       [event.target.name]: toggled,
@@ -86,6 +109,7 @@ class GroceryListRecommender extends React.Component {
   removeFromDefaultList = (event, item) => {
     this.props.removeFromDefaultList(item);
   }
+
   updateDefaultListItem = (item, e, newVal) => {
     console.log(newVal, item)
   }

@@ -10,7 +10,7 @@ from datetime import datetime
 import uuid
 import base64
 
-from receipt import receipt_service
+from grocery import grocery_service
 import bottle
 bottle.BaseRequest.MEMFILE_MAX = 1024 * 1024
 
@@ -26,64 +26,38 @@ def enable_cors(fn):
             return fn(*args, **kwargs)
     return _enable_cors
 
-receipt_app = Bottle()
-receipt_serv = receipt_service.ReceiptService()
+grocery_app = Bottle()
+grocery_serv = grocery_service.GroceryService()
 
-@receipt_app.route(path='/receipt/test', method=['GET','OPTIONS'])
+@grocery_app.route(path='/grocery/test', method=['GET','OPTIONS'])
 @enable_cors
-def receiptTest():
+def groceryTest():
     try:
-        return {'result': 'receipt test'}
+        return {'result': 'grocery test'}
     except Exception as e:
         print e
         return e
 
 
-@receipt_app.route(path='/receipt/<id>', method=['GET', 'OPTIONS'])
+@grocery_app.route(path='/grocery/recommended', method=['GET', 'OPTIONS'])
 @enable_cors
-def receiptData(id):
+def getRecommendedGrocery():
     try:
         user_id = request.get_header('user_id')
         print('user id:', user_id)
-        print('receipt id:', id)
-        receipt_data = receipt_serv.getReceipt(user_id, id)
-        return { 'data': receipt_data, 'receipt_id': id}
+        rec_grocery_data = grocery_serv.getRecommendedGrocery(user_id)
+        return { 'data': rec_grocery_data}
     except Exception as e:
         print e
         return e
 
-@receipt_app.route(path='/receipt/all', method=['GET', 'OPTIONS'])
+@grocery_app.route(path='/grocery/suggested', method=['GET','OPTIONS'])
 @enable_cors
-def getAllReceiptData():
+def getSuggestedItems():
     try:
         user_id = request.get_header('user_id')
-        print('user id:', user_id)
-        receipt_data = receipt_serv.getAllReceipts(user_id)
-        return { 'data': receipt_data}
-    except Exception as e:
-        print e
-        return e
-
-@receipt_app.route(path='/receipt/<id>', method=['PUT','OPTIONS'])
-@enable_cors
-def receiptVerify(id):
-    try:
-        user_id = request.get_header('user_id')
-        print('receipt id:', id)
         # request_json = dict(request.json)
-        data = receipt_serv.updateReceipt(receipt_id, request_json)
-        return {'data': data, 'receipt_id': id}
-    except Exception as e:
-        print e
-        return e
-
-@receipt_app.route(path='/receipt/upload_receipt', method=['POST','OPTIONS'])
-@enable_cors
-def upload_receipt():
-    try:
-        user_id = request.get_header('user_id')
-        upload = request.files.get('upload')
-        data = receipt_serv.storeReceipt(upload)
+        data = grocery_serv.getSuggestedGrocery(user_id)
         return {'data': data}
     except Exception as e:
         print e
@@ -99,4 +73,4 @@ if __name__ == '__main__':
                       help="port number", metavar="port")
     (options, args) = parser.parse_args()
 
-    run(receipt_app,  server='gevent', host=options.host, port=int(options.port))
+    run(grocery_app,  server='gevent', host=options.host, port=int(options.port))

@@ -5,23 +5,38 @@ import hashlib
 '''
 Schema: USER_PROFILE
 
-USER_ID bigint primary key,
- USERNAME varchar(128) ,
- EMAIL varchar(128) ,
- PASSWORD varchar(128) ,
- USER_NM varchar(128) ,
- USER_AGE integer,
- FAMILY_MBR_ID bigint,
- FAMILY_SIZE integer,
- NUM_ADULTS integer,
- NUM_KIDS integer,
- ANNUAL_HOUSEHOLD_INCOME DECIMAL UNSIGNED,
- SHOP_TRIP_FREQ INTEGER
+USER_ID VARCHAR(128) primary key, /*Login User Name*/
+USER_NM varchar(128) , /*Name of User*/
+USER_AGE integer,
+PASSWORD VARCHAR(128),
+/*FAMILY_MBR_ID bigint,*/
+FAMILY_SIZE integer,
+NUM_ADULTS integer,
+NUM_KIDS integer,
+ANNUAL_HOUSEHOLD_INCOME VARCHAR(200), /* Range */
+SHOP_TRIP_FREQ INTEGER
 '''
 
 class UserService(object):
     def __init__(self):
         self.sql_ = db_connection_cls.MysqlDBPython()
+        self.init()
+    def init(self):
+        mapper = {
+            "USER_ID" :   "username",
+            "USER_NM" :   "name",
+            "USER_AGE" :  "age",
+            "PASSWORD" :  "password",
+            "FAMILY_SIZE" :  "family_size",
+            "NUM_ADULTS" :  "num_adults",
+            "NUM_KIDS" :  "num_kids",
+            "ANNUAL_HOUSEHOLD_INCOME" :  "income",
+            "SHOP_TRIP_FREQ INTEGER" : "shop_trip_freq"
+        }
+        self.ui_to_db = mapper
+        self.db_to_ui = {v:k for (k,v) in mapper.items()}
+
+
     '''
     CREATE_USER
 
@@ -87,11 +102,13 @@ class UserService(object):
     '''
     def getUser(self, user_id):
         conditional_query = 'USER_ID = '+user_id
-        fields = ['USER_ID', 'USERNAME','USER_NM','USER_AGE','EMAIL','FAMILY_SIZE', \
-        'NUM_ADULTS','NUM_KIDS','ANNUAL_HOUSEHOLD_INCOME','SHOP_TRIP_FREQ']
+        fields = self.ui_to_db.keys()
         data = self.sql_.selectFields('USER_PROFILE', conditional_query, \
         fields)
-        return data
+        d = {}
+        for k in self.db_to_ui.keys():
+            d[self.db_to_ui[k]] = data[k]
+        return d
     '''
     LOGIN_USER
 

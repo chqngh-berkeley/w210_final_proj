@@ -6,7 +6,8 @@ import TextField from 'material-ui/TextField';
 import { push } from 'react-router-redux';
 import { Link } from 'react-router-dom'
 import { Redirect } from 'react-router'
-import {setReceiptData, removeReceiptFromHistory} from './../../../actions/receiptAction'
+import {setAllReceipts, setReceipt} from './../../../actions/receiptAction'
+import {api} from './../../../util/api';
 import {
   Table,
   TableBody,
@@ -26,41 +27,25 @@ const st = {
   padding: '15px 0'
 }
 
-const mapStateToProps = function(state){
-  console.log(state)
+const mapStateToProps = function(state) {
   return {
-    receiptHistoryData : state.receiptHistoryReducer
+    receipts : state.receiptReducer.receipts
   };
 };
 
 const mapDispatchToProps =(dispatch) => {
   return {
-      removeReceiptFromHistory :(item) => {
-        dispatch(removeReceiptFromHistory(item));
-      },
       setCurrentReceipt :(item) => {
-        let dummyJson = [
-          {food_name : 'Apple',
-           price : '5$',
-           count : '5',
-           size : '32oz',
-           category : 'Fruit',
-           closest_category : 'Fruit'},
-          {food_name : 'Orange',
-           price : '5$',
-           count : '5',
-           size : '32oz',
-           category : 'Fruit',
-           closest_category : 'Fruit'},
-          {food_name : 'Banana',
-           price : '5$',
-           count : '5',
-           size : '32oz',
-           category : 'Fruit',
-           closest_category : 'Fruit'
-         }
-        ]
-        dispatch(setReceiptData(dummyJson));
+        console.log(item)
+        api.getReceiptDataById(1, item['id']).then(function(res) {
+            dispatch(setReceipt(res['data']));
+        })
+        // dispatch(push('/receiptInfo'))
+      },
+      getAllReceipts: () => {
+        api.getAllReceipts(1).then(function(res) {
+            dispatch(setAllReceipts(res['data']));
+        })
       }
     }
 };
@@ -92,17 +77,17 @@ class ReceiptHistory extends React.Component {
     this.setState({height: event.target.value});
   };
 
-  handleOnReceiptEdit = (event, idx) => {
-    console.log('Edit data...', idx, this.props.receiptHistoryData[idx])
-    this.props.setCurrentReceipt(this.props.receiptHistoryData[idx]);
+  handleOnReceiptEdit = (event, item) => {
+    console.log('Edit data...', item);
+    this.props.setCurrentReceipt(item);
   }
   handleOnReceiptRemove = (event, idx) => {
-    console.log('remove data...', idx, this.props.receiptHistoryData[idx])
-    this.props.removeReceiptFromHistory(this.props.receiptHistoryData[idx]);
+    console.log('remove data...', idx)
   }
 
   componentDidMount() {
-
+    // this.setState({receipts : this.props.receipts})
+    this.props.getAllReceipts();
   }
 
   getSlider() {
@@ -112,7 +97,7 @@ class ReceiptHistory extends React.Component {
     );
   }
   render() {
-
+//
     return (
       <div>
         <h1> Past Grocery Receipts </h1>
@@ -147,7 +132,7 @@ class ReceiptHistory extends React.Component {
             showRowHover={this.state.showRowHover}
             stripedRows={this.state.stripedRows}
           >
-            {this.props.receiptHistoryData && this.props.receiptHistoryData.map( (row, index) => (
+            {this.props.receipts && this.props.receipts.map( (row, index) => (
               <TableRow key={index}>
                 <TableRowColumn>{row.id}</TableRowColumn>
                 <TableRowColumn>{new Date(parseInt(row.timestamp)).toString()}</TableRowColumn>
@@ -157,9 +142,9 @@ class ReceiptHistory extends React.Component {
                 <TableRowColumn>
                   <Link
                     to = '/receiptInfo'
-                    onClick = {this.handleOnReceiptEdit.bind(this, null, index)}>
+                    onClick = {this.handleOnReceiptEdit.bind(this, null, row)}>
                   Edit
-                  </Link>
+                </Link>
                 </TableRowColumn>
               </TableRow>
               ))}

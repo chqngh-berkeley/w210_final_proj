@@ -24,8 +24,6 @@ class Consumer extends React.Component {
   getTabs() {
     return (
     <Tabs>
-
-
      <Tab label="Receipt History" value="b">
        <ReceiptHistory />
      </Tab>

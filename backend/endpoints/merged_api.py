@@ -11,10 +11,12 @@ import base64
 
 from user_api_new import user_app
 from receipt_api import receipt_app
+from grocery_api import grocery_app
 
 import bottle
 
 user_app.merge(receipt_app)
+user_app.merge(grocery_app)
 app = user_app
 print(app)
 

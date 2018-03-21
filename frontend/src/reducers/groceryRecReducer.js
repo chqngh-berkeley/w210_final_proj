@@ -2,54 +2,56 @@ import * as c from '../constants/constants'
 
 let groceryRecommendationData = {
 
-  defaultList : [
-    {food_name : 'Apple',
-     price : '5$',
-     count : '5',
-     size : '2 lbs',
-     category : 'Fruit',
-     closest_category : 'Fruit'},
-    {food_name : 'Beef',
-     price : '15$',
-     count : '2',
-     size : '32oz',
-     category : 'Meat',
-     closest_category : 'Meat'},
-    {food_name : 'Banana',
-     price : '5$',
-     count : '5',
-     size : '2 lbs',
-     category : 'Fruit',
-     closest_category : 'Fruit'
-   }
+  recommendedList : [
+   //  {food_name : 'Apple',
+   //   price : '5$',
+   //   count : '5',
+   //   size : '2 lbs',
+   //   category : 'Fruit',
+   //   closest_category : 'Fruit'},
+   //  {food_name : 'Beef',
+   //   price : '15$',
+   //   count : '2',
+   //   size : '32oz',
+   //   category : 'Meat',
+   //   closest_category : 'Meat'},
+   //  {food_name : 'Banana',
+   //   price : '5$',
+   //   count : '5',
+   //   size : '2 lbs',
+   //   category : 'Fruit',
+   //   closest_category : 'Fruit'
+   // }
   ],
   suggestedList : [
-    {food_name : 'Pork',
-     price : '5$',
-     count : '5',
-     size : '32',
-     category : 'Fruit',
-     closest_category : 'Fruit'},
-    {food_name : 'Beef',
-     price : '5$',
-     count : '5',
-     size : '32',
-     category : 'Fruit',
-     closest_category : 'Fruit'},
-    {food_name : 'Banana',
-     price : '5$',
-     count : '5',
-     size : '32',
-     category : 'Fruit',
-     closest_category : 'Fruit'
-   }
+   //  {food_name : 'Pork',
+   //   price : '5$',
+   //   count : '5',
+   //   size : '32',
+   //   category : 'Fruit',
+   //   closest_category : 'Fruit'},
+   //  {food_name : 'Beef',
+   //   price : '5$',
+   //   count : '5',
+   //   size : '32',
+   //   category : 'Fruit',
+   //   closest_category : 'Fruit'},
+   //  {food_name : 'Banana',
+   //   price : '5$',
+   //   count : '5',
+   //   size : '32',
+   //   category : 'Fruit',
+   //   closest_category : 'Fruit'
+   // }
   ]
 }
 
 export function groceryRecReducer(state=groceryRecommendationData, action) {
   switch(action.type) {
       case c.SET_RECOMMENDED_GROCERY_LIST:
-        return Object.assign({}, state,action.recommendations);
+        return Object.assign({}, state,{recommendedList: action.items});
+      case c.SET_SUGGESTED_ITEM_LIST:
+        return Object.assign({}, state,{suggestedList: action.items});
       case c.ADD_TO_DEFAULT:
         let d = Object.assign({}, state)
         d.defaultList.push(action.item)

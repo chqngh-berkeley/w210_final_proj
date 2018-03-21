@@ -25,31 +25,9 @@ const styles = {
   },
 };
 
-const tableData = [
-  {
-    name: 'Apple',
-    quantity: 4,
-    cost : '10',
-    category : 'fruit'
-  },
-  {
-    name: 'bananas',
-    quantity: 4,
-    cost : '10',
-    category : 'fruit'
-  },
-  {
-    name: 'chicken wings',
-    quantity: 2,
-    cost : '10',
-    category : 'mean'
-  }
-];
-
 const mapStateToProps = function(state){
   return {
-    receiptId : state.receiptReducer.receiptId,
-    tableData : state.receiptReducer.receiptData
+    current_receipt : state.receiptReducer.current_receipt
   };
 };
 
@@ -149,8 +127,8 @@ class VerifyTable extends Component {
           showRowHover={this.state.showRowHover}
           stripedRows={this.state.stripedRows}
         >
-          {this.props.tableData && this.props.tableData.length > 0 &&
-            this.props.tableData.map( (row, index) => (
+          {this.props.current_receipt && this.props.current_receipt.length > 0 &&
+            this.props.current_receipt.map( (row, index) => (
             <TableRow key={index}>
               <TableRowColumn tooltip={row.food_name}>{row.food_name}</TableRowColumn>
               <TableRowColumn tooltip={row.price}>{row.price}</TableRowColumn>

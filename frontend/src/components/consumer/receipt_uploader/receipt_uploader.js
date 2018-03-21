@@ -10,7 +10,7 @@ import ExpandTransition from 'material-ui/internal/ExpandTransition';
 import TextField from 'material-ui/TextField';
 import VerifyTable from './VerifyTable'
 import {api} from './../../../util/api';
-import {setReceiptId, setReceiptData} from './../../../actions/receiptAction';
+import {setReceipt} from './../../../actions/receiptAction';
 
 import {connect} from 'react-redux';
 
@@ -33,6 +33,9 @@ const mapStateToProps = function(state){
 
 const mapDispatchToProps =(dispatch) => {
   return {
+    resetCurrentReceipt: () => {
+      dispatch(setReceipt([]))
+    },
     uploadReceiptData : (data) => {
       api.submitFileUpload(data).then(function(json_res) {
         console.log('res:', json_res)
@@ -55,6 +58,10 @@ class ReceiptUploader extends React.Component {
     stepIndex: 0,
   };
 
+  componentDidMount() {
+    this.props.resetCurrentReceipt();
+  }
+
   dummyAsync = (cb) => {
     this.setState({loading: true}, () => {
       this.asyncTimer = setTimeout(cb, 500);
@@ -62,6 +69,7 @@ class ReceiptUploader extends React.Component {
   };
 
   handleNext = () => {
+
     const {stepIndex} = this.state;
     if (!this.state.loading) {
       this.dummyAsync(() => this.setState({
@@ -133,30 +141,6 @@ class ReceiptUploader extends React.Component {
       return (
         <div style={contentStyle}>
           <h2>Analytic/Results</h2>
-          <hr />
-          <br/>
-          <br/>
-          <h3> TBD: Tableau Analytics </h3>
-          <hr />
-          <br/>
-          <br/>
-          <h3> TBD: Tableau Analytics </h3>
-          <hr />
-          <br/>
-          <br/>
-          <h3> TBD: Tableau Analytics </h3>
-          <hr/>
-          <p>
-            <a
-              href="#"
-              onClick={(event) => {
-                event.preventDefault();
-                this.setState({stepIndex: 0, finished: false});
-              }}
-            >
-              Click here
-            </a> to start over.
-          </p>
         </div>
       );
     }

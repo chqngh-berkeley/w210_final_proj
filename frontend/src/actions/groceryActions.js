@@ -28,3 +28,15 @@ export const removeFromSuggestedList = (item) => {
     item
   }
 }
+export const setSuggestedItemsList = (items) => {
+  return {
+    type: c.SET_SUGGESTED_ITEM_LIST,
+    items
+  }
+}
+export const setRecommendedGroceryList = (items) => {
+  return {
+    type: c.SET_RECOMMENDED_GROCERY_LIST,
+    items
+  }
+}

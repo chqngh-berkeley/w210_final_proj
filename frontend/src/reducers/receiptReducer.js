@@ -1,36 +1,29 @@
 import * as c from '../constants/constants'
 
 let receiptInitData = {
-  receiptId : null,
-  receiptData : [{food_name : 'Apple',
-   price : '5$',
-   count : '5',
-   size : '32oz',
-   category : 'Fruit',
-   closest_category : 'Fruit'},
-  {food_name : 'Orange',
-   price : '5$',
-   count : '5',
-   size : '32oz',
-   category : 'Fruit',
-   closest_category : 'Fruit'},
-  {food_name : 'Banana',
-   price : '5$',
-   count : '5',
-   size : '32oz',
-   category : 'Fruit',
-   closest_category : 'Fruit'
- }]
+  receipts:[],
+  current_receipt: []
 }
 
 export function receiptReducer(state=receiptInitData, action) {
   switch(action.type) {
-      case c.SET_RECEIPT_ID:
+      case c.SET_RECEIPT:
         return Object.assign({}, state,
-        {receiptId: action.receiptId});
-      case c.NEW_RECEIPT_DATA:
-        return Object.assign({}, state,
-        {receiptData : action.receiptData});
+        {current_receipt : action.receipt});
+      case c.SET_RECEIPT_HISTORY:
+        return Object.assign({}, state, {receipts : action.receipts});
+      case c.SET_RECEIPT_ITEM:
+        let mod_item = action.item;
+        let receipt = []
+        for(var i =0; i< state.current_receipt.length; i++) {
+          var item = state.current_receipt[i];
+          if(item['id'] == mod_item['id']) {
+            receipt.push(mod_item);
+          } else {
+            receipt.push(item)
+          }
+        }
+        return Object.assign({}, state, {current_receipt : receipt});;
       default:
         return state;
   }

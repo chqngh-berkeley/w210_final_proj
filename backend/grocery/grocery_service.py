@@ -6,7 +6,7 @@ import numpy as np
 
 
 
-class ReceiptService(object):
+class GroceryService(object):
     def __init__(self):
         self.sql_ = db_connection_cls.MysqlDBPython()
         self.init()
@@ -24,7 +24,7 @@ class ReceiptService(object):
         }
         self.ui_to_db = mapper
         self.db_to_ui = {v:k for (k,v) in mapper.items()}
-    def getRandomItem(self, user_id, receipt_id):
+    def getRandomItem(self, user_id):
         names = ['apple','banana','orange']
         categories = ['JUICE', 'FROZEN FRUIT', 'APPLES', 'APRICOTS', 'BANANAS', 'BERRIES',
            'CHERRIES', 'GRAPES', 'MELONS', 'KIWI', 'CITRUS', 'MANGO', 'PEACH',
@@ -60,7 +60,6 @@ class ReceiptService(object):
            'FROZEN WHIPPED', 'FROZEN ENTREE', 'FROZEN SANDWICH']
         return {
              "user_id" : user_id,
-             "receipt_id" : receipt_id,
              "id" : np.random.randint(1,1000),
              "name" : np.random.choice(names, 1)[0],
              "price" : np.random.randint(1,20),
@@ -69,22 +68,10 @@ class ReceiptService(object):
              "category" : np.random.choice(categories, 1)[0],
              "closest_category" : np.random.choice(categories, 1)[0]
          }
-    def getRandomReceipt(self, user_id):
-        return {
-            "id" : np.random.randint(1,100000),
-            "timestamp" : 1520812333157 - 10000000 * np.random.randint(1,10)
-        }
-    # POST
-    def storeReceipt(self, receiptData):
-        pass
     # GET
-    def getReceipt(self, user_id, receipt_id):
-        return [self.getRandomItem(user_id, receipt_id) for r in range(np.random.randint(2,10))]
-    def getAllReceipts(self, user_id):
-        return [self.getRandomReceipt(user_id) for r in range(np.random.randint(1,15))]
-    # PUT
-    def updateReceipt(self, user_id, receipt_id, receiptData):
-        return [self.getRandomItem(user_id, receipt_id) for r in range(np.random.randint(2,10))]
-    # DELETE
-    def deleteReceipt(self, user_id, receipt_id):
-        pass
+    def getRecommendedGrocery(self, user_id):
+        return [self.getRandomItem(user_id) for r in range(np.random.randint(2,10))]
+
+    # GET
+    def getSuggestedGrocery(self, user_id):
+        return [self.getRandomItem(user_id) for r in range(np.random.randint(2,10))]
