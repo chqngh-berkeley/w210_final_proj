@@ -177,7 +177,7 @@ class ReceiptUploader extends React.Component {
         <h1>
           Upload Receipt
         </h1>
-
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vulputate cursus scelerisque. Phasellus at laoreet mi. Morbi non nibh facilisis, viverra dui luctus, vestibulum metus. Aliquam suscipit mauris dui, quis hendrerit tellus sagittis ut. Nam leo mi, dignissim sit amet dapibus eget, pharetra at neque. Integer ut facilisis purus. Aliquam erat volutpat.</p>
         <Stepper activeStep={stepIndex}>
           <Step>
             <StepLabel>Upload Receipt</StepLabel>

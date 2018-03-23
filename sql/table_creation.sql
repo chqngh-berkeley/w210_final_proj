@@ -7,92 +7,190 @@ USE FOOD_WASTE_CONSUMER_DB;
 DROP TABLE IF EXISTS USER_PROFILE;
 
 CREATE TABLE IF NOT EXISTS USER_PROFILE
-(USER_ID bigint primary key,
- USERNAME varchar(128) ,
- EMAIL varchar(128) ,
- PASSWORD varchar(128) ,
- USER_NM varchar(128) ,
+(USER_ID VARCHAR(128) primary key, /*Login User Name*/
+ USER_NM varchar(128) , /*Name of User*/
  USER_AGE integer,
- FAMILY_MBR_ID bigint,
+ PASSWORD VARCHAR(128),
  FAMILY_SIZE integer,
  NUM_ADULTS integer,
  NUM_KIDS integer,
- ANNUAL_HOUSEHOLD_INCOME DECIMAL UNSIGNED,
- SHOP_TRIP_FREQ INTEGER
+ ANNUAL_HOUSEHOLD_INCOME VARCHAR(200), /* Range */
+ SHOP_TRIP_FREQ VARCHAR(30)
 );
-
-INSERT INTO USER_PROFILE (USER_ID,
-  USERNAME, EMAIL, PASSWORD,
-  USER_NM, USER_AGE, FAMILY_MBR_ID,
-  FAMILY_SIZE, NUM_ADULTS, NUM_KIDS,
-  ANNUAL_HOUSEHOLD_INCOME, SHOP_TRIP_FREQ
-)
-VALUES (1, "bob", "bob@bob.com", "bob", "Bob McBob", 30, null, 3, 2, 1, 1000000, 5);
-
-INSERT INTO USER_PROFILE (USER_ID,
-  USERNAME, EMAIL, PASSWORD,
-  USER_NM, USER_AGE, FAMILY_MBR_ID,
-  FAMILY_SIZE, NUM_ADULTS, NUM_KIDS,
-  ANNUAL_HOUSEHOLD_INCOME, SHOP_TRIP_FREQ
-)
-VALUES (2, "jane", "jane@jane.com", "jane", "Jane Jane", 25, null, 3, 2, 1, 1000000, 3);
 
 DROP TABLE IF EXISTS USER_GROCERY_RECEIPT;
 
 CREATE TABLE IF NOT EXISTS USER_GROCERY_RECEIPT
-(USER_ID bigint,
- RECEIPT_ID bigint,
- UPLOAD_DT date,
- ITEM_ID bigint,
+(USER_ID VARCHAR(128), /*Login User Name*/
+ RECEIPT_ID bigint,   /* System Generated ID - Hash Value from Receipt */
+ RECEIPT_UPLOAD_DT bigint,
+ ITEM_ID bigint, /* UPC Code */
+ ITEM_NAME VARCHAR(100), /* Name from Receipt */
  ITEM_QTY_PRCH decimal unsigned,
  ITEM_UNITS varchar(20)	,
- ITEM_TOTAL_PRICE decimal unsigned,
- ITEM_CATEGORY varchar(30),
- CONSTRAINT groceries_pk PRIMARY KEY (USER_ID, RECEIPT_ID , UPLOAD_DT)
+ ITEM_TOTAL_PRICE decimal unsigned, /* Price in Dollars */
+ ITEM_CATEGORY varchar(30), /* OCR Closest Category */
+ CONSTRAINT groceries_pk PRIMARY KEY (USER_ID, RECEIPT_ID, ITEM_ID)
  );
-
-
-
-
-DROP TABLE IF EXISTS USER_GROCERY_ITEM_LKP;
-
-CREATE TABLE IF NOT EXISTS USER_GROCERY_ITEM_LKP
-(ITEM_ID bigint primary key,
-ITEM_NAME varchar(100) );
-
 
 DROP TABLE IF EXISTS USER_GROCERY_ITEM_WASTE_ACTUAL;
 
 CREATE TABLE IF NOT EXISTS USER_GROCERY_ITEM_WASTE_ACTUAL
-(USER_ID bigint,
+(USER_ID varchar(128),
  RECEIPT_ID bigint,
- DATA_ENTRY_DT date,
- ITEM_ID bigint,
+ WASTE_DATA_ENTRY_DT varchar(30),
+ ITEM_ID varchar(100),
+ ITEM_NAME varchar(100),
+ ITEM_CATEGORY varchar(30),
+ ITEM_SIZE decimal unsigned,
+ ITEM_TOTAL_PRICE decimal unsigned,
  WASTE_AMT decimal unsigned,
- WASTE_UNIT varchar(30),
- CONSTRAINT grocery_waste_pk PRIMARY KEY (USER_ID, RECEIPT_ID , DATA_ENTRY_DT, ITEM_ID)
+ ITEM_UNITS  varchar(30),
+ CONSTRAINT grocery_waste_pk PRIMARY KEY (USER_ID, RECEIPT_ID, ITEM_ID)
  );
 
 DROP TABLE IF EXISTS USER_GROCERY_ITEM_WASTE_PRED;
 
 CREATE TABLE IF NOT EXISTS USER_GROCERY_ITEM_WASTE_PRED
-(USER_ID bigint,
- RECEIPT_ID bigint,
- DATA_ENTRY_DT date,
+(USER_ID VARCHAR(128),
+ SHOPPING_TRIP_ID bigint, /*System Generated - Autoincrement*/
+ RECOMMENDATION_CATEGORY varchar(100), /* Values - Recommended or Suggested */
+ MODEL_RUN_DT date,
  ITEM_ID bigint,
- PRED_ASTE_AMT decimal unsigned,
- PRED_WASTE_UNIT varchar(30),
+ ITEM_NAME varchar(100),
+ ITEM_CATEGORY varchar(30),
+ PRED_WASTE_AMT decimal unsigned,
+ PRED_WASTE_UNITS varchar(30),
+ RECOMMENDED_QTY bigint,
+ RECOMMENDED_QTY_UNITS varchar(30),
  MODEL_TYPE varchar(20),
- CONSTRAINT grocery_waste_pred_pk PRIMARY KEY (USER_ID, RECEIPT_ID , DATA_ENTRY_DT, ITEM_ID)
+ CONSTRAINT grocery_waste_pred_pk PRIMARY KEY (USER_ID, SHOPPING_TRIP_ID , MODEL_RUN_DT, ITEM_ID)
  );
+
+
+
+DROP TABLE IF EXISTS USER_RECO_GROCERY_EDITS_STG;
+
+CREATE TABLE IF NOT EXISTS USER_RECO_GROCERY_EDITS_STG
+(USER_ID VARCHAR(128),
+ SHOPPING_TRIP_ID bigint,
+ RECOMMENDATION_CATEGORY varchar(100), /* Values - Recommended or Suggested */
+ EDIT_DT date,
+ ITEM_ID bigint,
+ ITEM_NAME varchar(100),
+ ITEM_CATEGORY varchar(30),
+ RECOMMENDED_QTY bigint,
+ ITEM_UNITS varchar(30),
+ EDITED_QTY bigint,
+ CONSTRAINT grocery_waste_pred_pk PRIMARY KEY (USER_ID, SHOPPING_TRIP_ID , EDIT_DT, ITEM_ID)
+ );
+
+
+DROP TABLE IF EXISTS USER_RECO_GROCERY_EDITS_HIST;
+
+CREATE TABLE IF NOT EXISTS USER_RECO_GROCERY_EDITS_HIST
+(USER_ID VARCHAR(128),
+ SHOPPING_TRIP_ID bigint,
+ RECOMMENDATION_CATEGORY varchar(100), /* Values - Recommended or Suggested */
+ EDIT_DT date,
+ ITEM_ID bigint,
+ ITEM_NAME varchar(100),
+ ITEM_CATEGORY varchar(30),
+ RECOMMENDED_QTY bigint,
+ ITEM_UNITS varchar(30),
+ EDITED_QTY bigint,
+ CONSTRAINT grocery_waste_pred_pk PRIMARY KEY (USER_ID, SHOPPING_TRIP_ID , EDIT_DT, ITEM_ID)
+ );
+
+
 
 
 DROP TABLE IF EXISTS USER_GROCERY_ITEM_PRCH_FREQ;
 
 CREATE TABLE IF NOT EXISTS USER_GROCERY_ITEM_PRCH_FREQ
-(USER_ID bigint,
+(USER_ID VARCHAR(128),
  ITEM_ID bigint,
  FRQ_PRCH_EVER bigint,
  FRQ_PRCH_LAST3_TRIPS integer,
  CONSTRAINT grocery_prch_freq_pk PRIMARY KEY (USER_ID, ITEM_ID)
  );
+
+
+ --
+ -- INSERT INTO USER_PROFILE (
+ --   USER_ID,
+ --   USER_NM,
+ --   PASSWORD,
+ --   USER_AGE,
+ --   FAMILY_SIZE,
+ --   NUM_ADULTS,
+ --   NUM_KIDS,
+ --   ANNUAL_HOUSEHOLD_INCOME,
+ --   SHOP_TRIP_FREQ
+ -- )
+ -- VALUES ("bob", "Bob McBob","bobpass", 30, 3, 2, 1, 1000000, 5);
+ -- INSERT INTO USER_PROFILE (
+ --   USER_ID,
+ --   USER_NM,
+ --   PASSWORD,
+ --   USER_AGE,
+ --   FAMILY_SIZE,
+ --   NUM_ADULTS,
+ --   NUM_KIDS,
+ --   ANNUAL_HOUSEHOLD_INCOME,
+ --   SHOP_TRIP_FREQ
+ -- )
+ -- VALUES ("jane", "jane o jane","janepass", 30, 3, 2, 1, 1000000, 5);
+ --
+ -- INSERT INTO USER_PROFILE (
+ --   USER_ID,
+ --   USER_NM,
+ --   PASSWORD,
+ --   USER_AGE,
+ --   FAMILY_SIZE,
+ --   NUM_ADULTS,
+ --   NUM_KIDS,
+ --   ANNUAL_HOUSEHOLD_INCOME,
+ --   SHOP_TRIP_FREQ
+ -- )
+ -- VALUES ("chu", "cq","chuchu", 30, 3, 2, 1, 1000000, 5);
+
+ --
+ --
+ -- INSERT INTO USER_GROCERY_RECEIPT (
+ --   USER_ID,
+ --   RECEIPT_ID,
+ --   RECEIPT_UPLOAD_DT,
+ --   ITEM_ID,
+ --   ITEM_NAME,
+ --   ITEM_QTY_PRCH,
+ --   ITEM_UNITS,
+ --   ITEM_TOTAL_PRICE,
+ --   ITEM_CATEGORY,
+ -- )
+ -- VALUES ("bob", "1234","2017-05-05", 1, "Apple", 5, "oz", 10, "FRUITS");
+ -- INSERT INTO USER_GROCERY_RECEIPT (
+ --   USER_ID,
+ --   RECEIPT_ID,
+ --   RECEIPT_UPLOAD_DT,
+ --   ITEM_ID,
+ --   ITEM_NAME,
+ --   ITEM_QTY_PRCH,
+ --   ITEM_UNITS,
+ --   ITEM_TOTAL_PRICE,
+ --   ITEM_CATEGORY,
+ -- )
+ -- VALUES ("bob", "1234","2017-05-05", 2, "Banana", 2, "oz", 10, "FRUITS");
+ -- INSERT INTO USER_GROCERY_RECEIPT (
+ --   USER_ID,
+ --   RECEIPT_ID,
+ --   RECEIPT_UPLOAD_DT,
+ --   ITEM_ID,
+ --   ITEM_NAME,
+ --   ITEM_QTY_PRCH,
+ --   ITEM_UNITS,
+ --   ITEM_TOTAL_PRICE,
+ --   ITEM_CATEGORY,
+ -- )
+ -- VALUES ("bob", "1234","2017-05-05", 1, "Oranges", 4, "oz", 10, "FRUITS");
+ --

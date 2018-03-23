@@ -1,2 +1,3 @@
 data/*.csv
 backend/images/*
+sql/*.csv

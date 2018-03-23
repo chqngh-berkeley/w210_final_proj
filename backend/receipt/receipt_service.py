@@ -24,8 +24,9 @@ class ReceiptService(object):
         }
         self.ui_to_db = mapper
         self.db_to_ui = {v:k for (k,v) in mapper.items()}
+
     def getRandomItem(self, user_id, receipt_id):
-        names = ['apple','banana','orange']
+        names = ['apple','banana','orange', 'beef','pork','grapes']
         categories = ['JUICE', 'FROZEN FRUIT', 'APPLES', 'APRICOTS', 'BANANAS', 'BERRIES',
            'CHERRIES', 'GRAPES', 'MELONS', 'KIWI', 'CITRUS', 'MANGO', 'PEACH',
            'PEAR', 'PLUM', 'ASPARAGUS', 'FROZEN VEGETABLE', 'BROCCOLI',

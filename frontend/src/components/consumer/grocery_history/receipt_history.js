@@ -102,7 +102,7 @@ class ReceiptHistory extends React.Component {
       <div>
         <h1> Past Grocery Receipts </h1>
         <br />
-
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vulputate cursus scelerisque. Phasellus at laoreet mi. Morbi non nibh facilisis, viverra dui luctus, vestibulum metus. Aliquam suscipit mauris dui, quis hendrerit tellus sagittis ut. Nam leo mi, dignissim sit amet dapibus eget, pharetra at neque. Integer ut facilisis purus. Aliquam erat volutpat.</p>
         <br />
         <Table
           height={this.state.height}

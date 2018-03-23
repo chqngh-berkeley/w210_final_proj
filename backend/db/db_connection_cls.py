@@ -153,6 +153,26 @@ class MysqlDBPython(object):
         return self.__session.lastrowid
     ## End def insert
 
+    def insertJSON(self, table, obj):
+        values = None
+        query = "INSERT INTO %s " % table
+        for k,v in obj.items():
+            pass
+        if kwargs:
+            keys = kwargs.keys()
+            values = tuple(kwargs.values())
+            query += "(" + ",".join(["`%s`"] * len(keys)) %  tuple (keys) + ") VALUES (" + ",".join(["%s"]*len(values)) + ")"
+        elif args:
+            values = args
+            query += " VALUES(" + ",".join(["%s"]*len(values)) + ")"
+
+        self.__open()
+        self.__session.execute(query, values)
+        self.__connection.commit()
+        self.__close()
+        return self.__session.lastrowid
+    ## End def insert
+
     def delete(self, table, where=None, *args):
         query = "DELETE FROM %s" % table
         if where:

@@ -2,7 +2,7 @@ version: '3'
 services:
   db:
     image: mariadb:latest
-    # build: ./sql
+    build: ./sql
     ports:
       - '3306:3306'
     environment:

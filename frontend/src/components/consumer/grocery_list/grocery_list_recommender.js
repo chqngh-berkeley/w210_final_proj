@@ -118,7 +118,7 @@ class GroceryListRecommender extends React.Component {
       <div>
         <h1> Grocery List Recommender </h1>
         <br />
-
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vulputate cursus scelerisque. Phasellus at laoreet mi. Morbi non nibh facilisis, viverra dui luctus, vestibulum metus. Aliquam suscipit mauris dui, quis hendrerit tellus sagittis ut. Nam leo mi, dignissim sit amet dapibus eget, pharetra at neque. Integer ut facilisis purus. Aliquam erat volutpat.</p>
         <h3>Frequently Purchased Items</h3>
 
         <Table

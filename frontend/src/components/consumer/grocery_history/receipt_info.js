@@ -83,6 +83,7 @@ class ReceiptInfo extends React.Component {
     return (
       <div>
         <h1> Grocery Info </h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vulputate cursus scelerisque. Phasellus at laoreet mi. Morbi non nibh facilisis, viverra dui luctus, vestibulum metus. Aliquam suscipit mauris dui, quis hendrerit tellus sagittis ut. Nam leo mi, dignissim sit amet dapibus eget, pharetra at neque. Integer ut facilisis purus. Aliquam erat volutpat.</p>
         <br />
         <Table
           height={this.state.height}

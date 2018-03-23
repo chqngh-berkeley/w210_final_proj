@@ -31,7 +31,7 @@ class UserService(object):
             "NUM_ADULTS" :  "num_adults",
             "NUM_KIDS" :  "num_kids",
             "ANNUAL_HOUSEHOLD_INCOME" :  "income",
-            "SHOP_TRIP_FREQ INTEGER" : "shop_trip_freq"
+            "SHOP_TRIP_FREQ" : "shop_trip_freq"
         }
         self.ui_to_db = mapper
         self.db_to_ui = {v:k for (k,v) in mapper.items()}
@@ -55,8 +55,7 @@ class UserService(object):
     }
     '''
     def createUser(self, request_json):
-        username = request_json['username']
-        uid = int(hashlib.sha1(username).hexdigest(), 16) % (10 ** 8)
+        uid = request_json['username']
         email = request_json['email']
         password = request_json['password']
         name = request_json['lastname'] + ',' + request_json['firstname']
@@ -67,7 +66,7 @@ class UserService(object):
         income = request_json['income']
         shop_trip_freq = request_json['shop_trip_freq']
         data = self.sql_.insert('USER_PROFILE', \
-        USER_ID = uid, USERNAME=username, PASSWORD= password, EMAIL= email, USER_NM= name, USER_AGE=age, \
+        USER_ID = uid, PASSWORD= password, USER_NM= name, USER_AGE=age, \
         FAMILY_SIZE = family_size, NUM_ADULTS=num_adults, \
         NUM_KIDS=num_kids, ANNUAL_HOUSEHOLD_INCOME=income,  \
         SHOP_TRIP_FREQ=shop_trip_freq)
@@ -120,9 +119,8 @@ class UserService(object):
     }
     '''
     def getUserViaLogin(self, username, password):
-        conditional_query = 'USERNAME="%s" AND PASSWORD="%s"' % (username, password)
-        fields = ['USER_ID', 'USERNAME','USER_NM','USER_AGE','EMAIL','FAMILY_SIZE', \
-        'NUM_ADULTS','NUM_KIDS','ANNUAL_HOUSEHOLD_INCOME','SHOP_TRIP_FREQ']
+        conditional_query = 'USER_ID="%s" AND PASSWORD="%s"' % (username, password)
+        fields = self.ui_to_db.keys()
         data = self.sql_.selectFields('USER_PROFILE', conditional_query, \
         fields)
         return data
