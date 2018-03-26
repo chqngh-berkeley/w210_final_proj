@@ -27,8 +27,11 @@ const mapDispatchToProps =(dispatch) => {
   return {
     loginUser : (username, password) => {
       api.loginUser(username, password).then(function(res) {
-        dispatch(loginUser(username, password));
-        dispatch(push('/consumer'));
+        console.log(res['data'])
+        if(res['data']) {
+          dispatch(loginUser(res['data']));
+          dispatch(push('/consumer'));
+        }
       });
       //
     }

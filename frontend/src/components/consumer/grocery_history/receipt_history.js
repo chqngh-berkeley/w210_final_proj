@@ -29,21 +29,22 @@ const st = {
 
 const mapStateToProps = function(state) {
   return {
+    username : state.loginReducer.username,
     receipts : state.receiptReducer.receipts
   };
 };
 
 const mapDispatchToProps =(dispatch) => {
   return {
-      setCurrentReceipt :(item) => {
-        console.log(item)
-        api.getReceiptDataById(1, item['id']).then(function(res) {
+      setCurrentReceipt :(username, item) => {
+        api.getReceiptDataById(username, item['receipt_id']).then(function(res) {
+            console.log(res['data']);
             dispatch(setReceipt(res['data']));
         })
         // dispatch(push('/receiptInfo'))
       },
-      getAllReceipts: () => {
-        api.getAllReceipts(1).then(function(res) {
+      getAllReceipts: (username) => {
+        api.getAllReceipts(username).then(function(res) {
             dispatch(setAllReceipts(res['data']));
         })
       }
@@ -79,7 +80,7 @@ class ReceiptHistory extends React.Component {
 
   handleOnReceiptEdit = (event, item) => {
     console.log('Edit data...', item);
-    this.props.setCurrentReceipt(item);
+    this.props.setCurrentReceipt(this.props.username, item);
   }
   handleOnReceiptRemove = (event, idx) => {
     console.log('remove data...', idx)
@@ -87,7 +88,7 @@ class ReceiptHistory extends React.Component {
 
   componentDidMount() {
     // this.setState({receipts : this.props.receipts})
-    this.props.getAllReceipts();
+    this.props.getAllReceipts(this.props.username);
   }
 
   getSlider() {
@@ -96,63 +97,77 @@ class ReceiptHistory extends React.Component {
       </div>
     );
   }
+
+  renderTable() {
+    if(this.props.receipts && this.props.receipts.length ==  0) {
+      return (<h3 style= {{textAlign : 'center', 'margin': '50px auto'}}>
+        No Receipt History
+      </h3>)
+    }
+    return (
+      <Table
+        height={this.state.height}
+        selectable = {false}
+        fixedHeader={this.state.fixedHeader}
+        fixedFooter={this.state.fixedFooter}
+      >
+        <TableHeader
+          displaySelectAll={false}
+          adjustForCheckbox={false}
+          enableSelectAll={false}
+          >
+          <TableRow>
+            <TableHeaderColumn colSpan="3" style={{textAlign: 'left'}}>
+              Receipt List History
+            </TableHeaderColumn>
+          </TableRow>
+          <TableRow>
+            <TableHeaderColumn tooltip="item">Receipt ID</TableHeaderColumn>
+            <TableHeaderColumn tooltip="timestamp">Date</TableHeaderColumn>
+
+            <TableHeaderColumn tooltip="action">Edit</TableHeaderColumn>
+          </TableRow>
+        </TableHeader>
+        <TableBody
+          displayRowCheckbox={false}
+          showRowHover={this.state.showRowHover}
+          stripedRows={this.state.stripedRows}
+        >
+          {this.props.receipts && this.props.receipts.map( (row, index) => (
+            <TableRow key={index}>
+              <TableRowColumn>{row.receipt_id}</TableRowColumn>
+              <TableRowColumn>{new Date(parseInt(row.upload_date)).toString()}</TableRowColumn>
+
+              <TableRowColumn>
+                <Link
+                  to = '/receiptInfo'
+                  onClick = {this.handleOnReceiptEdit.bind(this, null, row)}>
+                Edit
+              </Link>
+              </TableRowColumn>
+            </TableRow>
+            ))}
+        </TableBody>
+        <TableFooter>
+        </TableFooter>
+      </Table>
+    )
+  }
+
   render() {
-//
+// <TableHeaderColumn tooltip="action">Wastage in $</TableHeaderColumn>
+
+// <TableRowColumn>
+//   {row.wastageInfo ? row.wastageInfo : 'N/A'}
+// </TableRowColumn>
     return (
       <div>
         <h1> Past Grocery Receipts </h1>
         <br />
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vulputate cursus scelerisque. Phasellus at laoreet mi. Morbi non nibh facilisis, viverra dui luctus, vestibulum metus. Aliquam suscipit mauris dui, quis hendrerit tellus sagittis ut. Nam leo mi, dignissim sit amet dapibus eget, pharetra at neque. Integer ut facilisis purus. Aliquam erat volutpat.</p>
         <br />
-        <Table
-          height={this.state.height}
-          selectable = {false}
-          fixedHeader={this.state.fixedHeader}
-          fixedFooter={this.state.fixedFooter}
-        >
-          <TableHeader
-            displaySelectAll={false}
-            adjustForCheckbox={false}
-            enableSelectAll={false}
-            >
-            <TableRow>
-              <TableHeaderColumn colSpan="4" style={{textAlign: 'left'}}>
-                Receipt List History
-              </TableHeaderColumn>
-            </TableRow>
-            <TableRow>
-              <TableHeaderColumn tooltip="item">Receipt ID</TableHeaderColumn>
-              <TableHeaderColumn tooltip="timestamp">Date</TableHeaderColumn>
-              <TableHeaderColumn tooltip="action">Wastage in $</TableHeaderColumn>
-              <TableHeaderColumn tooltip="action">Edit</TableHeaderColumn>
-            </TableRow>
-          </TableHeader>
-          <TableBody
-            displayRowCheckbox={false}
-            showRowHover={this.state.showRowHover}
-            stripedRows={this.state.stripedRows}
-          >
-            {this.props.receipts && this.props.receipts.map( (row, index) => (
-              <TableRow key={index}>
-                <TableRowColumn>{row.id}</TableRowColumn>
-                <TableRowColumn>{new Date(parseInt(row.timestamp)).toString()}</TableRowColumn>
-                <TableRowColumn>
-                  {row.wastageInfo ? row.wastageInfo : 'N/A'}
-                </TableRowColumn>
-                <TableRowColumn>
-                  <Link
-                    to = '/receiptInfo'
-                    onClick = {this.handleOnReceiptEdit.bind(this, null, row)}>
-                  Edit
-                </Link>
-                </TableRowColumn>
-              </TableRow>
-              ))}
-          </TableBody>
-          <TableFooter>
-          </TableFooter>
-        </Table>
 
+        {this.renderTable()}
       </div>
     );
   }

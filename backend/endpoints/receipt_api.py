@@ -83,7 +83,9 @@ def upload_receipt():
     try:
         user_id = request.get_header('user_id')
         upload = request.files.get('upload')
-        data = receipt_serv.storeReceipt(upload)
+        if not upload:
+            return {'data': 'upload cannot be empty'}
+        data = receipt_serv.storeReceipt(user_id, upload.file)
         return {'data': data}
     except Exception as e:
         print e

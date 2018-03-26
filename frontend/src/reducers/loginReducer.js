@@ -2,11 +2,9 @@ import * as c from '../constants/constants'
 
 let loginInitState = {
   loggedIn : false,
-  username : null,
+  username : '875',
   password : null,
-  email : null,
-  firstname : null,
-  lastname : null,
+  name : null,
   age : null,
   income : null,
   family_size : null,
@@ -20,23 +18,21 @@ let loginInitState = {
 export function loginReducer(state=loginInitState, action) {
   switch(action.type) {
       case c.LOGIN_USER:
-        console.log(action)
+        let userinfo = action.userinfo
         return {
           loggedIn : true,
-          username : action.username,
-          password : action.password,
-          email : action.email,
-          firstname : action.firstname,
-          lastname : action.lastname,
-          age : action.age,
-          income : action.income,
-          family_size : action.family_size,
-          num_adults : action.num_adults,
-          num_kids : action.num_kids,
-          shopping_freq : action.shopping_freq
+          username : userinfo.username,
+          password : userinfo.password,
+          name : userinfo.name,
+          age : userinfo.age,
+          income : userinfo.income,
+          family_size : userinfo.family_size,
+          num_adults : userinfo.num_adults,
+          num_kids : userinfo.num_kids,
+          shopping_freq : userinfo.shop_trip_freq
         };
       case c.LOGOUT_USER:
-        return Object.assign({}, state, {loggedIn : false})
+        return Object.assign({}, state, loginInitState)
       default:
         return state;
   }

@@ -135,6 +135,30 @@ class MysqlDBPython(object):
         return update_rows
     ## End function update
 
+    def updateObj(self, table, where, obj):
+        query  = "UPDATE %s SET " % table
+        keys   = obj.keys()
+        values = tuple(obj.values())
+        l = len(keys) - 1
+        for i, key in enumerate(keys):
+            query += "`"+key+"` = %s"
+            if i < l:
+                query += ","
+            ## End if i less than 1
+        ## End for keys
+        query += " WHERE %s" % where
+        print(query)
+        self.__open()
+        self.__session.execute(query, values)
+        self.__connection.commit()
+
+        # Obtain rows affected
+        update_rows = self.__session.rowcount
+        self.__close()
+
+        return update_rows
+    ## End function update
+
     def insert(self, table, *args, **kwargs):
         values = None
         query = "INSERT INTO %s " % table
@@ -153,18 +177,19 @@ class MysqlDBPython(object):
         return self.__session.lastrowid
     ## End def insert
 
-    def insertJSON(self, table, obj):
+    def insertObj(self, table, obj):
         values = None
         query = "INSERT INTO %s " % table
-        for k,v in obj.items():
-            pass
-        if kwargs:
-            keys = kwargs.keys()
-            values = tuple(kwargs.values())
-            query += "(" + ",".join(["`%s`"] * len(keys)) %  tuple (keys) + ") VALUES (" + ",".join(["%s"]*len(values)) + ")"
-        elif args:
-            values = args
-            query += " VALUES(" + ",".join(["%s"]*len(values)) + ")"
+        keys = obj.keys()
+        values = obj.values()
+        query += "(" + ",".join(["`%s`"] * len(keys)) %  tuple (keys) + ") VALUES (" + ",".join(["%s"]*len(values)) + ")"
+        # if kwargs:
+        #     keys = kwargs.keys()
+        #     values = tuple(kwargs.values())
+        #     query += "(" + ",".join(["`%s`"] * len(keys)) %  tuple (keys) + ") VALUES (" + ",".join(["%s"]*len(values)) + ")"
+        # elif args:
+        #     values = args
+        #     query += " VALUES(" + ",".join(["%s"]*len(values)) + ")"
 
         self.__open()
         self.__session.execute(query, values)

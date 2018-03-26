@@ -6,11 +6,11 @@ import { push } from 'react-router-redux';
 import {logoutUser} from '../../actions/loginAction'
 
 const st = {
-  backgroundColor : 'black',
+  backgroundColor : 'white',
   color: 'black',
-  textAlign: 'right',
-  margin: '0 auto',
-  padding: '15px 0'
+  textAlign: 'left',
+  // margin: '0 auto',
+  padding: '15px'
 }
 
 const mapStateToProps = function(state){
@@ -32,46 +32,41 @@ const mapDispatchToProps =(dispatch) => {
 
 class HeaderBar extends React.Component {
   render() {
-    // <FlatButton primary={true} label="Consumer App" />
-    // <FlatButton primary={true} label="Retailer App" />
-    // <Link style={linkStyle} to='/retailer'>Retailer Waste Reduction Solutions</Link>
-    // <span style={{'paddingRight':'20px'}}></span>
-
     const linkStyle = {
-      color: 'white',
-      textDecoration: 'none'
+      // color: 'black',
+      textDecoration: 'none',
+      marginLeft : '5px'
     }
     var el = <span></span>
     if(this.props.loggedIn) {
-      el = (<span>
-              <Link style={linkStyle} to='/consumer'>Consumer Waste Reduction Solutions </Link>
-              <span style={{'paddingRight':'20px'}}></span>
-              <Link style={linkStyle} to='/userinfo'>Info</Link>
-              <span style={{'paddingRight':'20px'}}></span>
-              <Link style={linkStyle} to='/login' onClick={this.props.logoutUser}>Logout</Link>
-              <span style={{'paddingRight':'20px'}}></span>
+      el = (<span className="w3-bar-item w3-button w3-hide-small">
+          <i className="fa fa-sign-out"></i>
+          <Link style={linkStyle} to='/login' onClick={this.props.logoutUser}>Logout</Link>
         </span>)
     } else {
       //
-      el = (<span>
-        <Link style={linkStyle} to='/login'>Login</Link>
+      el = (<span className="w3-bar-item w3-button w3-hide-small">
+        <i className="fa fa-binoculars"></i>
+        <Link style={linkStyle} to='/login'>
+          Our Solution
+        </Link>
         </span>)
     }
     return (
-      <header style = {st}>
-        <span>
-         <Link style={linkStyle} to='/wastage'>Visualizing Food Waste </Link>
-         <span style={{'paddingRight':'20px'}}></span>
+      <header>
+          <a href="http://0.0.0.0:8586/#home" className="w3-bar-item w3-button"><i className="fa fa-home"></i> Home</a>
+          <a href="http://0.0.0.0:8586/#introduction" className="w3-bar-item w3-button w3-hide-small"><i className="fa fa-circle"></i> Introduction</a>
+          <a href="http://0.0.0.0:8586/#data" className="w3-bar-item w3-button w3-hide-small"><i className="fa fa-database"></i> The Data</a>
+          <a href="http://0.0.0.0:8586/#about" className="w3-bar-item w3-button w3-hide-small"><i className="fa fa-user"></i> About Us</a>
+         <a href="http://0.0.0.0:8585" className="w3-bar-item w3-button w3-hide-small"><i className="fa fa-area-chart"></i> Infomatics </a>
          {el}
-         <span style={{'paddingRight':'20px'}}></span>
-          <Link style={linkStyle} to='/faq'>About Us</Link>
-          <span style={{'paddingRight':'20px'}}></span>
-
-        </span>
-
-      </header>
-    );
-  }
+     </header>
+   );
+ }
 }
+      //   </span>
+      //
+      // </header>
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderBar)

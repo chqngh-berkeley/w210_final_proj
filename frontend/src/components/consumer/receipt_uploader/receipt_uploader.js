@@ -16,7 +16,7 @@ import {connect} from 'react-redux';
 
 const uploadFileboxCss = {
   // width: '100%',
-  height: '150px',
+  height: '250px',
   textAlign: 'center',
   // padding: '50px 120px',
   paddingTop: '50px',
@@ -27,7 +27,7 @@ const uploadFileboxCss = {
 
 const mapStateToProps = function(state){
   return {
-
+    username : state.loginReducer.username
   };
 };
 
@@ -36,13 +36,13 @@ const mapDispatchToProps =(dispatch) => {
     resetCurrentReceipt: () => {
       dispatch(setReceipt([]))
     },
-    uploadReceiptData : (data) => {
-      api.submitFileUpload(data).then(function(json_res) {
+    uploadReceiptData : (username, data) => {
+      api.submitFileUpload(username, data).then(function(json_res) {
         console.log('res:', json_res)
-        dispatch(setReceiptId(json_res['result']));
-        api.getReceiptDataById(json_res['result']).then(function(res) {
+        // dispatch(setReceiptId(json_res['result']));
+        api.getReceiptDataById(username,json_res['data'][0]['receipt_id']).then(function(res) {
           console.log('receipt data:', res);
-          dispatch(setReceiptData(res['result']));
+          // dispatch(setReceiptData(res['result']));
         });
       });
     }
@@ -97,7 +97,7 @@ class ReceiptUploader extends React.Component {
   }
 
   submitFileUpload = (e) => {
-    this.props.uploadReceiptData(this.state.file);
+    this.props.uploadReceiptData(this.props.username, this.state.file);
     this.handleNext()
   }
 

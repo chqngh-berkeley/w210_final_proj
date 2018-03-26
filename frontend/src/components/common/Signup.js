@@ -43,8 +43,7 @@ class Signup extends React.Component {
       username : '',
       password : '',
       email : '',
-      firstname : '',
-      lastname : '',
+      name : '',
       age : '',
       income : '',
       family_size : '',
@@ -84,31 +83,21 @@ class Signup extends React.Component {
       <br />
       <div>
       <TextField
-          onChange = {(e) => {this.setState({firstname: e.target.value})}}
+          onChange = {(e) => {this.setState({name: e.target.value})}}
           floatingLabelFixed = {true}
-          floatingLabelText="Firstname" />
-          <TextField
-          onChange = {(e) => {this.setState({lastname: e.target.value})}}
-          floatingLabelFixed = {true}
-          style={spacer}
-          floatingLabelText="Lastname" />
-      </div>
-      <div>
+          floatingLabelText="Name" />
         <TextField
         onChange = {(e) => {this.setState({age: e.target.value})}}
         floatingLabelFixed = {true}
+        style = {spacer}
         floatingLabelText="Age" />
-        <TextField
-        onChange = {(e) => {this.setState({income: e.target.value})}}
-        floatingLabelFixed = {true}
-        style={spacer}
-        floatingLabelText="Income in $" />
+
       </div>
       <div>
-        <TextField
-          onChange = {(e) => {this.setState({email: e.target.value})}}
+          <TextField
+          onChange = {(e) => {this.setState({income: e.target.value})}}
           floatingLabelFixed = {true}
-          floatingLabelText="Email Address"/>
+          floatingLabelText="Income in $" />
           <TextField
             onChange = {(e) => {this.setState({shop_trip_freq: e.target.value})}}
             floatingLabelFixed = {true}

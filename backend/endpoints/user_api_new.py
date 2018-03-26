@@ -37,7 +37,7 @@ def createUser():
     try:
         request_json = dict(request.json)
         data = user_serv.createUser(request_json)
-        return {'result': data}
+        return {'data': data}
     except Exception as e:
         print e
         return e
@@ -51,7 +51,7 @@ def loginUser():
         username = request_json['username']
         password = request_json['password']
         data = user_serv.getUserViaLogin(username, password)
-        return {'result': data}
+        return {'data': data}
     except Exception as e:
         print e
         return e
@@ -63,7 +63,7 @@ def getUser(id):
     try:
         user_id = id
         data = user_serv.getUser(user_id)
-        return {'result': data}
+        return {'data': data}
     except Exception as e:
         print e
         return e
@@ -83,7 +83,7 @@ def updateUser(id):
         # shop_trip_freq = request_json['shop_trip_freq']
         data = user_serv.updateUser(user_id, request_json)
         # db.update_user(id, name, age, family_size, num_adults, num_kids, income, shop_trip_freq)
-        return { 'result' : data }
+        return { 'data' : data }
     except Exception as e:
         print e
         return e
@@ -99,7 +99,7 @@ def deleteUser():
         '''
         # db.delete_user_based_on_id(user_id)
         data = user_serv.removeUser(user_id)
-        return {'result': data }
+        return {'data': data }
     except Exception as e:
         print e
         return e
@@ -108,7 +108,7 @@ def deleteUser():
 def userTest():
     try:
         print('user_id:',request.get_header('user_id'))
-        return {'result': 'user test'}
+        return {'data': 'user test'}
     except Exception as e:
         print e
         return e

@@ -36,6 +36,7 @@ const st = {
 
 const mapStateToProps = function(state){
   return {
+    username: state.loginReducer.username,
     defaultList : state.groceryRecReducer.defaultList,
     suggestedList : state.groceryRecReducer.suggestedList
   };
@@ -55,16 +56,16 @@ const mapDispatchToProps =(dispatch) => {
       removeFromSuggestedList : (item) => {
         dispatch(removeFromSuggestedList(item))
       },
-      getRecommendations : () => {
-        api.getGroceryListRecommendations().then(function(res) {
-          dispatch(setRecommendedGroceryList(res['data']))
+      getRecommendations : (username) => {
+        api.getGroceryListRecommendations(username).then(function(res) {
+          // dispatch(setRecommendedGroceryList(res['data']))
         })
       },
-      getItemSuggestion : () => {
-        api.getGroceryItemSuggestions().then(function(res) {
-          dispatch(setSuggestedItemsList(res['data']))
+      getItemSuggestion : (username) => {
+        api.getGroceryItemSuggestions(username).then(function(res) {
+          // dispatch(setSuggestedItemsList(res['data']))
         })
-      },
+      }
     }
 };
 
@@ -87,8 +88,9 @@ class GroceryListRecommender extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getRecommendations();
-    this.props.getItemSuggestion();
+
+    this.props.getRecommendations(this.props.username);
+    this.props.getItemSuggestion(this.props.username);
   }
 
   handleToggle = (event, toggled) => {

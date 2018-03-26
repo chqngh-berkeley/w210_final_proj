@@ -1,11 +1,10 @@
 import * as c from '../constants/constants'
 
 
-export const loginUser = (username, password) => {
+export const loginUser = (userinfo) => {
   return {
     type: c.LOGIN_USER,
-    username,
-    password
+    userinfo
   }
 }
 export const logoutUser = () => {

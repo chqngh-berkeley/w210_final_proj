@@ -14,34 +14,38 @@ from operator import itemgetter
 from itertools import groupby
 import warnings
 warnings.filterwarnings("ignore")
+import numpy as np
 
 # walmart api key
 key = '4vdmcj2gwqvd7fg74ddu7e99'
 
 def ocr(args):
     # load the example image and convert it to grayscale
-    image = cv2.imread(args["image"])
+    # image = cv2.imread(args["image"])
+    image = args["image"].read()
+
+    image = cv2.imdecode(np.frombuffer(image, np.uint8), 1)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     # check to see if we should apply thresholding to preprocess the
     # image
-    if args["preprocess"] == "thresh":
-        gray = cv2.threshold(gray, 0, 255,
-            cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+    # if args["preprocess"] == "thresh":
+    #     gray = cv2.threshold(gray, 0, 255,
+    #         cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
     # make a check to see if median blurring should be done to remove
     # noise
-    elif args["preprocess"] == "blur":
-        gray = cv2.medianBlur(gray, 3)
+    # elif args["preprocess"] == "blur":
+    #     gray = cv2.medianBlur(gray, 3)
     # write the grayscale image to disk as a temporary file so we can
     # apply OCR to it
-    filename = "{}.png".format(os.getpid())
-    cv2.imwrite(filename, gray)
+    # filename = "{}.png".format(os.getpid())
+    # cv2.imwrite(filename, gray)
 
     # load the image as a PIL/Pillow image, apply OCR, and then delete
     # the temporary file
-    text = pytesseract.image_to_string(Image.open(filename))
-    os.remove(filename)
-
+    # text = pytesseract.image_to_string(Image.open(filename))
+    text = pytesseract.image_to_string(image)
+    # os.remove(filename)
     # split up text based on each row in the receipt
     text_list = []
     row = []
@@ -109,7 +113,7 @@ def ocr(args):
     columns = ['food_name', 'category', 'size', 'upc', 'food_code', 'price', 'tax_code']
     receipt_df = pd.DataFrame(data = food_items, columns = columns)
 
-    food_categories = pd.read_csv('food_categories.csv', delimiter = '\t')
+    food_categories = pd.read_csv('ocr_module/food_categories.csv', delimiter = '\t')
 
     categories = food_categories['ITEM DESCRIPTION'].tolist()
 
@@ -165,10 +169,10 @@ def ocr(args):
 
     receipt_id = str(pd.to_numeric(receipt_df['upc']).sum()) + str(round(pd.to_numeric(receipt_df['price']).sum()))
     receipt_df.insert(0, 'receipt_id', receipt_id)
-    
+
     pd.set_option('display.expand_frame_repr', False)
-    print(receipt_df)
-    return receipt_df
+
+    return receipt_df.to_dict('records')
 
 # show the output images
 #cv2.imshow("Image", image)

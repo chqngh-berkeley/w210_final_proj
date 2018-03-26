@@ -4,7 +4,14 @@ import ReceiptHistory from './grocery_history/receipt_history';
 import  GroceryListRecommender from './grocery_list/grocery_list_recommender';
 import ReceiptUploader from './receipt_uploader/receipt_uploader';
 import {connect} from 'react-redux';
+import { push } from 'react-router-redux';
 import {Tabs, Tab} from 'material-ui/Tabs';
+import {
+  team500, team700,
+  pinkA200,
+  grey100, grey300, grey400, grey500,
+  white, darkBlack, fullBlack,
+} from 'material-ui/styles/colors';
 const st = {
   backgroundColor : '#FAFAFA',
   // color: 'black',
@@ -15,25 +22,48 @@ const st = {
 
 const mapStateToProps = function(state){
   return {
-
+    username : state.loginReducer.username,
   };
 };
+const mapDispatchToProps = function(dispatch) {
+  return {
+    returnToLogin: () => {
+      dispatch(push('/login'));
+    }
+  }
+}
 
 class Consumer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      val : 'b'
+    }
+  }
+  componentDidMount() {
+    if(!this.props.username) {
+      this.props.returnToLogin()
+      return;
+    }
+  }
+  onTabChange(tabVal) {
+    console.log(tabVal)
+    this.setState({val : tabVal})
+  }
 
   getTabs() {
     return (
-    <Tabs>
+    <Tabs value={this.state.val}
+      onChange={this.onTabChange.bind(this)}>
      <Tab label="Receipt History" value="b">
-       <ReceiptHistory />
+       {this.state.val ==  'b' && <ReceiptHistory />}
+
      </Tab>
      <Tab label="Grocery Recommender" value="c">
-       <GroceryListRecommender />
+       {this.state.val == 'c' && <GroceryListRecommender />}
      </Tab>
      <Tab label="Receipt Uploader" value="a">
-        <div>
-          <ReceiptUploader />
-        </div>
+       {this.state.val == 'a' && <ReceiptUploader />}
       </Tab>
   </Tabs>)
   }
@@ -46,4 +76,4 @@ class Consumer extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(Consumer)
+export default connect(mapStateToProps, mapDispatchToProps)(Consumer)

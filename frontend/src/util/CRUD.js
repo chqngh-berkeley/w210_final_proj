@@ -1,10 +1,10 @@
 import fetch from 'isomorphic-fetch';
 
-function getCRUDSetting(type) {
+function getCRUDSetting(type, user_id) {
   return {
     headers:{
      'Content-Type': 'application/json',
-     'user_id': 'blarg'
+     'user_id': user_id ? user_id : null
     },
     method: type,
     // mode: 'cors',
@@ -12,11 +12,11 @@ function getCRUDSetting(type) {
   };
 }
 
-function getFileCRUDSetting(type) {
+function getFileCRUDSetting(type, user_id) {
 
   return {
     headers:{
-
+      'user_id': user_id ? user_id : null
     },
     method: type
   };
@@ -31,32 +31,32 @@ function appendQueryParams(params) {
 }
 
 export const CRUD = {
-  get(url, params) {
-    var cs = getCRUDSetting('GET');
+  get(url, params, user_id) {
+    var cs = getCRUDSetting('GET', user_id);
     if(params) {
       url += appendQueryParams(params);
     }
     return fetch(url, cs);
   },
 
-  post(url, data) {
-    var cs = getCRUDSetting('POST');
+  post(url, data, user_id) {
+    var cs = getCRUDSetting('POST', user_id);
     cs.body = JSON.stringify(data);
     return fetch(url, cs);
   },
 
-  postFile(url, data) {
-    var cs = getFileCRUDSetting('POST');
+  postFile(url, data, user_id) {
+    var cs = getFileCRUDSetting('POST', user_id);
     cs.body = data;
     return fetch(url, cs);
   },
-  put(url, data) {
-    var cs = getCRUDSetting('PUT');
+  put(url, data, user_id) {
+    var cs = getCRUDSetting('PUT', user_id);
     cs.body = JSON.stringify(data);
     return fetch(url, cs);
   },
-  del(url) {
-    var cs = getCRUDSetting('DELETE');
+  del(url, user_id) {
+    var cs = getCRUDSetting('DELETE', user_id);
     return fetch(url, cs);
   }
 };

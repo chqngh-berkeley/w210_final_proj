@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS USER_GROCERY_RECEIPT
  ITEM_QTY_PRCH decimal unsigned,
  ITEM_UNITS varchar(20)	,
  ITEM_TOTAL_PRICE decimal unsigned, /* Price in Dollars */
- ITEM_CATEGORY varchar(30), /* OCR Closest Category */
+ ITEM_CATEGORY varchar(100), /* OCR Closest Category */
  CONSTRAINT groceries_pk PRIMARY KEY (USER_ID, RECEIPT_ID, ITEM_ID)
  );
 
