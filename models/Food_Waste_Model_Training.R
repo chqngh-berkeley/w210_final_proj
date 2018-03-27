@@ -2,12 +2,12 @@ library(RMariaDB)
 library(DBI)
 library(sqldf)
 library(car)
-library(plm)
-library(dlnm)
+#library(plm)
+#library(dlnm)
 #library(tidyverse)    #Used for data_frame, which can store lists as columns
-library(nnet)    #for #multinom
-library(MASS)    #for #ordinal
-library(dplyr)   #reordering rows in df
+#library(nnet)    #for #multinom
+#library(MASS)    #for #ordinal
+#library(dplyr)   #reordering rows in df
 
 username <- "root"
 host <- "0.0.0.0"
@@ -16,7 +16,7 @@ con <- dbConnect(RMariaDB::MariaDB(), host = host, user = username, dbname = dbn
 
 #get data from MariaDB 
 user_profile <- dbGetQuery(con, "SELECT * FROM USER_PROFILE")
-data_complete <- dbGetQuery(con, "SELECT * FROM USER_GROCERY_RECEIPT")
+data_complete <- dbGetQuery(con, "SELECT * FROM USER_GROCERY_ITEM_WASTE_PRED")
 user_grocery_item_lookup <- dbGetQuery(con, "SELECT * FROM USER_GROCERY_ITEM_LOOKUP")
 new_receipts1 <- dbGetQuery(con, "SELECT * FROM SAMPLE_RECEIPTS")
 
