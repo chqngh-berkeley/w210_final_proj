@@ -14,8 +14,8 @@ CREATE TABLE IF NOT EXISTS USER_PROFILE
  FAMILY_SIZE integer,
  NUM_ADULTS integer,
  NUM_KIDS integer,
- ANNUAL_HOUSEHOLD_INCOME VARCHAR(200), /* Range */
- SHOP_TRIP_FREQ VARCHAR(30)
+ ANNUAL_HOUSEHOLD_INCOME integer, /* Range */
+ SHOP_TRIP_FREQ integer
 );
 
 DROP TABLE IF EXISTS USER_GROCERY_RECEIPT;
@@ -30,8 +30,36 @@ CREATE TABLE IF NOT EXISTS USER_GROCERY_RECEIPT
  ITEM_UNITS varchar(20)	,
  ITEM_TOTAL_PRICE decimal unsigned, /* Price in Dollars */
  ITEM_CATEGORY varchar(100), /* OCR Closest Category */
+ ITEM_CLASS VARCHAR(30),
+ ITEM_SIZE decimal unsigned,
+ SHOPPING_DATE bigint,
+ ITEM_TOTAL_SIZE decimal unsigned,
+ FAMILY_SIZE integer,
+ PER_CAPITA_SIZE decimal unsigned,
+ PER_CAPITA_SIZE_TRIP decimal unsigned,
+ PREVIOUS_SHOP_DATE bigint,
+ PREVIOUS_SHOP_SIZE bigint,
+ ITEM_SIZE_AVG decimal unsigned,
+ ITEM_SIZE_STDEV decimal unsigned,
+ ITEM_SIZE_Z decimal unsigned,
+ ITEM_SIZE_ALL_AVG decimal unsigned,
+ ITEM_SIZE_ALL_STDEV decimal unsigned,
+ ITEM_SIZE_ALL_Z decimal unsigned,
+ ITEM_DURATION decimal unsigned,
+ TIME_LOSS_COUNTER decimal unsigned,
+ TIME_LOSS bigint,
+ TRIP_SIZE_AVG decimal unsigned,
+ TRIP_SIZE_STDEV decimal unsigned,
+ DAYS_BETWEEN_AVG decimal unsigned,
+ DAYS_BETWEEN_STDEV decimal unsigned,
+ PREV_SIZE_Z decimal unsigned,
+ PREV_DATE_Z decimal unsigned,
+ PREV_Z decimal unsigned,
+ SHOPPING_RANK bigint,
+ WASTE_AMT decimal unsigned,
  CONSTRAINT groceries_pk PRIMARY KEY (USER_ID, RECEIPT_ID, ITEM_ID)
  );
+
 
 DROP TABLE IF EXISTS USER_GROCERY_ITEM_WASTE_ACTUAL;
 
@@ -114,6 +142,45 @@ CREATE TABLE IF NOT EXISTS USER_GROCERY_ITEM_PRCH_FREQ
  FRQ_PRCH_LAST3_TRIPS integer,
  CONSTRAINT grocery_prch_freq_pk PRIMARY KEY (USER_ID, ITEM_ID)
  );
+
+
+
+DROP TABLE IF EXISTS USER_GROCERY_ITEM_LOOKUP;
+
+CREATE TABLE IF NOT EXISTS USER_GROCERY_ITEM_LOOKUP
+(ITEM_ID bigint primary key,
+ ITEM_NAME VARCHAR(100),
+ ITEM_CATEGORY VARCHAR(30),
+ ITEM_CLASS VARCHAR(30),
+ ITEM_SIZE decimal unsigned,
+ ITEM_UNITS varchar(30),
+ ITEM_DURATION decimal unsigned,
+ CONSTRAINT items_pk PRIMARY KEY (ITEM_ID)
+ );
+
+
+
+DROP TABLE IF EXISTS SAMPLE_RECEIPTS;
+
+CREATE TABLE IF NOT EXISTS SAMPLE_RECEIPTS
+(USER_ID VARCHAR(128),
+ ITEM_ID bigint,
+ ITEM_SIZE decimal unsigned,
+ ITEM_QTY_PRCH bigint,
+ SHOPPING_DATE bigint,
+ RECEIPT_ID bigint,
+ ITEM_TOTAL_PRICE decimal unsigned,
+ CONSTRAINT groceries_PK PRIMARY KEY (USER_ID, RECEIPT_ID, ITEM_ID)
+ );
+
+
+
+DROP TABLE IF EXISTS MODEL_PARAMETERS;
+
+CREATE TABLE IF NOT EXISTS MODEL_PARAMETERS
+(VARIABLE VARCHAR(128) primary key,
+ COEFFICIENTS decimal unsigned
+);
 
 
  --
