@@ -30,6 +30,38 @@ CREATE TABLE IF NOT EXISTS USER_GROCERY_RECEIPT
  ITEM_UNITS varchar(20)	,
  ITEM_TOTAL_PRICE decimal unsigned, /* Price in Dollars */
  ITEM_CATEGORY varchar(100), /* OCR Closest Category */
+ CONSTRAINT groceries_pk PRIMARY KEY (USER_ID, RECEIPT_ID, ITEM_ID)
+ );
+
+
+DROP TABLE IF EXISTS USER_GROCERY_ITEM_WASTE_ACTUAL;
+
+CREATE TABLE IF NOT EXISTS USER_GROCERY_ITEM_WASTE_ACTUAL
+(USER_ID varchar(128),
+ RECEIPT_ID bigint,
+ WASTE_DATA_ENTRY_DT varchar(30),
+ ITEM_ID varchar(100),
+ ITEM_NAME varchar(100),
+ ITEM_CATEGORY varchar(30),
+ ITEM_SIZE decimal unsigned,
+ ITEM_TOTAL_PRICE decimal unsigned,
+ WASTE_AMT decimal unsigned,
+ ITEM_UNITS  varchar(30),
+ CONSTRAINT grocery_waste_pk PRIMARY KEY (USER_ID, RECEIPT_ID, ITEM_ID)
+ );
+
+DROP TABLE IF EXISTS USER_GROCERY_ITEM_WASTE_PRED;
+
+CREATE TABLE IF NOT EXISTS USER_GROCERY_ITEM_WASTE_PRED
+(USER_ID VARCHAR(128), /*Login User Name*/
+ RECEIPT_ID bigint,   /* System Generated ID - Hash Value from Receipt */
+ RECEIPT_UPLOAD_DT bigint,
+ ITEM_ID bigint, /* UPC Code */
+ ITEM_NAME VARCHAR(100), /* Name from Receipt */
+ ITEM_QTY_PRCH decimal unsigned,
+ ITEM_UNITS varchar(20)	,
+ ITEM_TOTAL_PRICE decimal unsigned, /* Price in Dollars */
+ ITEM_CATEGORY varchar(100), /* OCR Closest Category */
  ITEM_CLASS VARCHAR(30),
  ITEM_SIZE decimal unsigned,
  SHOPPING_DATE bigint,
@@ -58,41 +90,6 @@ CREATE TABLE IF NOT EXISTS USER_GROCERY_RECEIPT
  SHOPPING_RANK bigint,
  WASTE_AMT decimal unsigned,
  CONSTRAINT groceries_pk PRIMARY KEY (USER_ID, RECEIPT_ID, ITEM_ID)
- );
-
-
-DROP TABLE IF EXISTS USER_GROCERY_ITEM_WASTE_ACTUAL;
-
-CREATE TABLE IF NOT EXISTS USER_GROCERY_ITEM_WASTE_ACTUAL
-(USER_ID varchar(128),
- RECEIPT_ID bigint,
- WASTE_DATA_ENTRY_DT varchar(30),
- ITEM_ID varchar(100),
- ITEM_NAME varchar(100),
- ITEM_CATEGORY varchar(30),
- ITEM_SIZE decimal unsigned,
- ITEM_TOTAL_PRICE decimal unsigned,
- WASTE_AMT decimal unsigned,
- ITEM_UNITS  varchar(30),
- CONSTRAINT grocery_waste_pk PRIMARY KEY (USER_ID, RECEIPT_ID, ITEM_ID)
- );
-
-DROP TABLE IF EXISTS USER_GROCERY_ITEM_WASTE_PRED;
-
-CREATE TABLE IF NOT EXISTS USER_GROCERY_ITEM_WASTE_PRED
-(USER_ID VARCHAR(128),
- SHOPPING_TRIP_ID bigint, /*System Generated - Autoincrement*/
- RECOMMENDATION_CATEGORY varchar(100), /* Values - Recommended or Suggested */
- MODEL_RUN_DT date,
- ITEM_ID bigint,
- ITEM_NAME varchar(100),
- ITEM_CATEGORY varchar(30),
- PRED_WASTE_AMT decimal unsigned,
- PRED_WASTE_UNITS varchar(30),
- RECOMMENDED_QTY bigint,
- RECOMMENDED_QTY_UNITS varchar(30),
- MODEL_TYPE varchar(20),
- CONSTRAINT grocery_waste_pred_pk PRIMARY KEY (USER_ID, SHOPPING_TRIP_ID , MODEL_RUN_DT, ITEM_ID)
  );
 
 
@@ -172,7 +169,6 @@ CREATE TABLE IF NOT EXISTS SAMPLE_RECEIPTS
  ITEM_TOTAL_PRICE decimal unsigned,
  CONSTRAINT groceries_PK PRIMARY KEY (USER_ID, RECEIPT_ID, ITEM_ID)
  );
-
 
 
 DROP TABLE IF EXISTS MODEL_PARAMETERS;
