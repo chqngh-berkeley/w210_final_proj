@@ -26,9 +26,9 @@ CREATE TABLE IF NOT EXISTS USER_GROCERY_RECEIPT
  RECEIPT_UPLOAD_DT bigint,
  ITEM_ID bigint, /* UPC Code */
  ITEM_NAME VARCHAR(100), /* Name from Receipt */
- ITEM_QTY_PRCH decimal unsigned,
+ ITEM_QTY_PRCH decimal(10, 2),
  ITEM_UNITS varchar(20)	,
- ITEM_TOTAL_PRICE decimal unsigned, /* Price in Dollars */
+ ITEM_TOTAL_PRICE decimal(10, 2), /* Price in Dollars */
  ITEM_CATEGORY varchar(100), /* OCR Closest Category */
  CONSTRAINT groceries_pk PRIMARY KEY (USER_ID, RECEIPT_ID, ITEM_ID)
  );
@@ -43,9 +43,9 @@ CREATE TABLE IF NOT EXISTS USER_GROCERY_ITEM_WASTE_ACTUAL
  ITEM_ID varchar(100),
  ITEM_NAME varchar(100),
  ITEM_CATEGORY varchar(30),
- ITEM_SIZE decimal unsigned,
- ITEM_TOTAL_PRICE decimal unsigned,
- WASTE_AMT decimal unsigned,
+ ITEM_SIZE decimal(10, 2),
+ ITEM_TOTAL_PRICE decimal(10, 2),
+ WASTE_AMT decimal(10, 2),
  ITEM_UNITS  varchar(30),
  CONSTRAINT grocery_waste_pk PRIMARY KEY (USER_ID, RECEIPT_ID, ITEM_ID)
  );
@@ -58,37 +58,37 @@ CREATE TABLE IF NOT EXISTS USER_GROCERY_ITEM_WASTE_PRED
  RECEIPT_UPLOAD_DT bigint,
  ITEM_ID bigint, /* UPC Code */
  ITEM_NAME VARCHAR(100), /* Name from Receipt */
- ITEM_QTY_PRCH decimal unsigned,
+ ITEM_QTY_PRCH decimal(10, 2),
  ITEM_UNITS varchar(20)	,
- ITEM_TOTAL_PRICE decimal unsigned, /* Price in Dollars */
+ ITEM_TOTAL_PRICE decimal(10, 2), /* Price in Dollars */
  ITEM_CATEGORY varchar(100), /* OCR Closest Category */
  ITEM_CLASS VARCHAR(30),
- ITEM_SIZE decimal unsigned,
+ ITEM_SIZE decimal(10, 2),
  SHOPPING_DATE bigint,
- ITEM_TOTAL_SIZE decimal unsigned,
+ ITEM_TOTAL_SIZE decimal(10, 2),
  FAMILY_SIZE integer,
- PER_CAPITA_SIZE decimal unsigned,
- PER_CAPITA_SIZE_TRIP decimal unsigned,
+ PER_CAPITA_SIZE decimal(10, 6),
+ PER_CAPITA_SIZE_TRIP decimal(10, 6),
  PREVIOUS_SHOP_DATE bigint,
  PREVIOUS_SHOP_SIZE bigint,
- ITEM_SIZE_AVG decimal unsigned,
- ITEM_SIZE_STDEV decimal unsigned,
- ITEM_SIZE_Z decimal unsigned,
- ITEM_SIZE_ALL_AVG decimal unsigned,
- ITEM_SIZE_ALL_STDEV decimal unsigned,
- ITEM_SIZE_ALL_Z decimal unsigned,
- ITEM_DURATION decimal unsigned,
- TIME_LOSS_COUNTER decimal unsigned,
+ ITEM_SIZE_AVG decimal(10, 6),
+ ITEM_SIZE_STDEV decimal(10, 6),
+ ITEM_SIZE_Z decimal(10, 6),
+ ITEM_SIZE_ALL_AVG decimal(10, 6),
+ ITEM_SIZE_ALL_STDEV decimal(10, 6),
+ ITEM_SIZE_ALL_Z decimal(10, 6),
+ ITEM_DURATION decimal(10, 6),
+ TIME_LOSS_COUNTER decimal(10, 6),
  TIME_LOSS bigint,
- TRIP_SIZE_AVG decimal unsigned,
- TRIP_SIZE_STDEV decimal unsigned,
- DAYS_BETWEEN_AVG decimal unsigned,
- DAYS_BETWEEN_STDEV decimal unsigned,
- PREV_SIZE_Z decimal unsigned,
- PREV_DATE_Z decimal unsigned,
- PREV_Z decimal unsigned,
+ TRIP_SIZE_AVG decimal(10, 6),
+ TRIP_SIZE_STDEV decimal(10, 6),
+ DAYS_BETWEEN_AVG decimal(10, 6),
+ DAYS_BETWEEN_STDEV decimal(10, 6),
+ PREV_SIZE_Z decimal(10, 6),
+ PREV_DATE_Z decimal(10, 6),
+ PREV_Z decimal(10, 6),
  SHOPPING_RANK bigint,
- WASTE_AMT decimal unsigned,
+ WASTE_AMT decimal(10, 2),
  CONSTRAINT groceries_pk PRIMARY KEY (USER_ID, RECEIPT_ID, ITEM_ID)
  );
 
@@ -149,9 +149,9 @@ CREATE TABLE IF NOT EXISTS USER_GROCERY_ITEM_LOOKUP
  ITEM_NAME VARCHAR(100),
  ITEM_CATEGORY VARCHAR(30),
  ITEM_CLASS VARCHAR(30),
- ITEM_SIZE decimal unsigned,
+ ITEM_SIZE decimal(10, 2),
  ITEM_UNITS varchar(30),
- ITEM_DURATION decimal unsigned
+ ITEM_DURATION decimal(10, 2)
  );
 
 
@@ -161,11 +161,11 @@ DROP TABLE IF EXISTS SAMPLE_RECEIPTS;
 CREATE TABLE IF NOT EXISTS SAMPLE_RECEIPTS
 (USER_ID VARCHAR(128),
  ITEM_ID bigint,
- ITEM_SIZE decimal unsigned,
+ ITEM_SIZE decimal(10, 2),
  ITEM_QTY_PRCH bigint,
  SHOPPING_DATE bigint,
  RECEIPT_ID bigint,
- ITEM_TOTAL_PRICE decimal unsigned,
+ ITEM_TOTAL_PRICE decimal(10, 2),
  CONSTRAINT groceries_PK PRIMARY KEY (USER_ID, RECEIPT_ID, ITEM_ID)
  );
 
@@ -174,10 +174,114 @@ DROP TABLE IF EXISTS MODEL_PARAMETERS;
 
 CREATE TABLE IF NOT EXISTS MODEL_PARAMETERS
 (VARIABLE VARCHAR(128) primary key,
- COEFFICIENTS decimal unsigned
+ COEFFICIENTS decimal(10, 6)
 );
 
 
+
+DROP TABLE IF EXISTS MODEL_PARAMETERS;
+
+CREATE TABLE IF NOT EXISTS MODEL_PARAMETERS_STAGING_TABLE
+(USER_ID VARCHAR(128), /*Login User Name*/
+ ITEM_CLASS VARCHAR(30),
+ SHOP_TRIP_COUNT bigint,   /* System Generated ID - Hash Value from Receipt */
+ ITEM_CATEGORY varchar(100), /* OCR Closest Category */
+ ITEM_ID bigint, /* UPC Code */
+ ITEM_SIZE_AVG decimal(10, 2),
+ SHOPPING_DATE bigint,
+ RECEIPT_ID bigint,   /* System Generated ID - Hash Value from Receipt */
+ RECEIPT_UPLOAD_DT bigint,
+ ITEM_NAME VARCHAR(100), /* Name from Receipt */
+ ITEM_QTY_PRCH decimal(10, 2),
+ ITEM_UNITS varchar(20)	,
+ ITEM_TOTAL_PRICE decimal(10, 2), /* Price in Dollars */
+ ITEM_SIZE decimal(10, 2),
+ ITEM_TOTAL_SIZE decimal(10, 2),
+ FAMILY_SIZE integer,
+ PER_CAPITA_SIZE decimal(10, 6),
+ PER_CAPITA_SIZE_TRIP decimal(10, 6),
+ PREVIOUS_SHOP_DATE bigint,
+ PREVIOUS_SHOP_SIZE bigint,
+ ITEM_SIZE_STDEV decimal(10, 6),
+ ITEM_SIZE_Z decimal(10, 6),
+ ITEM_SIZE_ALL_AVG decimal(10, 6),
+ ITEM_SIZE_ALL_STDEV decimal(10, 6),
+ ITEM_SIZE_ALL_Z decimal(10, 6),
+ ITEM_DURATION decimal(10, 6),
+ TIME_LOSS_COUNTER decimal(10, 6),
+ TIME_LOSS bigint,
+ TRIP_SIZE_AVG decimal(10, 6),
+ TRIP_SIZE_STDEV decimal(10, 6),
+ DAYS_BETWEEN_AVG decimal(10, 6),
+ DAYS_BETWEEN_STDEV decimal(10, 6),
+ PREV_SIZE_Z decimal(10, 6),
+ PREV_DATE_Z decimal(10, 6),
+ PREV_Z decimal(10, 6),
+ WASTE_AMT decimal(10, 2),
+ within_30 bigint,
+ within_90 bigint,
+ one_year_ago bigint,
+ SHOP_TRIP_COUNT_x integer,
+ LAST_PURCH_DAY_ITEM integer,
+ ITEM_TRIP_COUNT integer,
+ SHOP_TRIP_COUNT_y integer,
+ ITEM_QTY_AVG bigint,
+ ITEM_PRCH_PERC bigint,
+ ITEM_FREQ_RANKED integer,
+ ITEM_RECENCY_RANKED integer,
+ LAST_PURCH_DAY_CAT integer,
+ CAT_TOTAL_COUNT integer,
+ CAT_TRIP_COUNT integer,
+ CAT_SIZE_AVG bigint,
+ CAT_QTY_AVG bigint,
+ CAT_PRCH_PERC bigint,
+ CAT_FREQ_RANKED integer,
+ CAT_RECENCY_RANKED integer,
+ LAST_PURCH_DAY_CLASS integer,
+ CLASS_TOTAL_COUNT integer,
+ CLASS_TRIP_COUNT integer,
+ CLASS_PRCH_PERC bigint,
+ LAST_TRIP bigint,
+ SECOND_LAST_TRIP bigint,
+ THIRD_LAST_TRIP bigint,
+ FOURTH_LAST_TRIP bigint,
+ FIFTH_LAST_TRIP bigint,
+ CONSTRAINT groceries_pk PRIMARY KEY (USER_ID, RECEIPT_ID, ITEM_ID)
+ );
+
+DROP TABLE IF EXISTS USER_GROCERY_LIST_PREDICTION;
+
+CREATE TABLE IF NOT EXISTS USER_GROCERY_LIST_PREDICTION
+(USER_ID VARCHAR(128), /*Login User Name*/
+ ITEM_CATEGORY varchar(100), /* OCR Closest Category */
+ FAMILY_SIZE integer,
+ ITEM_ID bigint, /* UPC Code */
+ FIRST_SIZE decimal(10, 2),
+ ITEM_SIZE decimal(10, 2),
+ ITEM_TRUE_SIZE decimal(10, 2),
+ ITEM_TOTAL_SIZE decimal(10, 2),
+ ITEM_SIZE_AVG decimal(10, 2),
+ ITEM_SIZE_STDEV decimal(10, 2),
+ ITEM_SIZE_Z decimal(10, 2),
+ ITEM_SIZE_ALL_AVG decimal(10, 2),
+ ITEM_SIZE_ALL_STDEV decimal(10, 2),
+ ITEM_SIZE_ALL_Z decimal(10, 2),
+ ITEM_QTY_PRCH decimal(10, 2),
+ PREVIOUS_SHOP_DATE integer,
+ DAYS_BETWEEN_AVG decimal(10, 2),
+ DAYS_BETWEEN_STDEV decimal(10, 2),
+ PREV_DATE_Z decimal(10, 2),
+ PREVIOUS_SHOP_SIZE decimal(10, 2),
+ TRIP_SIZE_AVG decimal(10, 2),
+ TRIP_SIZE_STDEV decimal(10, 2),
+ PREV_SIZE_Z decimal(10, 2),
+ PREV_Z decimal(10, 2),
+ TIME_LOSS_COUNTER integer,
+ TIME_LOSS integer,
+ SECTION VARCHAR(30),
+ prediction decimal(10, 2),
+ CONSTRAINT groceries_pk PRIMARY KEY (USER_ID, ITEM_ID)
+ );
  --
  -- INSERT INTO USER_PROFILE (
  --   USER_ID,

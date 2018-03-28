@@ -7,7 +7,7 @@ library(car)
 #library(tidyverse)    #Used for data_frame, which can store lists as columns
 #library(nnet)    #for #multinom
 #library(MASS)    #for #ordinal
-#library(dplyr)   #reordering rows in df
+library(dplyr)   #reordering rows in df
 
 username <- "root"
 host <- "0.0.0.0"
@@ -133,8 +133,6 @@ day = 712
 new_receipts9$RECEIPT_UPLOAD_DT = day
 new_receipts9$ITEM_UNITS = 'oz'
 new_receipts9$SHOPPING_RANK = 0
-print(!names(data_complete) %in% names(new_receipts9))
-print(names(data_complete))
 receipts = rbind(data_complete, new_receipts9)
 
 #Reranking Shopping Rank
@@ -221,5 +219,7 @@ loss_prediction = lm(WASTE_AMT ~ ITEM_SIZE_Z + ITEM_SIZE_ALL_Z + FAMILY_SIZE + T
 model_parameters <- data.frame(names(coef(loss_prediction)), loss_prediction$coefficients)
 names(model_parameters) <- c("VARIABLE", "COEFFICIENTS")
 dbWriteTable(con, "MODEL_PARAMETERS", model_parameters, overwrite = TRUE)
+dbWriteTable(con, "MODEL_PARAMETERS_STAGING_TABLE", receipts5, overwrite = TRUE)
+
 dbDisconnect(con)
 
