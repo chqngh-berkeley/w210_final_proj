@@ -216,6 +216,19 @@ class MysqlDBPython(object):
         return delete_rows
     ## End def delete
 
+    def run_raw_query(self, query):
+        self.__open()
+        self.__session.execute(query)
+        self.__connection.commit()
+        number_rows = self.__session.rowcount
+        number_columns = len(self.__session.description)
+
+        if number_rows >= 1 and number_columns > 1:
+            result = [item for item in self.__session.fetchall()]
+        else:
+            result = [item[0] for item in self.__session.fetchall()]
+        self.__close()
+        return result
     def select_advanced(self, sql, *args):
         od = OrderedDict(args)
         query  = sql

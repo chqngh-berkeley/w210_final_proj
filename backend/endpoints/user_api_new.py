@@ -74,15 +74,7 @@ def updateUser(id):
     try:
         request_json = dict(request.json)
         user_id = id
-        # name = request_json['name']
-        # age = request_json['age']
-        # family_size = request_json['family_size']
-        # num_adults = request_json['num_adults']
-        # num_kids = request_json['num_kids']
-        # income = request_json['income']
-        # shop_trip_freq = request_json['shop_trip_freq']
         data = user_serv.updateUser(user_id, request_json)
-        # db.update_user(id, name, age, family_size, num_adults, num_kids, income, shop_trip_freq)
         return { 'data' : data }
     except Exception as e:
         print e

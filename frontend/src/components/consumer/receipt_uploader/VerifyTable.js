@@ -27,18 +27,25 @@ const styles = {
 
 const mapStateToProps = function(state){
   return {
+    username: state.loginReducer.username,
     current_receipt : state.receiptReducer.current_receipt
   };
 };
 
 const mapDispatchToProps =(dispatch) => {
   return {
-    getReceiptData : (receipt_id) => {
-      api.getReceiptDataById(receipt_id).then(function(res) {
+    getReceiptData : (user_id, receipt_id) => {
+      api.getReceiptDataById(user_id, receipt_id).then(function(res) {
         console.log('receipt data:', res);
         dispatch(setReceiptData(res['result']));
       });
-    }
+    },
+    updateReceipt : (user_id, receipt_id, receipt_data).then(function(res) {
+      api.updateReceiptDataById(user_id, receipt_id, receipt_data).then(function(res) {
+        console.log('receipt data:', res);
+        dispatch(setReceiptData(res['result']));
+      });
+    })
   };
 };
 /**
@@ -79,21 +86,14 @@ class VerifyTable extends Component {
   render() {
     return (
       <div>
-
-        {this.getUploadReceipt()}
+        {this.getUploadedReceipt()}
+        <RaisedButton label="Submit"></RaisedButton>
       </div>
     );
   }
-  getUploadReceipt() {
-    // <TextField
-    //   onChange = {(e) => {this.setState({'receipt_id': e.target.value})}}
-    //   floatingLabelText="Receipt Id" />
-    // <FlatButton primary={true} onClick={() => {this.props.getReceiptData(this.state.receipt_id)}}
-    // label = 'Get Receipt Data'>
-    // </FlatButton>
-    return (<div>
 
-    <br />
+  getUploadedReceipt() {
+    return (
       <Table
         height={this.state.height}
         fixedHeader={this.state.fixedHeader}
@@ -147,9 +147,7 @@ class VerifyTable extends Component {
           adjustForCheckbox={this.state.showCheckboxes}
         >
         </TableFooter>
-      </Table>
-
-    </div>)
+      </Table>)
   }
 }
 
