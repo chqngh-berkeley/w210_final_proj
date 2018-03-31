@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS USER_PROFILE
  NUM_ADULTS integer,
  NUM_KIDS integer,
  ANNUAL_HOUSEHOLD_INCOME integer, /* Range */
- SHOP_TRIP_FREQ integer
+ SHOP_TRIP_FREQ varchar(30)
 );
 
 DROP TABLE IF EXISTS USER_GROCERY_RECEIPT;
@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS USER_GROCERY_RECEIPT;
 CREATE TABLE IF NOT EXISTS USER_GROCERY_RECEIPT
 (USER_ID VARCHAR(128), /*Login User Name*/
  RECEIPT_ID bigint,   /* System Generated ID - Hash Value from Receipt */
- RECEIPT_UPLOAD_DT bigint,
+ RECEIPT_UPLOAD_DT varchar(30),
  ITEM_ID bigint, /* UPC Code */
  ITEM_NAME VARCHAR(100), /* Name from Receipt */
  ITEM_QTY_PRCH decimal(10, 2),
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS USER_GROCERY_ITEM_WASTE_PRED
  ITEM_CATEGORY varchar(100), /* OCR Closest Category */
  ITEM_CLASS VARCHAR(30),
  ITEM_SIZE decimal(10, 2),
- SHOPPING_DATE bigint,
+ DAY bigint,
  ITEM_TOTAL_SIZE decimal(10, 2),
  FAMILY_SIZE integer,
  PER_CAPITA_SIZE decimal(10, 6),
@@ -72,10 +72,10 @@ CREATE TABLE IF NOT EXISTS USER_GROCERY_ITEM_WASTE_PRED
  PREVIOUS_SHOP_DATE bigint,
  PREVIOUS_SHOP_SIZE bigint,
  ITEM_SIZE_AVG decimal(10, 6),
- ITEM_SIZE_STDEV decimal(10, 6),
+ ITEM_SIZE_STDEV varchar,
  ITEM_SIZE_Z decimal(10, 6),
  ITEM_SIZE_ALL_AVG decimal(10, 6),
- ITEM_SIZE_ALL_STDEV decimal(10, 6),
+ ITEM_SIZE_ALL_STDEV varchar(30),
  ITEM_SIZE_ALL_Z decimal(10, 6),
  ITEM_DURATION decimal(10, 6),
  TIME_LOSS_COUNTER decimal(10, 6),
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS USER_GROCERY_ITEM_WASTE_PRED
  PREV_DATE_Z decimal(10, 6),
  PREV_Z decimal(10, 6),
  SHOPPING_RANK bigint,
- WASTE_AMT decimal(10, 2),
+ WASTE_AMT varchar(30),
  CONSTRAINT groceries_pk PRIMARY KEY (USER_ID, RECEIPT_ID, ITEM_ID)
  );
 
@@ -151,7 +151,7 @@ CREATE TABLE IF NOT EXISTS USER_GROCERY_ITEM_LOOKUP
  ITEM_CLASS VARCHAR(30),
  ITEM_SIZE decimal(10, 2),
  ITEM_UNITS varchar(30),
- ITEM_DURATION decimal(10, 2)
+ ITEM_DURATION varchar(30)
  );
 
 
@@ -183,12 +183,12 @@ DROP TABLE IF EXISTS MODEL_PARAMETERS;
 
 CREATE TABLE IF NOT EXISTS MODEL_PARAMETERS_STAGING_TABLE
 (USER_ID VARCHAR(128), /*Login User Name*/
+ ITEM_ID bigint, /* UPC Code */
  ITEM_CLASS VARCHAR(30),
  SHOP_TRIP_COUNT bigint,   /* System Generated ID - Hash Value from Receipt */
  ITEM_CATEGORY varchar(100), /* OCR Closest Category */
- ITEM_ID bigint, /* UPC Code */
  ITEM_SIZE_AVG decimal(10, 2),
- SHOPPING_DATE bigint,
+ DAY bigint,
  RECEIPT_ID bigint,   /* System Generated ID - Hash Value from Receipt */
  RECEIPT_UPLOAD_DT bigint,
  ITEM_NAME VARCHAR(100), /* Name from Receipt */
@@ -218,9 +218,11 @@ CREATE TABLE IF NOT EXISTS MODEL_PARAMETERS_STAGING_TABLE
  PREV_DATE_Z decimal(10, 6),
  PREV_Z decimal(10, 6),
  WASTE_AMT decimal(10, 2),
- within_30 bigint,
- within_90 bigint,
- one_year_ago bigint,
+ SHOPPING_DATE date,
+ SHOPPING_RANK bigint,
+ IN_30 bigint,
+ IN_90 bigint,
+ YEAR_AGO bigint,
  SHOP_TRIP_COUNT_x integer,
  LAST_PURCH_DAY_ITEM integer,
  ITEM_TRIP_COUNT integer,
@@ -246,6 +248,11 @@ CREATE TABLE IF NOT EXISTS MODEL_PARAMETERS_STAGING_TABLE
  THIRD_LAST_TRIP bigint,
  FOURTH_LAST_TRIP bigint,
  FIFTH_LAST_TRIP bigint,
+ SUM_2 bigint,
+ SUM_5 bigint,
+ WITHIN_30 bigint,
+ WITHIN_90 bigint,
+ ONE_YEAR_AGO bigint,
  CONSTRAINT groceries_pk PRIMARY KEY (USER_ID, RECEIPT_ID, ITEM_ID)
  );
 
