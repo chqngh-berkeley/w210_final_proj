@@ -38,8 +38,24 @@ const mapDispatchToProps =(dispatch) => {
   return {
       setCurrentReceipt :(username, item) => {
         api.getReceiptDataById(username, item['receipt_id']).then(function(res) {
-            console.log(res['data']);
-            dispatch(setReceipt(res['data']));
+            console.log(res['receipt_data']);
+            console.log(res['wastage_data']);
+            var receipt_data = res['receipt_data'];
+            var wastage_data = res['wastage_data'];
+            // for(var i=0; i< receipt_data.length; i++) {
+            //   let receipt = receipt_data[i];
+            //   let waste = wastage_data[i];
+            //   receipt_obj = {
+            //     category: receipt['category'],
+            //     id : receipt['id'],
+            //     name : receipt['name'],
+            //     price: receipt['price'],
+            //     quantity: receipt['quantity'],
+            //     receipt_id: receipt['receipt_id'],
+            //     unit: receipt['unit']
+            //   }
+            // }
+            dispatch(setReceipt({receipt: receipt_data, wastage: wastage_data}));
         })
         // dispatch(push('/receiptInfo'))
       },

@@ -33,30 +33,52 @@ function appendQueryParams(params) {
 export const CRUD = {
   get(url, params, user_id) {
     var cs = getCRUDSetting('GET', user_id);
-    if(params) {
-      url += appendQueryParams(params);
+    let p = {
+      'user_id' : user_id
     }
+    if(params) {
+      url += appendQueryParams(Object.assign({}, params, p));
+    }else{
+      url += appendQueryParams(p);
+    }
+
     return fetch(url, cs);
   },
 
   post(url, data, user_id) {
     var cs = getCRUDSetting('POST', user_id);
     cs.body = JSON.stringify(data);
+    let p = {
+      'user_id' : user_id
+    }
+    url += appendQueryParams(p);
     return fetch(url, cs);
   },
 
   postFile(url, data, user_id) {
     var cs = getFileCRUDSetting('POST', user_id);
     cs.body = data;
+    let p = {
+      'user_id' : user_id
+    }
+    url += appendQueryParams(p);
     return fetch(url, cs);
   },
   put(url, data, user_id) {
     var cs = getCRUDSetting('PUT', user_id);
     cs.body = JSON.stringify(data);
+    let p = {
+      'user_id' : user_id
+    }
+    url += appendQueryParams(p);
     return fetch(url, cs);
   },
   del(url, user_id) {
     var cs = getCRUDSetting('DELETE', user_id);
+    let p = {
+      'user_id' : user_id
+    }
+    url += appendQueryParams(p);
     return fetch(url, cs);
   }
 };

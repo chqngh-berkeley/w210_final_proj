@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding=utf-8
-import MySQLdb, sys
+import sys
 import mysql.connector as mariadb
 
 class MysqlDBPython(object):
@@ -30,6 +30,7 @@ class MysqlDBPython(object):
         self.__user     = user
         self.__password = password
         self.__database = database
+        print self.__host,self.__port, self.__database
     ## End def __init__
 
     def __open(self):
@@ -141,15 +142,16 @@ class MysqlDBPython(object):
         values = tuple(obj.values())
         l = len(keys) - 1
         for i, key in enumerate(keys):
-            query += "`"+key+"` = %s"
+            query += ""+key+' = "%s"'
             if i < l:
                 query += ","
             ## End if i less than 1
         ## End for keys
         query += " WHERE %s" % where
+        query = query%(values)
         print(query)
         self.__open()
-        self.__session.execute(query, values)
+        self.__session.execute(query)
         self.__connection.commit()
 
         # Obtain rows affected

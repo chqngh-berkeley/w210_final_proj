@@ -52,7 +52,7 @@ export const api = {
   },
 
   updateWastageDataById : function(userId,receiptId, info) {
-    return CRUD.put(BASE_URL+'/wastage/'+receiptId, info, userId).then(res => res.json())
+    return CRUD.put(BASE_URL+'/wastage/'+receiptId, {'data': info}, userId).then(res => res.json())
   },
 
   // Grocery list

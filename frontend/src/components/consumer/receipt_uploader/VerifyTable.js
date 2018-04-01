@@ -82,12 +82,15 @@ class VerifyTable extends Component {
   handleChange = (event) => {
     this.setState({height: event.target.value});
   };
+  submitReceipt() {
+    console.log('submit receipt clicked');
+  }
 
   render() {
     return (
       <div>
         {this.getUploadedReceipt()}
-        <RaisedButton label="Submit"></RaisedButton>
+        <RaisedButton onClick={this.submitReceipt.bind(this)} label="Submit"></RaisedButton>
       </div>
     );
   }
@@ -113,12 +116,10 @@ class VerifyTable extends Component {
           </TableRow>
           <TableRow>
           <TableHeaderColumn tooltip="item">Food Name</TableHeaderColumn>
-
-          <TableHeaderColumn tooltip="price">Price($)</TableHeaderColumn>
+          <TableHeaderColumn tooltip="unit">Unit</TableHeaderColumn>
           <TableHeaderColumn tooltip="category">Category</TableHeaderColumn>
-          <TableHeaderColumn tooltip="closest_category">Closest Category</TableHeaderColumn>
-          <TableHeaderColumn tooltip="count">Count</TableHeaderColumn>
-          <TableHeaderColumn tooltip="size">Size</TableHeaderColumn>
+          <TableHeaderColumn tooltip="quantity">Quantity</TableHeaderColumn>
+          <TableHeaderColumn tooltip="price">Price($)</TableHeaderColumn>
           </TableRow>
         </TableHeader>
         <TableBody
@@ -130,15 +131,14 @@ class VerifyTable extends Component {
           {this.props.current_receipt && this.props.current_receipt.length > 0 &&
             this.props.current_receipt.map( (row, index) => (
             <TableRow key={index}>
-              <TableRowColumn tooltip={row.food_name}>{row.food_name}</TableRowColumn>
-              <TableRowColumn tooltip={row.price}>{row.price}</TableRowColumn>
+              <TableRowColumn tooltip={row.name}>{row.name}</TableRowColumn>
+              <TableRowColumn tooltip={row.units}>{row.units}</TableRowColumn>
               <TableRowColumn tooltip={row.category}>{row.category}</TableRowColumn>
-              <TableRowColumn tooltip={row.closest_category}>{row.closest_category}</TableRowColumn>
-              <TableRowColumn tooltip={row.count}>
-                <TextField value = {row.count == 'unknown_count'?  'N/A' :  row.count} />
+              <TableRowColumn tooltip={row.quantity}>
+                <TextField value = {row.quantity?  row.quantity : 1} />
               </TableRowColumn>
-              <TableRowColumn tooltip={row.size}>
-                <TextField value = {row.size == 'Unknown Size'?  'N/A' :  row.size} />
+              <TableRowColumn tooltip={row.price}>
+                <TextField value = {row.price?  row.price:0} />
               </TableRowColumn>
             </TableRow>
             ))}

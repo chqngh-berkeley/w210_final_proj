@@ -13,6 +13,7 @@ import base64
 from grocery import grocery_service
 import bottle
 bottle.BaseRequest.MEMFILE_MAX = 1024 * 1024
+import subprocess
 
 def enable_cors(fn):
     def _enable_cors(*args, **kwargs):
@@ -43,22 +44,36 @@ def groceryTest():
 @enable_cors
 def getRecommendedGrocery():
     try:
-        user_id = request.get_header('user_id')
+        user_id = request.query['user_id']
         print('user id:', user_id)
-        rec_grocery_data = grocery_serv.getRecommendedGrocery(user_id)
+        rec_grocery_data = grocery_serv.getPredictedList(user_id)
         return { 'data': rec_grocery_data}
     except Exception as e:
         print e
         return e
 
-@grocery_app.route(path='/grocery/suggested', method=['GET','OPTIONS'])
+@grocery_app.route(path='/grocery/training', method=['GET', 'OPTIONS'])
 @enable_cors
-def getSuggestedItems():
+def train():
     try:
-        user_id = request.get_header('user_id')
-        # request_json = dict(request.json)
-        data = grocery_serv.getSuggestedGrocery(user_id)
-        return {'data': data}
+        import os
+        os.system("sh ./models/train.sh")
+        return { 'data': user_id}
+    except Exception as e:
+        print e
+        return e
+
+@grocery_app.route(path='/grocery/predict', method=['GET', 'OPTIONS'])
+@enable_cors
+def predict():
+    try:
+        user_id = request.query['user_id']
+        threshold = request.query['threshold']
+        import os
+        command = ("sh ./models/predict.sh %s %s")%(user_id, threshold)
+        print command
+        os.system(command)
+        return { 'data': command}
     except Exception as e:
         print e
         return e

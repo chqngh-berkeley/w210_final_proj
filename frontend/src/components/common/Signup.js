@@ -9,6 +9,8 @@ import {api} from './../../util/api';
 import { Link } from 'react-router-dom'
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import {toastr} from 'react-redux-toastr'
+
 const st = {
   backgroundColor : '#FAFAFA',
   // color: 'black',
@@ -62,11 +64,15 @@ class Signup extends React.Component {
     let spacer = {
       marginLeft : '10px'
     }
+    // <button
+    //     onClick={() => toastr.success('The title', 'The message')}
+    //     type="button">Toastr Success</button>
     return (
       <div>
       <h1>
         Signup
       </h1>
+
       <div>
       <TextField
         onChange = {(e) => {this.setState({username: e.target.value})}}

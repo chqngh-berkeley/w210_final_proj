@@ -1,6 +1,5 @@
 import sys
 from db import db_connection_cls
-from ocr_module import ocr
 import hashlib
 import numpy as np
 
@@ -16,6 +15,7 @@ class GroceryService(object):
          "ITEM_CATEGORY": "category",
          "FAMILY_SIZE": "",
          "ITEM_ID": "id",
+         "ITEM_NAME" : "name",
          "FIRST_SIZE": "",
          "ITEM_SIZE": "",
          "ITEM_TRUE_SIZE": "",
@@ -47,26 +47,15 @@ class GroceryService(object):
     # GET
     def getPredictedList(self, user_id):
         conditional_query = 'USER_ID = "'+user_id + '"';
-        fields = ['RECEIPT_ID', 'RECEIPT_UPLOAD_DT']
+        fields = ['ITEM_CATEGORY','ITEM_CLASS', 'ITEM_TRUE_SIZE','ITEM_QTY_PRCH','prediction']
         data = self.sql_.selectFields('USER_GROCERY_LIST_PREDICTION', conditional_query, \
         fields)
         d = []
-        receipt_ids = []
-
         for item in data:
-            obj = {}
-            id = item['RECEIPT_ID']
-            dt = item['RECEIPT_UPLOAD_DT']
-            if id in receipt_ids:
-                continue
-            else:
-                receipt_ids.append(id)
-                d.append({
-                    'receipt_id' : id,
-                    'upload_date': dt
-                })
+            d.append({
+                'name' : item['ITEM_CATEGORY'],
+                'size': item['ITEM_TRUE_SIZE'],
+                'quantity' : item['ITEM_QTY_PRCH'],
+                'class' : item['ITEM_CLASS']
+            })
         return d
-
-    # GET
-    def getSuggestedGrocery(self, user_id):
-        return [self.getRandomItem(user_id) for r in range(np.random.randint(2,10))]

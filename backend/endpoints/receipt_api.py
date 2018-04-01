@@ -9,7 +9,6 @@ import sys
 from datetime import datetime
 import uuid
 import base64
-
 from receipt import receipt_service
 import bottle
 bottle.BaseRequest.MEMFILE_MAX = 1024 * 1024
@@ -28,7 +27,6 @@ def enable_cors(fn):
 
 receipt_app = Bottle()
 receipt_serv = receipt_service.ReceiptService()
-
 @receipt_app.route(path='/receipt/test', method=['GET','OPTIONS'])
 @enable_cors
 def receiptTest():
@@ -43,21 +41,27 @@ def receiptTest():
 @enable_cors
 def receiptData(id):
     try:
-        user_id = request.get_header('user_id')
+        user_id = request.query['user_id']
         print('user id:', user_id)
         print('receipt id:', id)
         receipt_data = receipt_serv.getReceipt(user_id, id)
-        return { 'data': receipt_data, 'receipt_id': id}
+        wastage_data = receipt_serv.getWastageInfo(user_id, id)
+        return {
+        'receipt_data': receipt_data,
+        'wastage_data' : wastage_data,
+        'receipt_id': id}
     except Exception as e:
         print e
         return e
 
-@receipt_app.route(path='/receipt/all', method=['GET', 'OPTIONS'])
+@receipt_app.route(path='/receipt/all', method=['GET'])
 @enable_cors
 def getAllReceiptData():
     try:
-        user_id = request.get_header('user_id')
+        user_id = request.query['user_id']
         print('user id:', user_id)
+        if not user_id:
+            return {'error': 'user_id required'}
         receipt_data = receipt_serv.getAllReceipts(user_id)
         return { 'data': receipt_data}
     except Exception as e:
@@ -68,11 +72,28 @@ def getAllReceiptData():
 @enable_cors
 def receiptVerify(id):
     try:
-        user_id = request.get_header('user_id')
+        user_id = request.query['user_id']
+        print('user id:', user_id)
         print('receipt id:', id)
         # request_json = dict(request.json)
-        data = receipt_serv.updateReceipt(receipt_id, request_json)
-        return {'data': data, 'receipt_id': id}
+
+        receipt_info_data = receipt_serv.updateReceipt(user_id, receipt_id, request_json)
+        return {'data': receipt_info_data, 'receipt_id': id}
+    except Exception as e:
+        print e
+        return e
+@receipt_app.route(path='/wastage/<id>', method=['PUT','OPTIONS'])
+@enable_cors
+def wastageUpdate(id):
+    try:
+        user_id = request.query['user_id']
+        print('user id:', user_id)
+        print('receipt id:', id)
+        print('request.json', request.json)
+        request_json = dict(request.json)['data']
+
+        wastage_info_data = receipt_serv.updateWastageInfo(user_id, id, request_json)
+        return {'data': wastage_info_data, 'receipt_id': id}
     except Exception as e:
         print e
         return e
@@ -81,11 +102,12 @@ def receiptVerify(id):
 @enable_cors
 def upload_receipt():
     try:
-        user_id = request.get_header('user_id')
+        user_id = request.query['user_id']
         upload = request.files.get('upload')
         if not upload:
             return {'data': 'upload cannot be empty'}
-        data = receipt_serv.storeReceipt(user_id, upload.file)
+        print user_id
+        data = receipt_serv.storeReceiptAndWastageInfo(user_id, upload.file)
         return {'data': data}
     except Exception as e:
         print e

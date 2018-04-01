@@ -26,5 +26,5 @@ RUN pip install mysql-connector
 # Define environment variable
 ENV PYTHONPATH /backend
 
-# Run app.py when the container launches
+# Run merged_api.py when the container launches
 CMD ["python", "/backend/endpoints/merged_api.py"]

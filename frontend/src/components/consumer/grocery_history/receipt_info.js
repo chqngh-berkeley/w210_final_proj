@@ -29,6 +29,7 @@ const st = {
 
 const mapStateToProps = function(state){
   return {
+    username : state.loginReducer.username,
     currentReceipt : state.receiptReducer.current_receipt
   };
 };
@@ -37,6 +38,12 @@ const mapDispatchToProps =(dispatch) => {
   return {
       setReceiptItem :(item) => {
         dispatch(setReceiptItem(item));
+      },
+      updateReceiptInfo :(user_id,receipt_id, receipts) => {
+        api.updateWastageDataById(user_id, receipt_id, receipts).then(function(res, err){
+          console.log(res);
+          console.log(err)
+        })
       }
     }
 };
@@ -67,19 +74,53 @@ class ReceiptInfo extends React.Component {
     this.setState({height: event.target.value});
   };
 
-  handleOnReceiptEdit = (event, item) => {
-    this.props.setReceiptItem(item);
+  handleOnReceiptEdit = (idx, item,e,val) => {
+    // this.props.setReceiptItem(item);
+    console.log(val, idx,item)
+    let receipt = this.state.receipt;
+    let res = receipt.receipt.slice();
+    let waste = receipt.wastage.slice();
+    waste[idx]['wastage'] = val
+    this.setState({receipt: {receipt: res, wastage: waste}})
   }
   handleOnReceiptRemove = (event, item) => {
     console.log('remove data...', item)
   }
 
-  componentDidMount() {
+  onSubmit() {
+    console.log(this.state.receipt)
+    this.props.updateReceiptInfo(this.props.username, this.props.currentReceipt.receipt[0]['receipt_id'],
+    this.state.receipt.wastage)
+  }
 
+  componentDidMount() {
+    this.setState({receipt: this.props.currentReceipt})
   }
 
   render() {
-
+    if(!this.props.currentReceipt || !this.props.currentReceipt.wastage
+      || !this.state.receipt || !this.state.receipt.wastage){
+      return <span>Loading...</span>
+    }
+    let items = []
+    for(var i =0; i< this.state.receipt.wastage.length; i ++) {
+      let receipt = this.state.receipt.receipt[i];
+      let wastage = this.state.receipt.wastage[i];
+      let el = (
+        <TableRow key={i}>
+          <TableRowColumn>{receipt['name']}</TableRowColumn>
+          <TableRowColumn>{receipt['quantity']}</TableRowColumn>
+          <TableRowColumn>{receipt['unit']}</TableRowColumn>
+          <TableRowColumn>{receipt['price']}</TableRowColumn>
+          <TableRowColumn>{receipt['category']}</TableRowColumn>
+          <TableRowColumn>
+            <TextField onChange={this.handleOnReceiptEdit.bind(this,i,wastage)} value={wastage.wastage}/>
+          </TableRowColumn>
+      </TableRow>
+      )
+      //
+      items.push(el)
+    }
     return (
       <div>
         <h1> Grocery Info for Id: {this.props.currentReceipt && this.props.currentReceipt[0] && this.props.currentReceipt[0].receipt_id}</h1>
@@ -107,7 +148,6 @@ class ReceiptInfo extends React.Component {
             <TableHeaderColumn tooltip="unit">Unit</TableHeaderColumn>
             <TableHeaderColumn tooltip="price">Price($)</TableHeaderColumn>
             <TableHeaderColumn tooltip="category">Category</TableHeaderColumn>
-            <TableHeaderColumn tooltip="closest_category">Closest Category</TableHeaderColumn>
             <TableHeaderColumn tooltip="wastage_info">Wastage %</TableHeaderColumn>
             </TableRow>
           </TableHeader>
@@ -116,26 +156,16 @@ class ReceiptInfo extends React.Component {
             showRowHover={this.state.showRowHover}
             stripedRows={this.state.stripedRows}
           >
-            {this.props.currentReceipt && this.props.currentReceipt.map( (row, index) => (
-              <TableRow key={index}>
-                <TableRowColumn>{row.name}</TableRowColumn>
-                <TableRowColumn>{row.quantity}</TableRowColumn>
-                <TableRowColumn>{row.unit}</TableRowColumn>
-                <TableRowColumn tooltip={row.price}>{row.price}</TableRowColumn>
-                <TableRowColumn tooltip={row.category}>{row.category}</TableRowColumn>
-                <TableRowColumn tooltip={row.closest_category}>{row.closest_category}</TableRowColumn>
-                <TableRowColumn>
-                  <TextField value={row.wastage} onChange={this.handleOnReceiptEdit.bind(this, null, row)} />
-                </TableRowColumn>
-              </TableRow>
-              ))}
+            {items && items.map((row) =>
+              (row))
+            }
           </TableBody>
           <TableFooter>
           </TableFooter>
         </Table>
         <div>
           <Link to='/consumer'>Back</Link>
-          <RaisedButton style={{marginLeft: '20px'}} label = 'Save' primary={true}/>
+          <RaisedButton onClick={this.onSubmit.bind(this)} style={{marginLeft: '20px'}} label = 'Save' primary={true}/>
         </div>
       </div>
     );

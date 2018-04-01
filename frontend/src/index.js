@@ -16,6 +16,7 @@ import { createStore, applyMiddleware, combineReducers} from 'redux';
 import thunk from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 import { Provider } from 'react-redux';
+import ReduxToastr from 'react-redux-toastr'
 
 
 // import { Router, Route, Switch , browserHistory, hashHistory} from 'react-router'
@@ -47,6 +48,14 @@ ReactDOM.render(
   <Provider store = {store}>
     <Router history={history}>
       <AppComponent>
+        <ReduxToastr
+          timeOut={4000}
+          newestOnTop={false}
+          preventDuplicates
+          position="top-left"
+          transitionIn="fadeIn"
+          transitionOut="fadeOut"
+          progressBar/>
         <Switch>
           <Route  path="/wastage" component={FoodWastage}/>
           <div className='content'>

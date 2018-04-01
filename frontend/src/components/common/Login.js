@@ -8,6 +8,7 @@ import { push } from 'react-router-redux';
 import {api} from './../../util/api';
 import { Link } from 'react-router-dom'
 import { Redirect } from 'react-router'
+import {toastr} from 'react-redux-toastr'
 
 const st = {
   backgroundColor : '#FAFAFA',
@@ -51,6 +52,9 @@ class Login extends React.Component {
   onLogin(e) {
     let username = this.state.username;
     let password = this.state.password;
+    if(!username || !password) {
+      toastr.success('The title', 'The message')
+    }
     this.props.loginUser(username, password)
   }
 
