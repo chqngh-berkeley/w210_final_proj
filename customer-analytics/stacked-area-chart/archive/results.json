@@ -1,0 +1,1298 @@
+[
+    {
+        "yr": "2016",
+        "MTH": "Apr",
+        "ITEM_CLASS": "DAIRY",
+        "WASTED_DOLLARS": "9.20"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Apr",
+        "ITEM_CLASS": "FISH",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Apr",
+        "ITEM_CLASS": "FOWL",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Apr",
+        "ITEM_CLASS": "FRESH FRUIT",
+        "WASTED_DOLLARS": "0.42"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Apr",
+        "ITEM_CLASS": "FRESH VEGETABLES",
+        "WASTED_DOLLARS": "0.12"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Apr",
+        "ITEM_CLASS": "MEAT",
+        "WASTED_DOLLARS": "25.01"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Apr",
+        "ITEM_CLASS": "MILK",
+        "WASTED_DOLLARS": "1.04"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Apr",
+        "ITEM_CLASS": "PROCESSED FRUIT",
+        "WASTED_DOLLARS": "0.03"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Apr",
+        "ITEM_CLASS": "PROCESSED VEGETABLES",
+        "WASTED_DOLLARS": "26.19"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Aug",
+        "ITEM_CLASS": "DAIRY",
+        "WASTED_DOLLARS": "1.08"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Aug",
+        "ITEM_CLASS": "FISH",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Aug",
+        "ITEM_CLASS": "FOWL",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Aug",
+        "ITEM_CLASS": "FRESH FRUIT",
+        "WASTED_DOLLARS": "0.17"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Aug",
+        "ITEM_CLASS": "FRESH VEGETABLES",
+        "WASTED_DOLLARS": "0.73"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Aug",
+        "ITEM_CLASS": "MEAT",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Aug",
+        "ITEM_CLASS": "MILK",
+        "WASTED_DOLLARS": "0.25"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Aug",
+        "ITEM_CLASS": "PROCESSED FRUIT",
+        "WASTED_DOLLARS": "4.98"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Aug",
+        "ITEM_CLASS": "PROCESSED VEGETABLES",
+        "WASTED_DOLLARS": "0.97"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Dec",
+        "ITEM_CLASS": "DAIRY",
+        "WASTED_DOLLARS": "1.39"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Dec",
+        "ITEM_CLASS": "FISH",
+        "WASTED_DOLLARS": "6.28"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Dec",
+        "ITEM_CLASS": "FOWL",
+        "WASTED_DOLLARS": "7.54"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Dec",
+        "ITEM_CLASS": "FRESH FRUIT",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Dec",
+        "ITEM_CLASS": "FRESH VEGETABLES",
+        "WASTED_DOLLARS": "3.40"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Dec",
+        "ITEM_CLASS": "MEAT",
+        "WASTED_DOLLARS": "1.42"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Dec",
+        "ITEM_CLASS": "MILK",
+        "WASTED_DOLLARS": "26.06"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Dec",
+        "ITEM_CLASS": "PROCESSED FRUIT",
+        "WASTED_DOLLARS": "7.60"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Dec",
+        "ITEM_CLASS": "PROCESSED VEGETABLES",
+        "WASTED_DOLLARS": "0.39"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Jul",
+        "ITEM_CLASS": "DAIRY",
+        "WASTED_DOLLARS": "8.64"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Jul",
+        "ITEM_CLASS": "FISH",
+        "WASTED_DOLLARS": "3.17"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Jul",
+        "ITEM_CLASS": "FOWL",
+        "WASTED_DOLLARS": "0.75"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Jul",
+        "ITEM_CLASS": "FRESH FRUIT",
+        "WASTED_DOLLARS": "2.69"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Jul",
+        "ITEM_CLASS": "FRESH VEGETABLES",
+        "WASTED_DOLLARS": "2.62"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Jul",
+        "ITEM_CLASS": "MEAT",
+        "WASTED_DOLLARS": "3.85"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Jul",
+        "ITEM_CLASS": "MILK",
+        "WASTED_DOLLARS": "7.56"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Jul",
+        "ITEM_CLASS": "PROCESSED FRUIT",
+        "WASTED_DOLLARS": "0.72"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Jul",
+        "ITEM_CLASS": "PROCESSED VEGETABLES",
+        "WASTED_DOLLARS": "5.61"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Jun",
+        "ITEM_CLASS": "DAIRY",
+        "WASTED_DOLLARS": "20.95"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Jun",
+        "ITEM_CLASS": "FISH",
+        "WASTED_DOLLARS": "0.49"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Jun",
+        "ITEM_CLASS": "FOWL",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Jun",
+        "ITEM_CLASS": "FRESH FRUIT",
+        "WASTED_DOLLARS": "0.87"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Jun",
+        "ITEM_CLASS": "FRESH VEGETABLES",
+        "WASTED_DOLLARS": "0.33"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Jun",
+        "ITEM_CLASS": "MEAT",
+        "WASTED_DOLLARS": "0.53"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Jun",
+        "ITEM_CLASS": "MILK",
+        "WASTED_DOLLARS": "0.04"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Jun",
+        "ITEM_CLASS": "PROCESSED FRUIT",
+        "WASTED_DOLLARS": "3.34"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Jun",
+        "ITEM_CLASS": "PROCESSED VEGETABLES",
+        "WASTED_DOLLARS": "0.09"
+    },
+    {
+        "yr": "2016",
+        "MTH": "May",
+        "ITEM_CLASS": "DAIRY",
+        "WASTED_DOLLARS": "7.81"
+    },
+    {
+        "yr": "2016",
+        "MTH": "May",
+        "ITEM_CLASS": "FISH",
+        "WASTED_DOLLARS": "0.42"
+    },
+    {
+        "yr": "2016",
+        "MTH": "May",
+        "ITEM_CLASS": "FOWL",
+        "WASTED_DOLLARS": "5.14"
+    },
+    {
+        "yr": "2016",
+        "MTH": "May",
+        "ITEM_CLASS": "FRESH FRUIT",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2016",
+        "MTH": "May",
+        "ITEM_CLASS": "FRESH VEGETABLES",
+        "WASTED_DOLLARS": "6.98"
+    },
+    {
+        "yr": "2016",
+        "MTH": "May",
+        "ITEM_CLASS": "MEAT",
+        "WASTED_DOLLARS": "16.13"
+    },
+    {
+        "yr": "2016",
+        "MTH": "May",
+        "ITEM_CLASS": "MILK",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2016",
+        "MTH": "May",
+        "ITEM_CLASS": "PROCESSED FRUIT",
+        "WASTED_DOLLARS": "9.10"
+    },
+    {
+        "yr": "2016",
+        "MTH": "May",
+        "ITEM_CLASS": "PROCESSED VEGETABLES",
+        "WASTED_DOLLARS": "11.76"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Nov",
+        "ITEM_CLASS": "DAIRY",
+        "WASTED_DOLLARS": "13.24"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Nov",
+        "ITEM_CLASS": "FISH",
+        "WASTED_DOLLARS": "0.99"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Nov",
+        "ITEM_CLASS": "FOWL",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Nov",
+        "ITEM_CLASS": "FRESH FRUIT",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Nov",
+        "ITEM_CLASS": "FRESH VEGETABLES",
+        "WASTED_DOLLARS": "7.16"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Nov",
+        "ITEM_CLASS": "MEAT",
+        "WASTED_DOLLARS": "4.51"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Nov",
+        "ITEM_CLASS": "MILK",
+        "WASTED_DOLLARS": "2.09"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Nov",
+        "ITEM_CLASS": "PROCESSED FRUIT",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Nov",
+        "ITEM_CLASS": "PROCESSED VEGETABLES",
+        "WASTED_DOLLARS": "0.28"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Oct",
+        "ITEM_CLASS": "DAIRY",
+        "WASTED_DOLLARS": "0.11"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Oct",
+        "ITEM_CLASS": "FISH",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Oct",
+        "ITEM_CLASS": "FOWL",
+        "WASTED_DOLLARS": "0.92"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Oct",
+        "ITEM_CLASS": "FRESH FRUIT",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Oct",
+        "ITEM_CLASS": "FRESH VEGETABLES",
+        "WASTED_DOLLARS": "5.71"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Oct",
+        "ITEM_CLASS": "MEAT",
+        "WASTED_DOLLARS": "0.64"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Oct",
+        "ITEM_CLASS": "MILK",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Oct",
+        "ITEM_CLASS": "PROCESSED FRUIT",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Oct",
+        "ITEM_CLASS": "PROCESSED VEGETABLES",
+        "WASTED_DOLLARS": "0.21"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Sep",
+        "ITEM_CLASS": "DAIRY",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Sep",
+        "ITEM_CLASS": "FISH",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Sep",
+        "ITEM_CLASS": "FOWL",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Sep",
+        "ITEM_CLASS": "FRESH FRUIT",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Sep",
+        "ITEM_CLASS": "FRESH VEGETABLES",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Sep",
+        "ITEM_CLASS": "MEAT",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Sep",
+        "ITEM_CLASS": "MILK",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Sep",
+        "ITEM_CLASS": "PROCESSED FRUIT",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2016",
+        "MTH": "Sep",
+        "ITEM_CLASS": "PROCESSED VEGETABLES",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Apr",
+        "ITEM_CLASS": "DAIRY",
+        "WASTED_DOLLARS": "4.83"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Apr",
+        "ITEM_CLASS": "FISH",
+        "WASTED_DOLLARS": "1.48"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Apr",
+        "ITEM_CLASS": "FOWL",
+        "WASTED_DOLLARS": "2.96"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Apr",
+        "ITEM_CLASS": "FRESH FRUIT",
+        "WASTED_DOLLARS": "1.17"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Apr",
+        "ITEM_CLASS": "FRESH VEGETABLES",
+        "WASTED_DOLLARS": "3.66"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Apr",
+        "ITEM_CLASS": "MEAT",
+        "WASTED_DOLLARS": "7.25"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Apr",
+        "ITEM_CLASS": "MILK",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Apr",
+        "ITEM_CLASS": "PROCESSED FRUIT",
+        "WASTED_DOLLARS": "0.74"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Apr",
+        "ITEM_CLASS": "PROCESSED VEGETABLES",
+        "WASTED_DOLLARS": "1.80"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Aug",
+        "ITEM_CLASS": "DAIRY",
+        "WASTED_DOLLARS": "31.24"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Aug",
+        "ITEM_CLASS": "FISH",
+        "WASTED_DOLLARS": "18.34"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Aug",
+        "ITEM_CLASS": "FOWL",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Aug",
+        "ITEM_CLASS": "FRESH FRUIT",
+        "WASTED_DOLLARS": "0.67"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Aug",
+        "ITEM_CLASS": "FRESH VEGETABLES",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Aug",
+        "ITEM_CLASS": "MEAT",
+        "WASTED_DOLLARS": "2.22"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Aug",
+        "ITEM_CLASS": "MILK",
+        "WASTED_DOLLARS": "0.65"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Aug",
+        "ITEM_CLASS": "PROCESSED FRUIT",
+        "WASTED_DOLLARS": "40.71"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Aug",
+        "ITEM_CLASS": "PROCESSED VEGETABLES",
+        "WASTED_DOLLARS": "10.12"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Dec",
+        "ITEM_CLASS": "DAIRY",
+        "WASTED_DOLLARS": "3.94"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Dec",
+        "ITEM_CLASS": "FISH",
+        "WASTED_DOLLARS": "0.36"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Dec",
+        "ITEM_CLASS": "FOWL",
+        "WASTED_DOLLARS": "4.52"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Dec",
+        "ITEM_CLASS": "FRESH FRUIT",
+        "WASTED_DOLLARS": "1.22"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Dec",
+        "ITEM_CLASS": "FRESH VEGETABLES",
+        "WASTED_DOLLARS": "9.49"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Dec",
+        "ITEM_CLASS": "MEAT",
+        "WASTED_DOLLARS": "12.40"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Dec",
+        "ITEM_CLASS": "MILK",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Dec",
+        "ITEM_CLASS": "PROCESSED FRUIT",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Dec",
+        "ITEM_CLASS": "PROCESSED VEGETABLES",
+        "WASTED_DOLLARS": "0.85"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Feb",
+        "ITEM_CLASS": "DAIRY",
+        "WASTED_DOLLARS": "8.17"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Feb",
+        "ITEM_CLASS": "FISH",
+        "WASTED_DOLLARS": "2.21"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Feb",
+        "ITEM_CLASS": "FOWL",
+        "WASTED_DOLLARS": "6.27"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Feb",
+        "ITEM_CLASS": "FRESH FRUIT",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Feb",
+        "ITEM_CLASS": "FRESH VEGETABLES",
+        "WASTED_DOLLARS": "0.60"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Feb",
+        "ITEM_CLASS": "MEAT",
+        "WASTED_DOLLARS": "11.44"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Feb",
+        "ITEM_CLASS": "MILK",
+        "WASTED_DOLLARS": "2.30"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Feb",
+        "ITEM_CLASS": "PROCESSED FRUIT",
+        "WASTED_DOLLARS": "0.53"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Feb",
+        "ITEM_CLASS": "PROCESSED VEGETABLES",
+        "WASTED_DOLLARS": "3.76"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jan",
+        "ITEM_CLASS": "DAIRY",
+        "WASTED_DOLLARS": "4.38"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jan",
+        "ITEM_CLASS": "FISH",
+        "WASTED_DOLLARS": "0.59"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jan",
+        "ITEM_CLASS": "FOWL",
+        "WASTED_DOLLARS": "7.41"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jan",
+        "ITEM_CLASS": "FRESH FRUIT",
+        "WASTED_DOLLARS": "0.15"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jan",
+        "ITEM_CLASS": "FRESH VEGETABLES",
+        "WASTED_DOLLARS": "0.67"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jan",
+        "ITEM_CLASS": "MEAT",
+        "WASTED_DOLLARS": "1.16"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jan",
+        "ITEM_CLASS": "MILK",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jan",
+        "ITEM_CLASS": "PROCESSED FRUIT",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jan",
+        "ITEM_CLASS": "PROCESSED VEGETABLES",
+        "WASTED_DOLLARS": "4.30"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jul",
+        "ITEM_CLASS": "DAIRY",
+        "WASTED_DOLLARS": "22.62"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jul",
+        "ITEM_CLASS": "FISH",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jul",
+        "ITEM_CLASS": "FOWL",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jul",
+        "ITEM_CLASS": "FRESH FRUIT",
+        "WASTED_DOLLARS": "0.36"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jul",
+        "ITEM_CLASS": "FRESH VEGETABLES",
+        "WASTED_DOLLARS": "0.19"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jul",
+        "ITEM_CLASS": "MEAT",
+        "WASTED_DOLLARS": "3.70"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jul",
+        "ITEM_CLASS": "MILK",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jul",
+        "ITEM_CLASS": "PROCESSED FRUIT",
+        "WASTED_DOLLARS": "0.82"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jul",
+        "ITEM_CLASS": "PROCESSED VEGETABLES",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jun",
+        "ITEM_CLASS": "DAIRY",
+        "WASTED_DOLLARS": "8.94"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jun",
+        "ITEM_CLASS": "FISH",
+        "WASTED_DOLLARS": "0.09"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jun",
+        "ITEM_CLASS": "FOWL",
+        "WASTED_DOLLARS": "0.26"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jun",
+        "ITEM_CLASS": "FRESH FRUIT",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jun",
+        "ITEM_CLASS": "FRESH VEGETABLES",
+        "WASTED_DOLLARS": "1.24"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jun",
+        "ITEM_CLASS": "MEAT",
+        "WASTED_DOLLARS": "9.57"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jun",
+        "ITEM_CLASS": "MILK",
+        "WASTED_DOLLARS": "0.85"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jun",
+        "ITEM_CLASS": "PROCESSED FRUIT",
+        "WASTED_DOLLARS": "2.06"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Jun",
+        "ITEM_CLASS": "PROCESSED VEGETABLES",
+        "WASTED_DOLLARS": "2.56"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Mar",
+        "ITEM_CLASS": "DAIRY",
+        "WASTED_DOLLARS": "13.82"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Mar",
+        "ITEM_CLASS": "FISH",
+        "WASTED_DOLLARS": "4.78"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Mar",
+        "ITEM_CLASS": "FOWL",
+        "WASTED_DOLLARS": "2.71"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Mar",
+        "ITEM_CLASS": "FRESH FRUIT",
+        "WASTED_DOLLARS": "1.16"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Mar",
+        "ITEM_CLASS": "FRESH VEGETABLES",
+        "WASTED_DOLLARS": "3.84"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Mar",
+        "ITEM_CLASS": "MEAT",
+        "WASTED_DOLLARS": "28.22"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Mar",
+        "ITEM_CLASS": "MILK",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Mar",
+        "ITEM_CLASS": "PROCESSED FRUIT",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Mar",
+        "ITEM_CLASS": "PROCESSED VEGETABLES",
+        "WASTED_DOLLARS": "0.46"
+    },
+    {
+        "yr": "2017",
+        "MTH": "May",
+        "ITEM_CLASS": "DAIRY",
+        "WASTED_DOLLARS": "3.85"
+    },
+    {
+        "yr": "2017",
+        "MTH": "May",
+        "ITEM_CLASS": "FISH",
+        "WASTED_DOLLARS": "0.09"
+    },
+    {
+        "yr": "2017",
+        "MTH": "May",
+        "ITEM_CLASS": "FOWL",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2017",
+        "MTH": "May",
+        "ITEM_CLASS": "FRESH FRUIT",
+        "WASTED_DOLLARS": "0.22"
+    },
+    {
+        "yr": "2017",
+        "MTH": "May",
+        "ITEM_CLASS": "FRESH VEGETABLES",
+        "WASTED_DOLLARS": "2.81"
+    },
+    {
+        "yr": "2017",
+        "MTH": "May",
+        "ITEM_CLASS": "MEAT",
+        "WASTED_DOLLARS": "5.25"
+    },
+    {
+        "yr": "2017",
+        "MTH": "May",
+        "ITEM_CLASS": "MILK",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2017",
+        "MTH": "May",
+        "ITEM_CLASS": "PROCESSED FRUIT",
+        "WASTED_DOLLARS": "1.72"
+    },
+    {
+        "yr": "2017",
+        "MTH": "May",
+        "ITEM_CLASS": "PROCESSED VEGETABLES",
+        "WASTED_DOLLARS": "1.00"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Nov",
+        "ITEM_CLASS": "DAIRY",
+        "WASTED_DOLLARS": "2.48"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Nov",
+        "ITEM_CLASS": "FISH",
+        "WASTED_DOLLARS": "0.20"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Nov",
+        "ITEM_CLASS": "FOWL",
+        "WASTED_DOLLARS": "0.03"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Nov",
+        "ITEM_CLASS": "FRESH FRUIT",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Nov",
+        "ITEM_CLASS": "FRESH VEGETABLES",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Nov",
+        "ITEM_CLASS": "MEAT",
+        "WASTED_DOLLARS": "1.50"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Nov",
+        "ITEM_CLASS": "MILK",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Nov",
+        "ITEM_CLASS": "PROCESSED FRUIT",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Nov",
+        "ITEM_CLASS": "PROCESSED VEGETABLES",
+        "WASTED_DOLLARS": "0.72"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Oct",
+        "ITEM_CLASS": "DAIRY",
+        "WASTED_DOLLARS": "15.27"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Oct",
+        "ITEM_CLASS": "FISH",
+        "WASTED_DOLLARS": "0.26"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Oct",
+        "ITEM_CLASS": "FOWL",
+        "WASTED_DOLLARS": "8.31"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Oct",
+        "ITEM_CLASS": "FRESH FRUIT",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Oct",
+        "ITEM_CLASS": "FRESH VEGETABLES",
+        "WASTED_DOLLARS": "0.01"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Oct",
+        "ITEM_CLASS": "MEAT",
+        "WASTED_DOLLARS": "58.19"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Oct",
+        "ITEM_CLASS": "MILK",
+        "WASTED_DOLLARS": "0.09"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Oct",
+        "ITEM_CLASS": "PROCESSED FRUIT",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Oct",
+        "ITEM_CLASS": "PROCESSED VEGETABLES",
+        "WASTED_DOLLARS": "5.91"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Sep",
+        "ITEM_CLASS": "DAIRY",
+        "WASTED_DOLLARS": "11.63"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Sep",
+        "ITEM_CLASS": "FISH",
+        "WASTED_DOLLARS": "0.42"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Sep",
+        "ITEM_CLASS": "FOWL",
+        "WASTED_DOLLARS": "4.90"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Sep",
+        "ITEM_CLASS": "FRESH FRUIT",
+        "WASTED_DOLLARS": "0.28"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Sep",
+        "ITEM_CLASS": "FRESH VEGETABLES",
+        "WASTED_DOLLARS": "0.72"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Sep",
+        "ITEM_CLASS": "MEAT",
+        "WASTED_DOLLARS": "7.75"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Sep",
+        "ITEM_CLASS": "MILK",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Sep",
+        "ITEM_CLASS": "PROCESSED FRUIT",
+        "WASTED_DOLLARS": "1.42"
+    },
+    {
+        "yr": "2017",
+        "MTH": "Sep",
+        "ITEM_CLASS": "PROCESSED VEGETABLES",
+        "WASTED_DOLLARS": "3.17"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Feb",
+        "ITEM_CLASS": "DAIRY",
+        "WASTED_DOLLARS": "7.30"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Feb",
+        "ITEM_CLASS": "FISH",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Feb",
+        "ITEM_CLASS": "FOWL",
+        "WASTED_DOLLARS": "1.31"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Feb",
+        "ITEM_CLASS": "FRESH FRUIT",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Feb",
+        "ITEM_CLASS": "FRESH VEGETABLES",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Feb",
+        "ITEM_CLASS": "MEAT",
+        "WASTED_DOLLARS": "3.09"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Feb",
+        "ITEM_CLASS": "MILK",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Feb",
+        "ITEM_CLASS": "PROCESSED FRUIT",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Feb",
+        "ITEM_CLASS": "PROCESSED VEGETABLES",
+        "WASTED_DOLLARS": "0.25"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Jan",
+        "ITEM_CLASS": "DAIRY",
+        "WASTED_DOLLARS": "2.64"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Jan",
+        "ITEM_CLASS": "FISH",
+        "WASTED_DOLLARS": "0.26"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Jan",
+        "ITEM_CLASS": "FOWL",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Jan",
+        "ITEM_CLASS": "FRESH FRUIT",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Jan",
+        "ITEM_CLASS": "FRESH VEGETABLES",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Jan",
+        "ITEM_CLASS": "MEAT",
+        "WASTED_DOLLARS": "0.34"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Jan",
+        "ITEM_CLASS": "MILK",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Jan",
+        "ITEM_CLASS": "PROCESSED FRUIT",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Jan",
+        "ITEM_CLASS": "PROCESSED VEGETABLES",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Mar",
+        "ITEM_CLASS": "DAIRY",
+        "WASTED_DOLLARS": "0.82"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Mar",
+        "ITEM_CLASS": "FISH",
+        "WASTED_DOLLARS": "0.02"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Mar",
+        "ITEM_CLASS": "FOWL",
+        "WASTED_DOLLARS": "1.11"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Mar",
+        "ITEM_CLASS": "FRESH FRUIT",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Mar",
+        "ITEM_CLASS": "FRESH VEGETABLES",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Mar",
+        "ITEM_CLASS": "MEAT",
+        "WASTED_DOLLARS": "3.79"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Mar",
+        "ITEM_CLASS": "MILK",
+        "WASTED_DOLLARS": "0.00"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Mar",
+        "ITEM_CLASS": "PROCESSED FRUIT",
+        "WASTED_DOLLARS": "0.01"
+    },
+    {
+        "yr": "2018",
+        "MTH": "Mar",
+        "ITEM_CLASS": "PROCESSED VEGETABLES",
+        "WASTED_DOLLARS": "0.00"
+    }
+]

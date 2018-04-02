@@ -1,0 +1,242 @@
+[
+    {
+        "grant_title": "MILK",
+        "id": "628",
+        "organization": "MILK",
+        "total_amount": "0.17",
+        "gp": "MEDIUM",
+        "WASTE_DATA_ENTRY_DT": "2018-03-16",
+        "USER_ID": "2449",
+        "start_year": "3"
+    },
+    {
+        "grant_title": "LETTUCE LEAF",
+        "id": "1522",
+        "organization": "FRESH VEGETABLES",
+        "total_amount": "0.43",
+        "gp": "HIGH",
+        "WASTE_DATA_ENTRY_DT": "2018-03-18",
+        "USER_ID": "2449",
+        "start_year": "2"
+    },
+    {
+        "grant_title": "YOGURT",
+        "id": "1176",
+        "organization": "DAIRY",
+        "total_amount": "1.12",
+        "gp": "HIGH",
+        "WASTE_DATA_ENTRY_DT": "2018-03-18",
+        "USER_ID": "2449",
+        "start_year": "2"
+    },
+    {
+        "grant_title": "LETTUCE LEAF",
+        "id": "831",
+        "organization": "FRESH VEGETABLES",
+        "total_amount": "0.28",
+        "gp": "HIGH",
+        "WASTE_DATA_ENTRY_DT": "2018-03-18",
+        "USER_ID": "2449",
+        "start_year": "2"
+    },
+    {
+        "grant_title": "MILK",
+        "id": "484",
+        "organization": "MILK",
+        "total_amount": "0.50",
+        "gp": "MEDIUM",
+        "WASTE_DATA_ENTRY_DT": "2018-03-18",
+        "USER_ID": "2449",
+        "start_year": "2"
+    },
+    {
+        "grant_title": "COLD JUICE",
+        "id": "1030",
+        "organization": "PROCESSED FRUIT",
+        "total_amount": "0.14",
+        "gp": "MEDIUM",
+        "WASTE_DATA_ENTRY_DT": "2018-03-18",
+        "USER_ID": "2449",
+        "start_year": "2"
+    },
+    {
+        "grant_title": "POTATOES",
+        "id": "683",
+        "organization": "FRESH VEGETABLES",
+        "total_amount": "0.12",
+        "gp": "HIGH",
+        "WASTE_DATA_ENTRY_DT": "2018-03-18",
+        "USER_ID": "2449",
+        "start_year": "2"
+    },
+    {
+        "grant_title": "PORK",
+        "id": "336",
+        "organization": "MEAT",
+        "total_amount": "0.17",
+        "gp": "MEDIUM",
+        "WASTE_DATA_ENTRY_DT": "2018-03-18",
+        "USER_ID": "2449",
+        "start_year": "2"
+    },
+    {
+        "grant_title": "LETTUCE LEAF",
+        "id": "1576",
+        "organization": "FRESH VEGETABLES",
+        "total_amount": "0.29",
+        "gp": "MEDIUM",
+        "WASTE_DATA_ENTRY_DT": "2018-03-18",
+        "USER_ID": "2449",
+        "start_year": "2"
+    },
+    {
+        "grant_title": "CONDIMENT",
+        "id": "1230",
+        "organization": "PROCESSED VEGETABLES",
+        "total_amount": "0.54",
+        "gp": "HIGH",
+        "WASTE_DATA_ENTRY_DT": "2018-03-18",
+        "USER_ID": "2449",
+        "start_year": "2"
+    },
+    {
+        "grant_title": "HARD CHEESE",
+        "id": "883",
+        "organization": "DAIRY",
+        "total_amount": "0.43",
+        "gp": "HIGH",
+        "WASTE_DATA_ENTRY_DT": "2018-03-18",
+        "USER_ID": "2449",
+        "start_year": "2"
+    },
+    {
+        "grant_title": "FROZEN FISH",
+        "id": "536",
+        "organization": "FISH",
+        "total_amount": "0.34",
+        "gp": "HIGH",
+        "WASTE_DATA_ENTRY_DT": "2018-03-18",
+        "USER_ID": "2449",
+        "start_year": "2"
+    },
+    {
+        "grant_title": "LETTUCE LEAF",
+        "id": "1429",
+        "organization": "FRESH VEGETABLES",
+        "total_amount": "0.17",
+        "gp": "MEDIUM",
+        "WASTE_DATA_ENTRY_DT": "2018-03-18",
+        "USER_ID": "2449",
+        "start_year": "2"
+    },
+    {
+        "grant_title": "SEAFOOD-FRZ-MISC",
+        "id": "1082",
+        "organization": "FISH",
+        "total_amount": "0.14",
+        "gp": "MEDIUM",
+        "WASTE_DATA_ENTRY_DT": "2018-03-18",
+        "USER_ID": "2449",
+        "start_year": "2"
+    },
+    {
+        "grant_title": "PICKLES",
+        "id": "736",
+        "organization": "PROCESSED VEGETABLES",
+        "total_amount": "0.25",
+        "gp": "HIGH",
+        "WASTE_DATA_ENTRY_DT": "2018-03-18",
+        "USER_ID": "2449",
+        "start_year": "2"
+    },
+    {
+        "grant_title": "FRZN CORN ON THE COB",
+        "id": "390",
+        "organization": "PROCESSED VEGETABLES",
+        "total_amount": "0.21",
+        "gp": "MEDIUM",
+        "WASTE_DATA_ENTRY_DT": "2018-03-18",
+        "USER_ID": "2449",
+        "start_year": "2"
+    },
+    {
+        "grant_title": "SPINACH",
+        "id": "1281",
+        "organization": "FRESH VEGETABLES",
+        "total_amount": "0.10",
+        "gp": "MEDIUM",
+        "WASTE_DATA_ENTRY_DT": "2018-03-18",
+        "USER_ID": "2449",
+        "start_year": "2"
+    },
+    {
+        "grant_title": "FROZEN MEAT",
+        "id": "934",
+        "organization": "MEAT",
+        "total_amount": "0.12",
+        "gp": "MEDIUM",
+        "WASTE_DATA_ENTRY_DT": "2018-03-18",
+        "USER_ID": "2449",
+        "start_year": "2"
+    },
+    {
+        "grant_title": "TOMATOES",
+        "id": "587",
+        "organization": "FRESH VEGETABLES",
+        "total_amount": "0.42",
+        "gp": "HIGH",
+        "WASTE_DATA_ENTRY_DT": "2018-03-18",
+        "USER_ID": "2449",
+        "start_year": "2"
+    },
+    {
+        "grant_title": "POTATOES",
+        "id": "240",
+        "organization": "FRESH VEGETABLES",
+        "total_amount": "0.62",
+        "gp": "HIGH",
+        "WASTE_DATA_ENTRY_DT": "2018-03-18",
+        "USER_ID": "2449",
+        "start_year": "2"
+    },
+    {
+        "grant_title": "ORANGES",
+        "id": "1480",
+        "organization": "FRESH FRUIT",
+        "total_amount": "0.09",
+        "gp": "MEDIUM",
+        "WASTE_DATA_ENTRY_DT": "2018-03-18",
+        "USER_ID": "2449",
+        "start_year": "2"
+    },
+    {
+        "grant_title": "YOGURT",
+        "id": "1133",
+        "organization": "DAIRY",
+        "total_amount": "0.46",
+        "gp": "HIGH",
+        "WASTE_DATA_ENTRY_DT": "2018-03-18",
+        "USER_ID": "2449",
+        "start_year": "2"
+    },
+    {
+        "grant_title": "HARD CHEESE",
+        "id": "787",
+        "organization": "DAIRY",
+        "total_amount": "0.89",
+        "gp": "HIGH",
+        "WASTE_DATA_ENTRY_DT": "2018-03-18",
+        "USER_ID": "2449",
+        "start_year": "2"
+    },
+    {
+        "grant_title": "BEANS",
+        "id": "441",
+        "organization": "PROCESSED VEGETABLES",
+        "total_amount": "1.55",
+        "gp": "HIGH",
+        "WASTE_DATA_ENTRY_DT": "2018-03-20",
+        "USER_ID": "2449",
+        "start_year": "1"
+    }
+]
