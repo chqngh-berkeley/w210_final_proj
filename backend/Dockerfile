@@ -1,3 +1,4 @@
+FROM r-base
 # Use an official Python runtime as a parent image
 FROM continuumio/anaconda
 
