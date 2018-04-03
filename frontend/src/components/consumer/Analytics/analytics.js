@@ -111,7 +111,7 @@ class Analytics extends React.Component {
         'bubble_chart-gh-pages',
         'stacked-area-chart'
       ]
-      let url = "http://localhost:8065/"+options[this.state.selection]+"/index.php?user_id=" + this.props.username;
+      let url = "http://50.97.219.169:8065/"+options[this.state.selection]+"/index.php?user_id=" + this.props.username;
       return (
         <div>
           <SelectField

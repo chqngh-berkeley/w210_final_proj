@@ -9,10 +9,10 @@ services:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
     # command:
       # - script.sh
-  # frontend:
-  #   build: ./frontend
-  #   ports:
-  #     - "8000:8000"
+  frontend:
+    build: ./frontend
+    ports:
+      - "8000:8000"
   # backend:
   #   build: ./backend
   #   ports:
@@ -24,6 +24,10 @@ services:
     build: ./informational-analytics
     ports:
       - "8585:8585"
+  customeranalytics:
+    build: ./customer-analytics
+    ports:
+      - "8065:8065"
   intro:
     build: ./intro
     ports:
