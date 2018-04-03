@@ -17,7 +17,7 @@ def enable_cors(fn):
     def _enable_cors(*args, **kwargs):
         # set CORS headers
         response.headers['Access-Control-Allow-Origin'] = '*'
-        response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, OPTIONS'
+        response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
         response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token, user_id'
 
         if bottle.request.method != 'OPTIONS':
@@ -52,7 +52,8 @@ def receiptData(id):
         'receipt_id': id}
     except Exception as e:
         print e
-        return e
+        response.status = 400
+        return {'error': str(e)}
 
 @receipt_app.route(path='/receipt/all', method=['GET'])
 @enable_cors
@@ -63,10 +64,11 @@ def getAllReceiptData():
         if not user_id:
             return {'error': 'user_id required'}
         receipt_data = receipt_serv.getAllReceipts(user_id)
-        return { 'data': receipt_data}
+        return { 'data' : receipt_data }
     except Exception as e:
         print e
-        return e
+        response.status = 400
+        return {'error': str(e)}
 
 @receipt_app.route(path='/receipt/<id>', method=['PUT','OPTIONS'])
 @enable_cors
@@ -75,13 +77,14 @@ def receiptVerify(id):
         user_id = request.query['user_id']
         print('user id:', user_id)
         print('receipt id:', id)
-        # request_json = dict(request.json)
-
+        request_json = dict(request.json)
+        print(request_json)
         receipt_info_data = receipt_serv.updateReceipt(user_id, receipt_id, request_json)
         return {'data': receipt_info_data, 'receipt_id': id}
     except Exception as e:
         print e
-        return e
+        response.status = 400
+        return {'error': str(e)}
 @receipt_app.route(path='/wastage/<id>', method=['PUT','OPTIONS'])
 @enable_cors
 def wastageUpdate(id):
@@ -96,7 +99,40 @@ def wastageUpdate(id):
         return {'data': wastage_info_data, 'receipt_id': id}
     except Exception as e:
         print e
-        return e
+        response.status = 400
+        return {'error': str(e)}
+@receipt_app.route(path='/receipt/<id>', method=['PUT','OPTIONS'])
+@enable_cors
+def receiptUpdate(id):
+    try:
+        user_id = request.query['user_id']
+        print('user id:', user_id)
+        print('receipt id:', id)
+        print('request.json', request.json)
+        request_json = list(request.json)
+
+        receipt_info_data = receipt_serv.updateReceipt(user_id, id, request_json)
+        return {'data': receipt_info_data, 'receipt_id': id}
+    except Exception as e:
+        print e
+        response.status = 400
+        return {'error': str(e)}
+
+@receipt_app.delete(path='/receipt/<id>')
+@enable_cors
+def deleteWastageInfo(id):
+    try:
+        user_id = request.query['user_id']
+        print('user id:', user_id)
+        print('receipt id:', id)
+        # request_json = dict(request.json)['data']
+
+        result = receipt_serv.deleteReceipt(user_id, id)
+        return {'data': result}
+    except Exception as e:
+        print e
+        response.status = 400
+        return {'error': str(e)}
 
 @receipt_app.route(path='/receipt/upload_receipt', method=['POST','OPTIONS'])
 @enable_cors
@@ -104,14 +140,18 @@ def upload_receipt():
     try:
         user_id = request.query['user_id']
         upload = request.files.get('upload')
+        if not user_id:
+            response.status = 400
+            return {'data': 'user_id cannot be empty'}
         if not upload:
+            response.status = 400
             return {'data': 'upload cannot be empty'}
         print user_id
         data = receipt_serv.storeReceiptAndWastageInfo(user_id, upload.file)
         return {'data': data}
     except Exception as e:
         print e
-        return e
+        return {'error': str(e)}
 
 if __name__ == '__main__':
     from optparse import OptionParser

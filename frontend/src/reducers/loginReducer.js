@@ -2,7 +2,7 @@ import * as c from '../constants/constants'
 
 let loginInitState = {
   loggedIn : false,
-  username : '718',
+  username : '184',//'718',
   password : null,
   name : null,
   age : null,

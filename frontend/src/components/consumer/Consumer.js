@@ -3,9 +3,12 @@ import FlatButton from 'material-ui/FlatButton';
 import ReceiptHistory from './grocery_history/receipt_history';
 import  GroceryListRecommender from './grocery_list/grocery_list_recommender';
 import ReceiptUploader from './receipt_uploader/receipt_uploader';
+import Analytics from './Analytics/analytics';
 import {connect} from 'react-redux';
 import { push } from 'react-router-redux';
 import {Tabs, Tab} from 'material-ui/Tabs';
+import { withRouter } from 'react-router-dom'
+
 import {
   team500, team700,
   pinkA200,
@@ -40,9 +43,10 @@ class Consumer extends React.Component {
       val : 'b'
     }
   }
+
   componentDidMount() {
     if(!this.props.username) {
-      this.props.returnToLogin()
+      this.props.history.push('/login')
       return;
     }
   }
@@ -63,7 +67,12 @@ class Consumer extends React.Component {
        {this.state.val == 'c' && <GroceryListRecommender />}
      </Tab>
      <Tab label="Receipt Uploader" value="a">
-       {this.state.val == 'a' && <ReceiptUploader />}
+       {this.state.val == 'a'
+         && <ReceiptUploader onTabChange={this.onTabChange.bind(this)}/>}
+      </Tab>
+
+     <Tab label="Analytics" value="d">
+       {this.state.val == 'd' && <Analytics />}
       </Tab>
   </Tabs>)
   }
@@ -76,4 +85,4 @@ class Consumer extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Consumer)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Consumer))

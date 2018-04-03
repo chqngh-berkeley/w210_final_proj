@@ -63,6 +63,13 @@ const mapDispatchToProps =(dispatch) => {
         api.getAllReceipts(username).then(function(res) {
             dispatch(setAllReceipts(res['data']));
         })
+      },
+      removeReceipt : (username, receipt) => {
+        api.deleteReceiptDataById(username, receipt['receipt_id']).then(function(res) {
+          api.getAllReceipts(username).then(function(res) {
+              dispatch(setAllReceipts(res['data']));
+          })
+        })
       }
     }
 };
@@ -98,12 +105,12 @@ class ReceiptHistory extends React.Component {
     console.log('Edit data...', item);
     this.props.setCurrentReceipt(this.props.username, item);
   }
-  handleOnReceiptRemove = (event, idx) => {
-    console.log('remove data...', idx)
+  handleOnReceiptRemove = (event, item) => {
+    console.log('remove data...', item)
+    this.props.removeReceipt(this.props.username, item);
   }
 
   componentDidMount() {
-    // this.setState({receipts : this.props.receipts})
     this.props.getAllReceipts(this.props.username);
   }
 
@@ -133,7 +140,7 @@ class ReceiptHistory extends React.Component {
           enableSelectAll={false}
           >
           <TableRow>
-            <TableHeaderColumn colSpan="3" style={{textAlign: 'left'}}>
+            <TableHeaderColumn colSpan="4" style={{textAlign: 'left'}}>
               Receipt List History
             </TableHeaderColumn>
           </TableRow>
@@ -142,6 +149,7 @@ class ReceiptHistory extends React.Component {
             <TableHeaderColumn tooltip="timestamp">Date</TableHeaderColumn>
 
             <TableHeaderColumn tooltip="action">Edit</TableHeaderColumn>
+            <TableHeaderColumn tooltip="action"></TableHeaderColumn>
           </TableRow>
         </TableHeader>
         <TableBody
@@ -149,10 +157,10 @@ class ReceiptHistory extends React.Component {
           showRowHover={this.state.showRowHover}
           stripedRows={this.state.stripedRows}
         >
-          {this.props.receipts && this.props.receipts.map( (row, index) => (
+          {this.props.receipts && this.props.receipts.sort(this.sortDate).map( (row, index) => (
             <TableRow key={index}>
               <TableRowColumn>{row.receipt_id}</TableRowColumn>
-              <TableRowColumn>{new Date(parseInt(row.upload_date)).toString()}</TableRowColumn>
+              <TableRowColumn>{this.convertDate(row.upload_date)}</TableRowColumn>
 
               <TableRowColumn>
                 <Link
@@ -161,6 +169,13 @@ class ReceiptHistory extends React.Component {
                 Edit
               </Link>
               </TableRowColumn>
+              <TableRowColumn>
+                <FlatButton
+                  secondary={true}
+                  onClick = {this.handleOnReceiptRemove.bind(this, null, row)}>
+                Delete
+              </FlatButton>
+              </TableRowColumn>
             </TableRow>
             ))}
         </TableBody>
@@ -168,6 +183,37 @@ class ReceiptHistory extends React.Component {
         </TableFooter>
       </Table>
     )
+  }
+  convertDate(d) {
+      if(d.includes('/')) {
+        let arr = d.split('/')
+        let da = arr[2] +'-' + arr[0] + '-' + arr[1]
+        return new Date(da).toLocaleDateString();
+      } else {
+        return new Date(d).toLocaleDateString();
+      }
+  }
+
+  sortDate(row1,row2) {
+    let d1 = row1['upload_date']
+    let d2 = row2['upload_date']
+    let a = ''
+    if(d1.includes('/')) {
+      let arr = d1.split('/')
+      let da = arr[2] +'-' + arr[0] + '-' + arr[1]
+      a = new Date(da);
+    } else {
+      a = new Date(d1);
+    }
+    let b = ''
+    if(d2.includes('/')) {
+      let arr = d2.split('/')
+      let da = arr[2] +'-' + arr[0] + '-' + arr[1]
+      b = new Date(da);
+    } else {
+      b = new Date(d2);
+    }
+    return a.getTime() > b.getTime() ? -1 : 1;
   }
 
   render() {

@@ -2,7 +2,10 @@ import * as c from '../constants/constants'
 
 let receiptInitData = {
   receipts:[],
-  current_receipt: {}
+  current_receipt: {
+    receipt : [],
+    wastage: []
+  }
 }
 
 export function receiptReducer(state=receiptInitData, action) {

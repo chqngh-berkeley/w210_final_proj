@@ -8,8 +8,8 @@
  * https://bost.ocks.org/mike/chart/
  *
  */
- 
-/* 
+
+/*
 var i = 0;
 var data = [
     'Analytics is at the heart of our tool',
@@ -28,12 +28,12 @@ function trans() {
         .duration(500)
         .text(data[i])
         .style("font-size","32px")
-        
+
        // .on('mousedown', function(d) {
          //   d3.select(this).moveToBack()});
     i = i + 1;
 };
- 
+
 d3.select('svg').on("click", function() {d3.select('svg').remove();});
 
 */
@@ -43,7 +43,7 @@ function bubbleChart() {
   // Constants for sizing
   var width = 1200;
   var height = 700;
-  
+
   var i = 0;
   var datum = [
     'Analytics is at the heart of our tool',
@@ -202,10 +202,10 @@ function bubbleChart() {
       .attr('stroke-width', 2)
       .on('mouseover', showDetail)
       .on('mouseout', hideDetail);
-      
-      
+
+
 	//add text to the group
-	/*    
+	/*
 	bubbles.append("text")
 	    .classed('bubble', true)
         .attr("x", function(d){ return d.x; })
@@ -215,13 +215,13 @@ function bubbleChart() {
 		return d["grant_title"];
 	})
 		.style({
-            "fill":"white", 
+            "fill":"white",
             "font-family":"Helvetica Neue, Helvetica, Arial, san-serif",
             "font-size": "12px"
 		});
 		*/
 	//bubbles.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-/*	
+/*
 	var i = 0;
 	var data = [
     'Analytics is at the heart of our tool',
@@ -240,12 +240,12 @@ function bubbleChart() {
         .duration(500)
         .text(data[i])
         .style("font-size","32px")
-        
+
        // .on('mousedown', function(d) {
          //   d3.select(this).moveToBack()});
     i = i + 1;
 	};
- 
+
 	d3.select('svg').on("click", function() {d3.select('svg').remove();});
 	*/
 
@@ -485,7 +485,7 @@ function doSomethingWithData(jsondata) {
 }
 
 //d3.json("php/data.php", doSomethingWithData);
-d3.csv('data/test1.csv', display);
+d3.csv('./data/test1.csv', display);
 
 /*d3.json("bala.json", function(error, data) {
 		console.log(data);
@@ -493,6 +493,3 @@ d3.csv('data/test1.csv', display);
 
 // setup the buttons.
 setupButtons();
-
-
-

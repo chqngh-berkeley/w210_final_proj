@@ -7,6 +7,8 @@ import { push } from 'react-router-redux';
 import { Link } from 'react-router-dom'
 import { Redirect } from 'react-router';
 import {api} from './../../../util/api';
+import { cyan500 } from 'material-ui/styles/colors';
+
 import {
   Table,
   TableBody,
@@ -17,7 +19,9 @@ import {
   TableRowColumn,
 } from 'material-ui/Table';
 import Toggle from 'material-ui/Toggle';
-import Slider from 'material-ui/Slider';
+// import Slider from 'material-ui/Slider';
+import Subheader from 'material-ui/Subheader';
+import Slider from 'material-ui-slider-label/Slider';
 
 import {addToDefaultList,
   removeFromDefaultList,
@@ -33,6 +37,30 @@ const st = {
   padding: '15px 0'
 }
 
+const sliderStyles = {
+  subheader: {
+    textTransform: 'capitalize',
+  },
+  labelStyleOuter: {
+    width: '40px',
+    height: '40px',
+    borderRadius: '50% 50% 50% 0',
+    position: 'absolute',
+    background: cyan500,
+    transform: 'rotate(-45deg)',
+    top: '-53px',
+    left: '-14px',
+  },
+  labelStyleInner: {
+    transform: 'rotate(45deg)',
+    color: 'white',
+    textAlign: 'center',
+    position: 'relative',
+    top: '10px',
+    right: '0px',
+    fontSize: '10px',
+  },
+};
 const mapStateToProps = function(state){
   return {
     username: state.loginReducer.username,
@@ -72,6 +100,7 @@ class GroceryListRecommender extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+    wasteThreshold: 50,
     fixedHeader: true,
     fixedFooter: true,
     stripedRows: false,
@@ -108,36 +137,50 @@ class GroceryListRecommender extends React.Component {
   removeFromDefaultList = (event, item) => {
     this.props.removeFromDefaultList(item);
   }
-
+  onThresholdChange = (event, val) => {
+    console.log(val)
+    this.setState({wasteThreshold : val * 100})
+  }
   updateDefaultListItem = (item, e, newVal) => {
     console.log(newVal, item)
   }
   render() {
-    // <TableRow>
-    //   <TableHeaderColumn colSpan="6" tooltip="Super Header" style={{textAlign: 'center'}}>
-    //     Frequently Purchased
-    //   </TableHeaderColumn>
-    // </TableRow>
-    // <TableRowColumn>
-    //   <div style={{position : 'relative'}}>
-    //     <div style={{display : 'inline-block', position: 'absolute', top: -15}}>
-    //       {row.wastage ? row.wastage*100 : 50}%
-    //     </div>
-    //     <Slider sliderStyle={{marginBottom : 20}}
-    //       value ={row.wastage ? row.wastage : 0.5}
-    //       onChange={this.updateDefaultListItem.bind(this, row)} />
-    //   </div>
-    // </TableRowColumn>
-    // <TableRowColumn>
-    //   <FlatButton onClick={this.removeFromDefaultList.bind(this, row)} secondary = {true} label = 'Remove'></FlatButton>
-    // </TableRowColumn>
+    if(this.props.recommendedList && this.props.recommendedList.length ==  0) {
+      return (
+        <div>
+          <h1> Grocery List Recommender </h1>
+            <h3 style= {{textAlign : 'center', 'margin': '50px auto'}}>
+            Upload a receipt to get your recommendations!
+          </h3>
+        </div>
+        )
+    }
     return (
       <div>
         <h1> Grocery List Recommender </h1>
         <br />
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vulputate cursus scelerisque. Phasellus at laoreet mi. Morbi non nibh facilisis, viverra dui luctus, vestibulum metus. Aliquam suscipit mauris dui, quis hendrerit tellus sagittis ut. Nam leo mi, dignissim sit amet dapibus eget, pharetra at neque. Integer ut facilisis purus. Aliquam erat volutpat.</p>
         <h3>Recommended Grocery Items</h3>
-
+        <div>
+            <Subheader style={sliderStyles.subheader}>
+              {'Wastage Threshold'}
+            </Subheader>
+            <Slider
+              defaultValue={5 / 100}
+              min={0}
+              max={1}
+              step={5 / 100}
+              value={this.state.wasteThreshold / 100}
+              onChange={this.onThresholdChange}
+              label={
+                <div style={sliderStyles.labelStyleOuter}>
+                  <div style={sliderStyles.labelStyleInner}>
+                    {this.state.wasteThreshold} %
+                  </div>
+                </div>
+              }
+            />
+        </div>
         <Table
           height={this.state.height}
           fixedHeader={this.state.fixedHeader}

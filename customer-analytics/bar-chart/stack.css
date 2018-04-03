@@ -8,6 +8,14 @@ position:relative;
     z-index:9999;
 }
 
+.select-container {
+  height: 50px;
+  width: 100%;
+  display: inline-block;
+  left: 0px;
+  position: absolute;
+}
+
 form {
     display: block;
     margin-top: 0em;

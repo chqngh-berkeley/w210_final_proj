@@ -20,7 +20,7 @@ def enable_cors(fn):
     def _enable_cors(*args, **kwargs):
         # set CORS headers
         response.headers['Access-Control-Allow-Origin'] = '*'
-        response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, OPTIONS'
+        response.headers['Access-Control-Allow-Methods'] = 'GET, POST, DELETE, PUT, OPTIONS'
         response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token, user_id'
 
         if bottle.request.method != 'OPTIONS':
@@ -40,7 +40,7 @@ def createUser():
         return {'data': data}
     except Exception as e:
         print e
-        return e
+        return {'error': e}
 
 
 @user_app.route(path='/user/login', method=['POST', 'OPTIONS'])
@@ -54,7 +54,7 @@ def loginUser():
         return {'data': data}
     except Exception as e:
         print e
-        return e
+        return {'error': e}
 
 
 @user_app.route(path='/user/<id>', method='GET')
@@ -66,7 +66,7 @@ def getUser(id):
         return {'data': data}
     except Exception as e:
         print e
-        return e
+        return {'error': e}
 
 @user_app.route(path='/user/<id>', method=['PUT','OPTION'])
 @enable_cors
@@ -78,7 +78,7 @@ def updateUser(id):
         return { 'data' : data }
     except Exception as e:
         print e
-        return e
+        return {'error': e}
 
 
 @user_app.route(path='/user/<id>', method=['DELETE','OPTION'])
@@ -94,7 +94,7 @@ def deleteUser():
         return {'data': data }
     except Exception as e:
         print e
-        return e
+        return {'error': e}
 @user_app.route(path='/user/test', method='GET')
 @enable_cors
 def userTest():
@@ -103,7 +103,7 @@ def userTest():
         return {'data': 'user test'}
     except Exception as e:
         print e
-        return e
+        return {'error': e}
 
 
 if __name__ == '__main__':

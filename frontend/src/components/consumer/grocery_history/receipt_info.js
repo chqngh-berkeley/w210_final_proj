@@ -7,7 +7,9 @@ import { push } from 'react-router-redux';
 import { Link } from 'react-router-dom'
 import { Redirect } from 'react-router'
 import {api} from './../../../util/api';
-import {setReceiptItem} from './../../../actions/receiptAction'
+import {setReceipt} from './../../../actions/receiptAction'
+import {toastr} from 'react-redux-toastr'
+import { withRouter } from 'react-router-dom'
 import {
   Table,
   TableBody,
@@ -36,13 +38,14 @@ const mapStateToProps = function(state){
 
 const mapDispatchToProps =(dispatch) => {
   return {
-      setReceiptItem :(item) => {
-        dispatch(setReceiptItem(item));
+      setReceiptItem :(receipt) => {
+        dispatch(setReceipt(receipt));
       },
-      updateReceiptInfo :(user_id,receipt_id, receipts) => {
-        api.updateWastageDataById(user_id, receipt_id, receipts).then(function(res, err){
+      updateReceiptInfo :(user_id,receipt_id, receipts, cb) => {
+        api.updateWastageDataById(user_id, receipt_id, receipts).then(function(res){
           console.log(res);
-          console.log(err)
+          cb()
+          toastr.success('Updated Receipt Id:', receipt_id);
         })
       }
     }
@@ -64,11 +67,6 @@ class ReceiptInfo extends React.Component {
       height: '300px',
     };
   }
-  handleToggle = (event, toggled) => {
-    this.setState({
-      [event.target.name]: toggled,
-    });
-  };
 
   handleChange = (event) => {
     this.setState({height: event.target.value});
@@ -77,20 +75,25 @@ class ReceiptInfo extends React.Component {
   handleOnReceiptEdit = (idx, item,e,val) => {
     // this.props.setReceiptItem(item);
     console.log(val, idx,item)
-    let receipt = this.state.receipt;
+    let receipt = this.props.currentReceipt;
     let res = receipt.receipt.slice();
     let waste = receipt.wastage.slice();
     waste[idx]['wastage'] = val
-    this.setState({receipt: {receipt: res, wastage: waste}})
+    this.props.setReceiptItem({receipt: res, wastage: waste})
   }
   handleOnReceiptRemove = (event, item) => {
     console.log('remove data...', item)
   }
 
   onSubmit() {
-    console.log(this.state.receipt)
-    this.props.updateReceiptInfo(this.props.username, this.props.currentReceipt.receipt[0]['receipt_id'],
-    this.state.receipt.wastage)
+    // console.log(this.props.currentReceipt)
+    let receipt_id = this.props.currentReceipt['receipt'][0]['receipt_id'];
+    let wastage = this.props.currentReceipt['wastage']
+    this.props.updateReceiptInfo(this.props.username,
+      receipt_id, wastage,() => {
+      console.log('finished...')
+      this.props.history.push('/consumer')
+    })
   }
 
   componentDidMount() {
@@ -98,14 +101,13 @@ class ReceiptInfo extends React.Component {
   }
 
   render() {
-    if(!this.props.currentReceipt || !this.props.currentReceipt.wastage
-      || !this.state.receipt || !this.state.receipt.wastage){
+    if(!this.props.currentReceipt || !this.props.currentReceipt.wastage){
       return <span>Loading...</span>
     }
     let items = []
-    for(var i =0; i< this.state.receipt.wastage.length; i ++) {
-      let receipt = this.state.receipt.receipt[i];
-      let wastage = this.state.receipt.wastage[i];
+    for(var i =0; i< this.props.currentReceipt.wastage.length; i ++) {
+      let receipt = this.props.currentReceipt.receipt[i];
+      let wastage = this.props.currentReceipt.wastage[i];
       let el = (
         <TableRow key={i}>
           <TableRowColumn>{receipt['name']}</TableRowColumn>
@@ -172,4 +174,4 @@ class ReceiptInfo extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReceiptInfo)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ReceiptInfo))

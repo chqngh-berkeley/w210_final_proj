@@ -11,6 +11,8 @@ import TextField from 'material-ui/TextField';
 import VerifyTable from './VerifyTable'
 import {api} from './../../../util/api';
 import {setReceipt} from './../../../actions/receiptAction';
+var Loader = require('react-loader');
+import {toastr} from 'react-redux-toastr'
 
 import {connect} from 'react-redux';
 
@@ -36,27 +38,42 @@ const mapDispatchToProps =(dispatch) => {
     resetCurrentReceipt: () => {
       dispatch(setReceipt([]))
     },
-    uploadReceiptData : (username, data) => {
+    uploadReceiptData : (username, data, cb) => {
       api.submitFileUpload(username, data).then(function(json_res) {
         console.log('res:', json_res)
+        if(json_res['error']) {
+          toastr.error('Failed to upload receipt...', json_res['error']);
+          cb(false);
+          return;
+        }
         // dispatch(setReceiptId(json_res['result']));
         api.getReceiptDataById(username,json_res['data'][0]['receipt_id']).then(function(res) {
           console.log('receipt data:', res);
-          // dispatch(setReceiptData(res['result']));
+          dispatch(setReceipt({receipt: res['receipt_data']}));
+          cb(true);
         });
+      }, function(err) {
+        console.log(err)
+        toastr.error('Failed to upload receipt...', err['error']);
+        cb(false);
       });
     }
   };
 };
 
 class ReceiptUploader extends React.Component {
+  constructor(props) {
+    super(props);
+    console.log('ReceiptUploader', props)
+    this.onTabChange = props.onTabChange;
+    this.state = {
+      loading: false,
+      finished: false,
+      file : null,
+      stepIndex: 0,
+    };
+  }
 
-  state = {
-    loading: false,
-    finished: false,
-    file : null,
-    stepIndex: 0,
-  };
 
   componentDidMount() {
     this.props.resetCurrentReceipt();
@@ -97,8 +114,22 @@ class ReceiptUploader extends React.Component {
   }
 
   submitFileUpload = (e) => {
-    this.props.uploadReceiptData(this.props.username, this.state.file);
-    this.handleNext()
+    const {stepIndex} = this.state;
+    this.setState({loading: true}, () => {
+      this.props.uploadReceiptData(this.props.username, this.state.file, (isSuccess) => {
+        if(isSuccess) {
+          this.setState({
+            loading: false,
+            stepIndex: stepIndex + 1,
+            finished: stepIndex >= 2,
+          })
+        } else {
+          this.setState({
+            loading: false
+          })
+        }
+      })
+    })
   }
 
   getStepContent(stepIndex) {
@@ -120,7 +151,7 @@ class ReceiptUploader extends React.Component {
         );
       case 1:
         return (
-          <VerifyTable />
+          <VerifyTable onTabChange={this.onTabChange}/>
         );
       case 2:
         return (
@@ -148,19 +179,6 @@ class ReceiptUploader extends React.Component {
     return (
       <div style={contentStyle}>
         <div>{this.getStepContent(stepIndex)}</div>
-        <div style={{marginTop: 24, marginBottom: 12}}>
-          <FlatButton
-            label="Back"
-            disabled={stepIndex === 0}
-            onClick={this.handlePrev}
-            style={{marginRight: 12}}
-          />
-          <RaisedButton
-            label={stepIndex === 1 ? 'Finish' : 'Next'}
-            primary={true}
-            onClick={this.handleNext}
-          />
-        </div>
       </div>
     );
   }
@@ -186,9 +204,11 @@ class ReceiptUploader extends React.Component {
             <StepLabel>Verify Receipt Items</StepLabel>
           </Step>
         </Stepper>
+        <Loader loaded={!this.state.loading}>
         <ExpandTransition loading={loading} open={true}>
-          {this.renderContent()}
+            {this.renderContent()}
         </ExpandTransition>
+        </Loader>
       </div>
     );
   }

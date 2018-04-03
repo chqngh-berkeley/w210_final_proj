@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import {
   Table,
   TableBody,
@@ -13,7 +14,9 @@ import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
 import {api} from './../../../util/api';
 import {connect} from 'react-redux';
-import {setReceiptData} from './../../../actions/receiptAction';
+import {toastr} from 'react-redux-toastr';
+import { withRouter } from 'react-router-dom'
+import {setReceiptData, setReceipt} from './../../../actions/receiptAction';
 const styles = {
   propContainer: {
     width: 200,
@@ -40,12 +43,23 @@ const mapDispatchToProps =(dispatch) => {
         dispatch(setReceiptData(res['result']));
       });
     },
-    updateReceipt : (user_id, receipt_id, receipt_data).then(function(res) {
+    setReceiptItem :(receipt) => {
+      dispatch(setReceipt(receipt));
+    },
+    updateReceipt : (user_id, receipt_id, receipt_data, cb) => {
+      console.log(receipt_data)
       api.updateReceiptDataById(user_id, receipt_id, receipt_data).then(function(res) {
         console.log('receipt data:', res);
-        dispatch(setReceiptData(res['result']));
+        if(res['error']) {
+          cb(false);
+          toastr.error('Failed to Update Receipt:', res['error']);
+          return;
+        }
+        cb(true)
+        toastr.success('Updated Receipt:', receipt_id);
+
       });
-    })
+    }
   };
 };
 /**
@@ -84,15 +98,62 @@ class VerifyTable extends Component {
   };
   submitReceipt() {
     console.log('submit receipt clicked');
+    let receipt_id = this.props.current_receipt['receipt'][0]['receipt_id'];
+    let receipt = this.props.current_receipt['receipt']
+    this.props.updateReceipt(this.props.username,
+      receipt_id, receipt,(isSuccess) => {
+      console.log('finished...')
+      if(isSuccess) {
+        console.log('verify', this.props)
+          this.props.onTabChange('b')
+      }
+    });
   }
 
   render() {
     return (
       <div>
         {this.getUploadedReceipt()}
-        <RaisedButton onClick={this.submitReceipt.bind(this)} label="Submit"></RaisedButton>
       </div>
     );
+  }
+
+  handleOnPriceEdit = (idx, item,e,val) => {
+    // this.props.setReceiptItem(item);
+    let receipt = this.props.current_receipt;
+    console.log(receipt)
+    let res = receipt.receipt.slice();
+    let waste = []
+    if(receipt.wastage) {
+      waste = receipt.wastage.slice();
+    }
+    res[idx]['price'] = val
+    this.props.setReceiptItem({receipt: res, wastage: waste})
+  }
+
+  handleOnQuantityEdit = (idx, item,e,val) => {
+    // this.props.setReceiptItem(item);
+    let receipt = this.props.current_receipt;
+    let res = receipt.receipt.slice();
+    let waste = []
+    if(receipt.wastage) {
+      waste = receipt.wastage.slice();
+    }
+    res[idx]['quantity'] = val
+    this.props.setReceiptItem({receipt: res, wastage: waste})
+  }
+
+  handleOnUnitEdit = (idx, item,e,val) => {
+    // this.props.setReceiptItem(item);
+    let receipt = this.props.current_receipt;
+    console.log(receipt)
+    let res = receipt.receipt.slice();
+    let waste = []
+    if(receipt.wastage) {
+      waste = receipt.wastage.slice();
+    }
+    res[idx]['unit'] = val
+    this.props.setReceiptItem({receipt: res, wastage: waste})
   }
 
   getUploadedReceipt() {
@@ -110,7 +171,7 @@ class VerifyTable extends Component {
           enableSelectAll={this.state.enableSelectAll}
         >
           <TableRow>
-            <TableHeaderColumn colSpan="4" tooltip="Receipt Data" style={{textAlign: 'left'}}>
+            <TableHeaderColumn colSpan="5" tooltip="Receipt Data" style={{textAlign: 'left'}}>
               Receipt data
             </TableHeaderColumn>
           </TableRow>
@@ -128,27 +189,36 @@ class VerifyTable extends Component {
           showRowHover={this.state.showRowHover}
           stripedRows={this.state.stripedRows}
         >
-          {this.props.current_receipt && this.props.current_receipt.length > 0 &&
-            this.props.current_receipt.map( (row, index) => (
+          {this.props.current_receipt &&this.props.current_receipt.receipt &&this.props.current_receipt.receipt.length > 0 &&
+            this.props.current_receipt.receipt.map( (row, index) => (
             <TableRow key={index}>
               <TableRowColumn tooltip={row.name}>{row.name}</TableRowColumn>
-              <TableRowColumn tooltip={row.units}>{row.units}</TableRowColumn>
-              <TableRowColumn tooltip={row.category}>{row.category}</TableRowColumn>
-              <TableRowColumn tooltip={row.quantity}>
-                <TextField value = {row.quantity?  row.quantity : 1} />
+                <TableRowColumn>
+                  <TextField value = {row.unit}
+                    onChange={this.handleOnUnitEdit.bind(this,index,row)} value={row.unit}
+                    />
+                </TableRowColumn>
+              <TableRowColumn tooltip={row.name}>{row.category}</TableRowColumn>
+              <TableRowColumn>
+                <TextField value = {row.quantity}
+                  onChange={this.handleOnQuantityEdit.bind(this,index,row)} value={row.quantity}
+                  />
               </TableRowColumn>
               <TableRowColumn tooltip={row.price}>
-                <TextField value = {row.price?  row.price:0} />
+                <TextField value = {row.price}
+                  onChange={this.handleOnPriceEdit.bind(this,index,row)} value={row.price}
+                  />
               </TableRowColumn>
             </TableRow>
             ))}
         </TableBody>
-        <TableFooter
-          adjustForCheckbox={this.state.showCheckboxes}
-        >
+        <TableFooter>
+          <div style={{textAlign: 'center'}}>
+            <RaisedButton primary={true} onClick={this.submitReceipt.bind(this)} label="Submit"></RaisedButton>
+          </div>
         </TableFooter>
       </Table>)
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(VerifyTable)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(VerifyTable))

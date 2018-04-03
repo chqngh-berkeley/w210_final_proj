@@ -1,6 +1,6 @@
 import {CRUD} from './CRUD';
+import {BASE_URL} from '../constants/constants'
 
-const BASE_URL = 'http://0.0.0.0:8090'
 // const BASE_URL = 'http://50.97.219.169'
 export const api = {
 

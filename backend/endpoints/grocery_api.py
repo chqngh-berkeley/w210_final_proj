@@ -19,7 +19,7 @@ def enable_cors(fn):
     def _enable_cors(*args, **kwargs):
         # set CORS headers
         response.headers['Access-Control-Allow-Origin'] = '*'
-        response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, OPTIONS'
+        response.headers['Access-Control-Allow-Methods'] = 'GET, DELETE, POST, PUT, OPTIONS'
         response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token, user_id'
 
         if bottle.request.method != 'OPTIONS':
@@ -37,7 +37,7 @@ def groceryTest():
         return {'result': 'grocery test'}
     except Exception as e:
         print e
-        return e
+        return {'error': e}
 
 
 @grocery_app.route(path='/grocery/recommended', method=['GET', 'OPTIONS'])
@@ -47,10 +47,15 @@ def getRecommendedGrocery():
         user_id = request.query['user_id']
         print('user id:', user_id)
         rec_grocery_data = grocery_serv.getPredictedList(user_id)
+        if len(rec_grocery_data) == 0:
+            import os
+            command = ("sh ./models/predict.sh %s %s")%(user_id, 50)
+            print command
+            os.system(command)
         return { 'data': rec_grocery_data}
     except Exception as e:
         print e
-        return e
+        return {'error': e}
 
 @grocery_app.route(path='/grocery/training', method=['GET', 'OPTIONS'])
 @enable_cors
@@ -61,7 +66,7 @@ def train():
         return { 'data': user_id}
     except Exception as e:
         print e
-        return e
+        return {'error': e}
 
 @grocery_app.route(path='/grocery/predict', method=['GET', 'OPTIONS'])
 @enable_cors
@@ -76,7 +81,7 @@ def predict():
         return { 'data': command}
     except Exception as e:
         print e
-        return e
+        return {'error': e}
 
 if __name__ == '__main__':
     from optparse import OptionParser

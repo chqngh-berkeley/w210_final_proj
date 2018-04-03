@@ -31,33 +31,35 @@ class ReceiptService(object):
     # POST
     def storeReceiptAndWastageInfo(self, user_id, receiptData):
         ocr_data = self.ocr_.ocr({'image': receiptData})
-        current_time = time.time()
+        import datetime
+        now = datetime.date.today()
         for row in ocr_data:
             obj = {
                 "USER_ID" : user_id,
                 "RECEIPT_ID" : str(row["receipt_id"]),
-                "RECEIPT_UPLOAD_DT" : str(current_time),
+                "RECEIPT_UPLOAD_DT" : str(now),
                 "ITEM_ID" : str(row['upc']),
-                "ITEM_NAME" : row['food_name'],
+                "ITEM_NAME" : row['food_name'].split(',')[0],
                 "ITEM_QTY_PRCH" : 1, #float(''.join([i for i in row['size'] if not i.isalpha()]).trim()),
                 "ITEM_UNITS" : ''.join([i for i in row['size'] if not i.isdigit()]),
                 "ITEM_TOTAL_PRICE" : row['price'],
                 "ITEM_CATEGORY": row["category"]
             }
             data =self.sql_.insertObj('USER_GROCERY_RECEIPT', obj)
+
             wastage_obj = {
                 "USER_ID" : obj["USER_ID"],
                 "RECEIPT_ID" : str(obj["RECEIPT_ID"]),
-                "WASTE_DATA_ENTRY_DT" : str(obj['RECEIPT_UPLOAD_DT']),
+                "WASTE_DATA_ENTRY_DT" : now,
                 "ITEM_ID" : obj['ITEM_ID'],
                 "ITEM_NAME" : obj['ITEM_NAME'],
                 "ITEM_SIZE" : obj['ITEM_QTY_PRCH'],
-                "ITEM_UNITS" : obj['ITEM_UNITS'],
+                "ITEM_CLASS" : obj['ITEM_CATEGORY'],
                 "ITEM_TOTAL_PRICE" : obj['ITEM_TOTAL_PRICE'],
                 "ITEM_CATEGORY": obj["ITEM_CATEGORY"],
-                "WASTE_AMT" : 0
+                "WASTE_AMT" : 0,
+                "WASTE_UNITS" : 0
             }
-            print wastage_obj
             wastage_data = self.sql_.insertObj('USER_GROCERY_ITEM_WASTE_ACTUAL', wastage_obj)
 
         return ocr_data
@@ -96,17 +98,13 @@ class ReceiptService(object):
                 obj[k] = item[v]
             d.append(obj)
         return d
-    # PUT
-    def updateReceipt(self, user_id, receipt_id, receiptData):
-        conditional_query = ('USER_ID = "%s" AND RECEIPT_ID=%s')%(user_id, receipt_id)
-        obj = {}
-        current_time = time.time()
-        for k,v in self.mapping_obj.items():
-            if v in receiptData:
-                obj[k] = receiptData[v]
-        obj['RECEIPT_UPLOAD_DT'] = current_time
-        data = self.sql_.updateObj('USER_GROCERY_RECEIPT', conditional_query,obj)
-        return data
+    # Delete
+    def deleteReceipt(self, user_id, receipt_id):
+        conditional_query = 'USER_ID = "'+user_id + '" AND RECEIPT_ID = "'+ receipt_id+'"';
+        result1 = self.sql_.delete('USER_GROCERY_RECEIPT', conditional_query)
+        result2 = self.sql_.delete('USER_GROCERY_ITEM_WASTE_ACTUAL', conditional_query)
+        return {"result_1": result1, "result_2": result2 }
+
 
     # GET
     def getWastageInfo(self, user_id, receipt_id):
@@ -117,10 +115,10 @@ class ReceiptService(object):
             "WASTE_DATA_ENTRY_DT" : "date",
             "ITEM_ID" : "id",
             "ITEM_NAME" : "food_name",
-            "ITEM_UNITS" : "unit",
             "ITEM_TOTAL_PRICE" : "price",
             "ITEM_CATEGORY" : "category",
-            "WASTE_AMT": "wastage"
+            "WASTE_AMT": "wastage",
+            "WASTE_UNITS": "waste_unit"
         }
         fields = mapping_obj.keys()
         data = self.sql_.selectFields('USER_GROCERY_ITEM_WASTE_ACTUAL', conditional_query, \
@@ -130,7 +128,10 @@ class ReceiptService(object):
             print item
             obj = {}
             for k,v in mapping_obj.items():
-                obj[v] = item[k]
+                if k == 'WASTE_DATA_ENTRY_DT':
+                    obj[v] = str(item[k])
+                else :
+                    obj[v] = item[k]
             d.append(obj)
         return d
     # PUT
@@ -145,6 +146,7 @@ class ReceiptService(object):
             "ITEM_UNITS" : "unit",
             "ITEM_TOTAL_PRICE" : "price",
             "ITEM_CATEGORY" : "category",
+            "ITEM_CLASS" : "class",
             "WASTE_AMT": "wastage"
         }
         result = []
@@ -156,7 +158,38 @@ class ReceiptService(object):
             for k,v in mapping_obj.items():
                 if v in item:
                     obj[k] = item[v]
-            obj['WASTE_DATA_ENTRY_DT'] = current_time
+            # obj['WASTE_DATA_ENTRY_DT'] = current_time
             data = self.sql_.updateObj('USER_GROCERY_ITEM_WASTE_ACTUAL', conditional_query,obj)
             result.append(data)
+        return result
+    # PUT
+    def updateReceipt(self, user_id, receipt_id, receiptData):
+        mapping_obj = {
+            "USER_ID" : "user_id",
+            "RECEIPT_ID" : "receipt_id",
+            "ITEM_ID" : "id",
+            "ITEM_NAME" : "food_name",
+            "ITEM_TOTAL_PRICE" : "price",
+            "ITEM_CATEGORY" : "category",
+            "WASTE_AMT": "wastage"
+        }
+        result = []
+        import datetime
+        now = datetime.date.today()
+        for item in receiptData:
+            obj = {}
+            print(item)
+            item_id = item['id']
+            conditional_query = ('USER_ID = "%s" AND RECEIPT_ID=%s AND ITEM_ID=%s')%(user_id, receipt_id, item_id)
+            for k,v in self.ui_to_db.items():
+                if v in item:
+                    obj[k] = item[v]
+            data = self.sql_.updateObj('USER_GROCERY_RECEIPT', conditional_query,obj)
+            result.append(data)
+            obj = {}
+            for k,v in mapping_obj.items():
+                if v in item:
+                    obj[k] = item[v]
+            obj['WASTE_DATA_ENTRY_DT'] = now
+            data = self.sql_.updateObj('USER_GROCERY_ITEM_WASTE_ACTUAL', conditional_query,obj)
         return result

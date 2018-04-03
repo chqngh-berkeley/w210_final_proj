@@ -10,13 +10,21 @@ p {
 
 @media (min-width: 500px) {
     .content {
-      max-width: 1080px;
-      margin: 0 auto;
+      /* max-width: 1080px; */
+      /* margin: 0 auto; */
       padding: 20px;
       text-align: center;
     }
 }
-
+.loader {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  /* background: white; */
+  z-index: 9999;
+}
 .index img {
   margin: 40px auto;
   border-radius: 4px;
