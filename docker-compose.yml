@@ -9,10 +9,10 @@ services:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
     # command:
       # - script.sh
-  frontend:
-    build: ./frontend
-    ports:
-      - "8000:8000"
+  # frontend:
+  #   build: ./frontend
+  #   ports:
+  #     - "8000:8000"
   # backend:
   #   build: ./backend
   #   ports:
