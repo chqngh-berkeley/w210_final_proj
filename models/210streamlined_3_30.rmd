@@ -1,0 +1,568 @@
+---
+title: "Untitled"
+author: "Adam Reilly"
+date: "March 24, 2018"
+output: pdf_document
+---
+
+#CHANGES- 
+#Order of libraries needed
+#ADDED SUM2 AND SUM5 TO COUNT HOW MANY OF LAST 2 OR 5 THEY WERE BOUGHT ON (In area starting on 167. I also covered the time that last year variable looks at)
+#Changed name of initial database (data_no_date instead of data_complete)
+#Adding in date creation system (Line 31-40 and 55)
+#receipt5 now aggregates into receipt6, which deaggregates into receipt7
+#I slightly altered the data that the regression trains on
+#I added some additional user_lists for sample list-making/regrsesion to run on
+#The list making section is very updated
+
+```{r setup, include=FALSE}
+library(sqldf)
+library(car)
+library(dplyr)   #reordering rows in df
+#library(plm)
+#library(dlnm)
+#library(tidyverse)    #Used for data_frame, which can store lists as columns
+#library(nnet)    #for #multinom
+#library(MASS)    #for #ordinal
+#library(dplyr)   #reordering rows in df
+#library(stringr)  #Padding Library
+```
+
+TASK 1. UPDATE MAIN DATABASE 
+```{r}
+#THE OLD DATABASE
+data_no_date = read.csv('USER_GROCERY_RECEIPTX.CSV')
+```
+```{r}
+#Date Converter to add dates to the old data. This is only used as a sample to keep the dates updated as time moves forward.
+#I believe every time DATE_CONVERTER.CSV is opened and saved, it will reset "today's" date
+date_converter = read.csv('DATE_CONVERTER.CSV')
+drop_converter = c('CONVERTER_FIELD', 'TODAY')
+date_converter= date_converter[ , !(names(date_converter) %in% drop_converter)]
+
+data_complete = merge(data_no_date, date_converter, by = 'SHOPPING_DATE')
+names(data_complete)[names(data_complete) == 'SHOPPING_DATE']  = 'DAY'
+names(data_complete)[names(data_complete) == 'DATE'] = 'SHOPPING_DATE'
+```
+```{r}
+#USER PROFILE
+user_profile = read.csv('USER_PROFILE.CSV')
+```
+```{r}
+#USER ITEM LOOKUP
+user_grocery_item_lookup = read.csv('USER_GROCERY_ITEM_LOOKUP.CSV')
+```
+```{r}
+#sAMPLE NEW RECEIPT BEING READ IN
+new_receipts1 = read.csv('sample_receipts.csv')
+new_receipts1$DAY = new_receipts1$SHOPPING_DATE
+new_receipts1$ITEM_TOTAL_SIZE = new_receipts1$ITEM_SIZE * new_receipts1$ITEM_QTY_PRCH
+new_receipts1$WASTE_AMT = 0
+
+#Join Household_size
+user_family_count = sqldf('SELECT USER_ID, FAMILY_SIZE from user_profile')
+new_receipts2 = merge(new_receipts1, user_family_count, by = 'USER_ID')
+new_receipts2$PER_CAPITA_SIZE = new_receipts2$ITEM_TOTAL_SIZE / new_receipts2$FAMILY_SIZE
+
+#new_receipts3 is each an aggregation of each trip w/ per capita spend and size
+new_receipts3 = sqldf('SELECT USER_ID, DAY, sum(PER_CAPITA_SIZE)/FAMILY_SIZE as PER_CAPITA_SIZE_TRIP
+                       FROM new_receipts2
+                       GROUP BY USER_ID, DAY')
+#Purch_Trip_merge adds the data from trip_purch_Agg to the purchases
+new_receipts4 = merge(new_receipts2, new_receipts3, by = c('USER_ID', 'DAY'))
+item_duration = sqldf('SELECT ITEM_ID, ITEM_NAME, ITEM_CATEGORY, ITEM_CLASS, ITEM_DURATION from user_grocery_item_lookup')
+
+new_receipts5 = merge(new_receipts4, item_duration, by = 'ITEM_ID')
+
+#Getting Previous Shopping Data into new receipts
+#LAST SHOPPING SIZES AND DATES
+last_data = sqldf('SELECT USER_ID, DAY as PREV_DATE, PER_CAPITA_SIZE_TRIP as PREVIOUS_SHOP_SIZE FROM data_complete
+                   WHERE SHOPPING_RANK == 1
+                  GROUP BY USER_ID')
+
+new_receipts6 = merge(new_receipts5, last_data, by = 'USER_ID')
+new_receipts6$PREVIOUS_SHOP_DATE = new_receipts6$DAY - new_receipts6$PREV_DATE
+drops = 'PREV_DATE'
+new_receipts6 = new_receipts6[ , !(names(new_receipts6) %in% drops)]
+```
+
+```{r}
+#At this point, we need to aggregate old and new data together to create new information on averages for items, global items, shopping patterns...etc
+#First Updating Average/Stdev/Z for Shopping Trip Patterns
+old_trip_stats = sqldf('SELECT USER_ID, DAY, PREVIOUS_SHOP_DATE, PER_CAPITA_SIZE_TRIP FROM data_complete
+                  GROUP BY USER_ID, DAY')
+new_trip_stats = sqldf('SELECT USER_ID, DAY, PREVIOUS_SHOP_DATE, PER_CAPITA_SIZE_TRIP FROM new_receipts6
+                  GROUP BY USER_ID, DAY')
+all_trip_stats = rbind(old_trip_stats, new_trip_stats)
+all_trip_stats_agg = sqldf('SELECT USER_ID, avg(PREVIOUS_SHOP_DATE) as DAYS_BETWEEN_AVG, stdev(PREVIOUS_SHOP_DATE) as DAYS_BETWEEN_STDEV, avg(PER_CAPITA_SIZE_TRIP) as TRIP_SIZE_AVG, stdev(PER_CAPITA_SIZE_TRIP) as TRIP_SIZE_STDEV
+                            FROM all_trip_stats
+                            GROUP BY USER_ID')
+
+new_receipts7 = merge(new_receipts6, all_trip_stats_agg, by = 'USER_ID')
+
+new_receipts7$PREV_SIZE_Z = (new_receipts7$PREVIOUS_SHOP_SIZE-new_receipts7$TRIP_SIZE_AVG)/new_receipts7$TRIP_SIZE_STDEV
+new_receipts7$PREV_DATE_Z = (new_receipts7$PREVIOUS_SHOP_DATE-new_receipts7$DAYS_BETWEEN_AVG)/new_receipts7$DAYS_BETWEEN_STDEV
+#PREV_SIZE_Z up, loss up. PREV_DATE_Z up (assuming same PREV_SIZE_Z) loss down.
+new_receipts7$PREV_Z = new_receipts7$PREV_SIZE_Z - new_receipts7$PREV_DATE_Z
+```
+```{r}
+#Now to deal with Comparing Item Average Sizes to Personal and Global Patterns
+old_item_stats = sqldf('SELECT USER_ID, ITEM_ID, ITEM_CATEGORY, PER_CAPITA_SIZE FROM data_complete')
+new_item_stats = sqldf('SELECT USER_ID, ITEM_ID, ITEM_CATEGORY, PER_CAPITA_SIZE FROM data_complete')
+all_item_stats = rbind(old_item_stats, new_item_stats)
+
+item_avg_size = sqldf('SELECT USER_ID, ITEM_CATEGORY, AVG(PER_CAPITA_SIZE) as ITEM_SIZE_AVG, STDEV(PER_CAPITA_SIZE) as ITEM_SIZE_STDEV
+                        FROM all_item_stats
+                        GROUP BY USER_ID, ITEM_CATEGORY')
+new_receipts8 = merge(new_receipts7, item_avg_size, by = c('USER_ID', 'ITEM_CATEGORY'))
+new_receipts8$ITEM_SIZE_Z = (new_receipts8$PER_CAPITA_SIZE - new_receipts8$ITEM_SIZE_AVG) / new_receipts8$ITEM_SIZE_STDEV
+new_receipts8$ITEM_SIZE_Z[is.na(new_receipts8$ITEM_SIZE_Z)] = 0
+new_receipts8$ITEM_SIZE_Z[new_receipts8$ITEM_SIZE_Z == -Inf] = 0
+new_receipts8$ITEM_SIZE_Z[new_receipts8$ITEM_SIZE_Z == Inf] = 0
+
+#Global
+item_all_avg_size = sqldf('SELECT ITEM_CATEGORY, AVG(PER_CAPITA_SIZE) as ITEM_SIZE_ALL_AVG, STDEV(PER_CAPITA_SIZE) as ITEM_SIZE_ALL_STDEV
+                        FROM all_item_stats
+                        GROUP BY ITEM_CATEGORY')
+new_receipts9 = merge(new_receipts8, item_all_avg_size, by = 'ITEM_CATEGORY')
+new_receipts9$ITEM_SIZE_ALL_Z = (new_receipts9$PER_CAPITA_SIZE - new_receipts9$ITEM_SIZE_ALL_AVG) / new_receipts9$ITEM_SIZE_ALL_STDEV
+new_receipts9$ITEM_SIZE_ALL_Z[is.na(new_receipts9$ITEM_SIZE_ALL_Z)] = 0
+new_receipts9$ITEM_SIZE_ALL_Z[new_receipts9$ITEM_SIZE_ALL_Z == -Inf] = 0
+new_receipts9$ITEM_SIZE_ALL_Z[new_receipts9$ITEM_SIZE_ALL_Z == Inf] = 0
+```
+```{r}
+#Adding in duration loss stats
+new_receipts9$TIME_LOSS_COUNTER = ifelse(new_receipts9$PREVIOUS_SHOP_DATE - new_receipts9$ITEM_DURATION < 0, 0, 
+                                            new_receipts9$PREVIOUS_SHOP_DATE - new_receipts9$ITEM_DURATION)
+new_receipts9$TIME_LOSS = ifelse(new_receipts9$TIME_LOSS_COUNTER == 0, 0, 
+                        ifelse(new_receipts9$TIME_LOSS_COUNTER < 15, new_receipts9$TIME_LOSS_COUNTER * 2, 30))
+
+```
+```{r}
+today = 715
+#Now we can merge_all_items
+new_receipts9$RECEIPT_UPLOAD_DT = today
+new_receipts9$ITEM_UNITS = 'oz'
+new_receipts9$SHOPPING_RANK = 0
+#print(!names(data_complete) %in% names(new_receipts9))
+#print(names(data_complete))
+receipts = rbind(data_complete, new_receipts9)
+```
+```{r}
+#Reranking Shopping Rank
+#Creating Variables for Shopping Trips
+trip_rank_agg = sqldf('SELECT USER_ID, DAY 
+                         FROM receipts
+                         GROUP BY USER_ID, DAY')
+#Removed PREVIOUS_SHOP_DATE, PREVIOUS_SHOP_SIZE, , PER_CAPITA_SIZE_TRIP, sum(WASTE_AMT*ITEM_TOTAL_SIZE/100) as LOSS_AMT,
+
+#FROM trip_aggr'))
+trip_ranker = trip_rank_agg %>% arrange(USER_ID) %>% group_by(USER_ID) %>% mutate(SHOPPING_RANK = rank(-DAY))
+drops_new = 'SHOPPING_RANK'
+receipts = receipts[ , !(names(receipts) %in% drops_new)]
+receipts_upd = merge(receipts, trip_ranker, by=c('USER_ID', 'DAY'))
+```
+
+```{r}
+#Now that we have an updated data set, we need to recalc the data to make the list
+
+#whether an item purchased in last 30 days, last 90 days of 1 year ago
+receipts_upd$IN_30 = ifelse(today - receipts_upd$DAY <= 30, 1, 0)
+receipts_upd$IN_90 = ifelse(today - receipts_upd$DAY <= 90, 1, 0)
+receipts_upd$YEAR_AGO = ifelse(today - receipts_upd$DAY <= 365 && 
+                                     today - receipts_upd$DAY >= 335, 1, 0)
+
+#Creating a database to predict how often someone buys items
+#Interim Steps to creating grocery lists
+#Need a stat for when someone last bought an item
+shop_trip_count = sqldf('SELECT USER_ID, count(distinct(DAY)) as SHOP_TRIP_COUNT FROM receipts_upd GROUP BY USER_ID')
+receipts2 = merge(receipts_upd, shop_trip_count, by = 'USER_ID')
+chance_of_purch_item = sqldf('SELECT USER_ID, ITEM_ID, ITEM_CATEGORY, ITEM_CLASS, max(DAY) as LAST_PURCH_DAY_ITEM, 
+                        count(DISTINCT(DAY)) as ITEM_TRIP_COUNT, SHOP_TRIP_COUNT, 
+                        ITEM_SIZE_AVG, avg(ITEM_QTY_PRCH) as ITEM_QTY_AVG 
+                        from receipts2
+                        group by USER_ID, ITEM_ID')
+chance_of_purch_item$ITEM_PRCH_PERC = chance_of_purch_item$ITEM_TRIP_COUNT/chance_of_purch_item$SHOP_TRIP_COUNT
+
+#Creating Ranks for recency and frequency to use in choosing items for the grocery list
+item_freq_ranked = chance_of_purch_item %>% arrange(USER_ID, ITEM_CATEGORY) %>% group_by(USER_ID, ITEM_CATEGORY) %>% mutate(ITEM_FREQ_RANKED = rank(-ITEM_PRCH_PERC, ties.method="min"))
+item_recency_ranked = chance_of_purch_item %>% arrange(USER_ID, ITEM_CATEGORY) %>% group_by(USER_ID, ITEM_CATEGORY) %>% mutate(ITEM_RECENCY_RANKED = rank(-LAST_PURCH_DAY_ITEM, ties.method="min"))
+
+item_freq_ranked$ITEM_RECENCY_RANKED = item_recency_ranked$ITEM_RECENCY_RANKED[item_freq_ranked$USER_ID == item_recency_ranked$USER_ID &&
+                                                                                  item_freq_ranked$ITEM_ID == item_recency_ranked$ITEM_ID]
+#Category Data
+chance_of_purch_cat = sqldf('SELECT USER_ID, ITEM_CATEGORY, ITEM_CLASS, max(DAY) as LAST_PURCH_DAY_CAT, count(ITEM_CATEGORY) as 
+                                  CAT_TOTAL_COUNT, count(DISTINCT(DAY)) as CAT_TRIP_COUNT, SHOP_TRIP_COUNT, avg(ITEM_SIZE) as 
+                                  CAT_SIZE_AVG, 
+                                  avg(ITEM_QTY_PRCH) as CAT_QTY_AVG 
+                            from receipts2
+                            group by USER_ID, ITEM_CATEGORY, ITEM_CLASS')
+chance_of_purch_cat$CAT_PRCH_PERC = chance_of_purch_cat$CAT_TRIP_COUNT/chance_of_purch_cat$SHOP_TRIP_COUNT
+
+#Class Data
+chance_of_purch_class = sqldf('SELECT USER_ID, ITEM_CLASS, max(DAY) as LAST_PURCH_DAY_CLASS, count(ITEM_CATEGORY) as 
+                                  CLASS_TOTAL_COUNT, count(DISTINCT(DAY)) as CLASS_TRIP_COUNT, SHOP_TRIP_COUNT
+                            from receipts2
+                            group by USER_ID, ITEM_CLASS')
+chance_of_purch_class$CLASS_PRCH_PERC = chance_of_purch_class$CLASS_TRIP_COUNT/chance_of_purch_class$SHOP_TRIP_COUNT
+
+#Creating Descr rank variables
+cat_freq_ranked = chance_of_purch_cat %>% arrange(USER_ID, ITEM_CLASS) %>% group_by(USER_ID, ITEM_CLASS) %>% mutate(CAT_FREQ_RANKED = 
+                                                                                        rank(-CAT_PRCH_PERC, ties.method="min"))
+cat_recency_ranked = chance_of_purch_cat %>% arrange(USER_ID, ITEM_CLASS) %>% group_by(USER_ID, ITEM_CLASS) %>% mutate(CAT_RECENCY_RANKED =
+                                                                                        rank(-LAST_PURCH_DAY_CAT, ties.method="min"))
+cat_freq_ranked$CAT_RECENCY_RANKED = cat_recency_ranked$CAT_RECENCY_RANKED[cat_freq_ranked$USER_ID == cat_recency_ranked$USER_ID &&
+                                                                           cat_freq_ranked$ITEM_CATEGORY == cat_recency_ranked$ITEM_CATEGORY]
+#Merging all this data back
+drops3 = c('SHOP_TRIP_COUNT', 'ITEM_SIZE_AVG')
+item_recency_ranked = item_recency_ranked[ , !(names(item_recency_ranked) %in% drops3)]
+receipts3 = merge(receipts2, item_freq_ranked, by = c('USER_ID', 'ITEM_ID', 'ITEM_CATEGORY', 'ITEM_CLASS', 'ITEM_SIZE_AVG'))
+receipts4 = merge(receipts3, cat_freq_ranked, by=c('USER_ID', 'ITEM_CLASS', 'ITEM_CATEGORY'))
+receipts5 = merge(receipts4, chance_of_purch_class, by = c('USER_ID', 'ITEM_CLASS', 'SHOP_TRIP_COUNT'))
+
+#Whether items were purchased on last 5 days
+receipts5$LAST_TRIP = ifelse(receipts4$SHOPPING_RANK == 1, 1, 0)
+receipts5$SECOND_LAST_TRIP = ifelse(receipts5$SHOPPING_RANK == 2, 1, 0)
+receipts5$THIRD_LAST_TRIP  = ifelse(receipts5$SHOPPING_RANK == 3, 1, 0)
+receipts5$FOURTH_LAST_TRIP = ifelse(receipts5$SHOPPING_RANK == 4, 1, 0)
+receipts5$FIFTH_LAST_TRIP = ifelse(receipts5$SHOPPING_RANK == 5, 1, 0)
+
+receipts6 = sqldf('SELECT USER_ID, ITEM_ID, SUM(LAST_TRIP+SECOND_LAST_TRIP) AS SUM_2, SUM(LAST_TRIP+SECOND_LAST_TRIP+THIRD_LAST_TRIP + 
+                  FOURTH_LAST_TRIP + FIFTH_LAST_TRIP) AS SUM_5, MAX(IN_30) AS WITHIN_30, MAX(IN_90) AS WITHIN_90, MAX(YEAR_AGO) AS 
+                  ONE_YEAR_AGO  FROM receipts5 GROUP BY USER_ID, ITEM_ID')
+receipts7 = merge(receipts5, receipts6, by = c('USER_ID', 'ITEM_ID'))
+```
+
+##TASK 2: WRITE REGRESSION FOR STORAGE
+```{r}
+#Train a model
+#Train on all items. Using data_complete because data newly added has no expectation of loss data. Will use new receipt 5 data when using regression in new shopping list
+today = 715
+loss_prediction = lm(WASTE_AMT ~ ITEM_SIZE_Z + ITEM_SIZE_ALL_Z + FAMILY_SIZE + TIME_LOSS + PREV_Z + as.factor(ITEM_CATEGORY) + as.factor(USER_ID), data = subset(data_complete, (data_complete$DAY - today) < -3))
+summary(loss_prediction)
+```
+
+
+##TASK 3: WHEN A USER WRITES A NEW LIST
+```{r}
+#Creating sample dataframes to feed into list. 
+current_date = today
+household = 184
+household_purch = subset(receipts7, receipts7$USER_ID == household)
+last_size = unique(household_purch$PER_CAPITA_SIZE_TRIP[household_purch$SHOPPING_RANK == 1])
+last_date = unique(household_purch$DAY[household_purch$SHOPPING_RANK == 1])
+
+user_list_prep = sqldf('SELECT USER_ID, FAMILY_SIZE, ITEM_ID, DAY, ITEM_CATEGORY, ITEM_CLASS, ITEM_PRCH_PERC, CAT_PRCH_PERC, CLASS_PRCH_PERC, ITEM_FREQ_RANKED, ITEM_RECENCY_RANKED, CAT_FREQ_RANKED, CAT_RECENCY_RANKED, ITEM_SIZE_AVG, ITEM_QTY_AVG, LAST_PURCH_DAY_ITEM, ITEM_SIZE_STDEV, ITEM_SIZE_ALL_AVG, ITEM_SIZE_ALL_STDEV, TRIP_SIZE_AVG, TRIP_SIZE_STDEV, current_date as CURRENT_DAY, DAYS_BETWEEN_AVG, DAYS_BETWEEN_STDEV, ITEM_DURATION, PREVIOUS_SHOP_DATE, MAX(LAST_TRIP) as LAST_TRIP, SUM_2, SUM_5, WITHIN_90, ONE_YEAR_AGO
+                        FROM household_purch
+                        GROUP BY ITEM_ID')
+user_list_prep$PREVIOUS_SHOP_SIZE = last_size
+user_list_prep$PREVIOUS_SHOP_DATE = ifelse(today - last_date > 4 * unique(household_purch$DAYS_BETWEEN_AVG), 4 * unique(household_purch$DAYS_BETWEEN_AVG), today - last_date)
+
+household = 660
+household_purch = subset(receipts7, receipts7$USER_ID == household)
+last_size = unique(household_purch$PER_CAPITA_SIZE_TRIP[household_purch$SHOPPING_RANK == 1])
+last_date = unique(household_purch$DAY[household_purch$SHOPPING_RANK == 1])
+
+user_list_prep2 = sqldf('SELECT USER_ID, FAMILY_SIZE, ITEM_ID, DAY, ITEM_CATEGORY, ITEM_CLASS, ITEM_PRCH_PERC, CAT_PRCH_PERC, CLASS_PRCH_PERC, ITEM_FREQ_RANKED, ITEM_RECENCY_RANKED, CAT_FREQ_RANKED, CAT_RECENCY_RANKED, ITEM_SIZE_AVG, ITEM_QTY_AVG, LAST_PURCH_DAY_ITEM, ITEM_SIZE_STDEV, ITEM_SIZE_ALL_AVG, ITEM_SIZE_ALL_STDEV, TRIP_SIZE_AVG, TRIP_SIZE_STDEV, current_date as CURRENT_DAY, DAYS_BETWEEN_AVG, DAYS_BETWEEN_STDEV, ITEM_DURATION, PREVIOUS_SHOP_DATE, MAX(LAST_TRIP) as LAST_TRIP, SUM_2, SUM_5, WITHIN_90, ONE_YEAR_AGO
+                        FROM household_purch
+                        GROUP BY ITEM_ID')
+user_list_prep2$PREVIOUS_SHOP_SIZE = last_size
+user_list_prep2$PREVIOUS_SHOP_DATE = ifelse(today - last_date > 4 * unique(household_purch$DAYS_BETWEEN_AVG), 4 * unique(household_purch$DAYS_BETWEEN_AVG), today - last_date)
+
+household = 1062
+household_purch = subset(receipts7, receipts7$USER_ID == household)
+last_size = unique(household_purch$PER_CAPITA_SIZE_TRIP[household_purch$SHOPPING_RANK == 1])
+last_date = unique(household_purch$DAY[household_purch$SHOPPING_RANK == 1])
+
+user_list_prep3 = sqldf('SELECT USER_ID, FAMILY_SIZE, ITEM_ID, DAY, ITEM_CATEGORY, ITEM_CLASS, ITEM_PRCH_PERC, CAT_PRCH_PERC, CLASS_PRCH_PERC, ITEM_FREQ_RANKED, ITEM_RECENCY_RANKED, CAT_FREQ_RANKED, CAT_RECENCY_RANKED, ITEM_SIZE_AVG, ITEM_QTY_AVG, LAST_PURCH_DAY_ITEM, ITEM_SIZE_STDEV, ITEM_SIZE_ALL_AVG, ITEM_SIZE_ALL_STDEV, TRIP_SIZE_AVG, TRIP_SIZE_STDEV, current_date as CURRENT_DAY, DAYS_BETWEEN_AVG, DAYS_BETWEEN_STDEV, ITEM_DURATION, PREVIOUS_SHOP_DATE, MAX(LAST_TRIP) as LAST_TRIP, SUM_2, SUM_5, WITHIN_90, ONE_YEAR_AGO
+                        FROM household_purch
+                        GROUP BY ITEM_ID')
+user_list_prep3$PREVIOUS_SHOP_SIZE = last_size
+user_list_prep3$PREVIOUS_SHOP_DATE = ifelse(today - last_date > 4 * unique(household_purch$DAYS_BETWEEN_AVG), 4 * unique(household_purch$DAYS_BETWEEN_AVG), today - last_date)
+
+household = 670
+household_purch = subset(receipts7, receipts7$USER_ID == household)
+last_size = unique(household_purch$PER_CAPITA_SIZE_TRIP[household_purch$SHOPPING_RANK == 1])
+last_date = unique(household_purch$DAY[household_purch$SHOPPING_RANK == 1])
+
+user_list_prep4 = sqldf('SELECT USER_ID, FAMILY_SIZE, ITEM_ID, DAY, ITEM_CATEGORY, ITEM_CLASS, ITEM_PRCH_PERC, CAT_PRCH_PERC, CLASS_PRCH_PERC, ITEM_FREQ_RANKED, ITEM_RECENCY_RANKED, CAT_FREQ_RANKED, CAT_RECENCY_RANKED, ITEM_SIZE_AVG, ITEM_QTY_AVG, LAST_PURCH_DAY_ITEM, ITEM_SIZE_STDEV, ITEM_SIZE_ALL_AVG, ITEM_SIZE_ALL_STDEV, TRIP_SIZE_AVG, TRIP_SIZE_STDEV, current_date as CURRENT_DAY, DAYS_BETWEEN_AVG, DAYS_BETWEEN_STDEV, ITEM_DURATION, PREVIOUS_SHOP_DATE, MAX(LAST_TRIP) as LAST_TRIP, SUM_2, SUM_5, WITHIN_90, ONE_YEAR_AGO
+                        FROM household_purch
+                        GROUP BY ITEM_ID')
+user_list_prep4$PREVIOUS_SHOP_SIZE = last_size
+user_list_prep4$PREVIOUS_SHOP_DATE = ifelse(today - last_date > 4 * unique(household_purch$DAYS_BETWEEN_AVG), 4 * unique(household_purch$DAYS_BETWEEN_AVG), today - last_date)
+
+household = 853
+household_purch = subset(receipts7, receipts7$USER_ID == household)
+last_size = unique(household_purch$PER_CAPITA_SIZE_TRIP[household_purch$SHOPPING_RANK == 1])
+last_date = unique(household_purch$DAY[household_purch$SHOPPING_RANK == 1])
+
+user_list_prep5 = sqldf('SELECT USER_ID, FAMILY_SIZE, ITEM_ID, DAY, ITEM_CATEGORY, ITEM_CLASS, ITEM_PRCH_PERC, CAT_PRCH_PERC, CLASS_PRCH_PERC, ITEM_FREQ_RANKED, ITEM_RECENCY_RANKED, CAT_FREQ_RANKED, CAT_RECENCY_RANKED, ITEM_SIZE_AVG, ITEM_QTY_AVG, LAST_PURCH_DAY_ITEM, ITEM_SIZE_STDEV, ITEM_SIZE_ALL_AVG, ITEM_SIZE_ALL_STDEV, TRIP_SIZE_AVG, TRIP_SIZE_STDEV, current_date as CURRENT_DAY, DAYS_BETWEEN_AVG, DAYS_BETWEEN_STDEV, ITEM_DURATION, PREVIOUS_SHOP_DATE, MAX(LAST_TRIP) as LAST_TRIP, SUM_2, SUM_5, WITHIN_90, ONE_YEAR_AGO
+                        FROM household_purch
+                        GROUP BY ITEM_ID')
+user_list_prep5$PREVIOUS_SHOP_SIZE = last_size
+user_list_prep5$PREVIOUS_SHOP_DATE = ifelse(today - last_date > 4 * unique(household_purch$DAYS_BETWEEN_AVG), 4 * unique(household_purch$DAYS_BETWEEN_AVG), today - last_date)
+
+household = 1
+household_purch = subset(receipts7, receipts7$USER_ID == household)
+last_size = unique(household_purch$PER_CAPITA_SIZE_TRIP[household_purch$SHOPPING_RANK == 1])
+last_date = unique(household_purch$DAY[household_purch$SHOPPING_RANK == 1])
+
+user_list_prep6 = sqldf('SELECT USER_ID, FAMILY_SIZE, ITEM_ID, DAY, ITEM_CATEGORY, ITEM_CLASS, ITEM_PRCH_PERC, CAT_PRCH_PERC, CLASS_PRCH_PERC, ITEM_FREQ_RANKED, ITEM_RECENCY_RANKED, CAT_FREQ_RANKED, CAT_RECENCY_RANKED, ITEM_SIZE_AVG, ITEM_QTY_AVG, LAST_PURCH_DAY_ITEM, ITEM_SIZE_STDEV, ITEM_SIZE_ALL_AVG, ITEM_SIZE_ALL_STDEV, TRIP_SIZE_AVG, TRIP_SIZE_STDEV, current_date as CURRENT_DAY, DAYS_BETWEEN_AVG, DAYS_BETWEEN_STDEV, ITEM_DURATION, PREVIOUS_SHOP_DATE, MAX(LAST_TRIP) as LAST_TRIP, SUM_2, SUM_5, WITHIN_90, ONE_YEAR_AGO
+                        FROM household_purch
+                        GROUP BY ITEM_ID')
+user_list_prep6$PREVIOUS_SHOP_SIZE = last_size
+user_list_prep6$PREVIOUS_SHOP_DATE = ifelse(today - last_date > 4 * unique(household_purch$DAYS_BETWEEN_AVG), 4 * unique(household_purch$DAYS_BETWEEN_AVG), today - last_date)
+
+shopping_list = data_frame(USER_ID = integer(), FAMILY_SIZE = integer(), ITEM_ID = integer(), ITEM_CATEGORY = character(), ITEM_CLASS = 
+                              character(), FIRST_SIZE=numeric(), ITEM_SIZE=numeric(), ITEM_TRUE_SIZE = numeric(), ITEM_TOTAL_SIZE = 
+                              numeric(), ITEM_SIZE_AVG=numeric(), ITEM_SIZE_STDEV=numeric(), ITEM_SIZE_Z = numeric(), ITEM_SIZE_ALL_AVG = 
+                              numeric(), ITEM_SIZE_ALL_STDEV=numeric(), ITEM_SIZE_ALL_Z = numeric(), ITEM_QTY_PRCH = integer(), 
+                              PREVIOUS_SHOP_DATE = integer(), DAYS_BETWEEN_AVG = numeric(), DAYS_BETWEEN_STDEV = numeric(), PREV_DATE_Z = 
+                              integer(), PREVIOUS_SHOP_SIZE = numeric(), TRIP_SIZE_AVG = numeric(), TRIP_SIZE_STDEV = numeric(), PREV_SIZE_Z =
+                              numeric(), PREV_Z = numeric(), TIME_LOSS_COUNTER = integer(), TIME_LOSS = integer(), ITEM_FREQ_RANKED = 
+                              integer(), CAT_FREQ_RANKED = integer(), MARKER = integer(), SECTION = character())
+
+```
+```{r warnings = FALSE}
+#Tolerance check takes the given tolerance, and cuts item size by 10% until it fits
+tolerance_check = function(df, tolerance){
+  repeat{
+    for (x in 1:nrow(df)){
+      if (df$prediction[x] > tolerance){
+        df$ITEM_SIZE[x] = df$ITEM_SIZE[x] * 0.9
+        df$ITEM_SIZE_Z[x] = (df$ITEM_SIZE[x] - 
+           df$ITEM_SIZE_AVG[x]) / 
+           df$ITEM_SIZE_STDEV[x]
+        df$ITEM_SIZE_ALL_Z[x] = (df$ITEM_SIZE[x] -
+           df$ITEM_SIZE_ALL_AVG[x]) / 
+           df$ITEM_SIZE_ALL_STDEV[x]
+        df$ITEM_TRUE_SIZE[x] = df$ITEM_SIZE[x] * df$FAMILY_SIZE[x]
+        df$ITEM_TOTAL_SIZE[x] = df$ITEM_SIZE[x] * df$ITEM_QTY_PRCH[x]
+      }
+    }
+    df$prediction = predict(loss_prediction, df)
+    if (any(df$prediction > tolerance)){
+    } else {
+        break
+    }
+  }
+  return(df)
+}
+  
+##Qualifications for how to order items on lists
+#Main
+#1. If item was on last grocery list and chance is above 25%   (df$ITEM_PRCH_PERC[df$ITEM_ID == product_temp] > 0.25 & df$ITEM_ID[df$ITEM_ID == product_temp] %in% unique(df$ITEM_ID[df$LAST_TRIP == 1])
+#2. More than 50% per 1 item          (df$ITEM_PRCH_PERC[df$ITEM_ID == product_temp] > 0.5)
+#3. More than 25% per category ->Then mix most recent (df$CAT_PRCH_PERC[df$ITEM_ID == product_temp] > 0.25 & df$ITEM_RECENCY_RANKED[df$ITEM_ID == product_temp] == 1) 
+#4. If an item is not the above two and the class is more than 50% of the time, then pick most recent
+#5. When an item was PURCHASED TWICE IN LAST 2 TRIPS
+#6. when an item WAS PURCHASED IN 3+ OF LAST 5 TRIPS
+
+#Suggested
+#1. More than 25% per category ->Then mix most common if different than most common, if different from most recent
+#2. If an item is not the above two and the class is more than 50% of the time, then pick most common, if different from most recent
+#3. When an item was PURCHASED TWICE IN LAST 2 TRIPS
+#4. If item on last list, and has a chance less than 25%
+#5. Class is above 15%, has yet to be represented. Pick most recent and an item of class was picked in last 90 days
+
+#Seasonal
+#1. Category Year Ago, but not in last 90 days. Pick most common item. LOOK AT 30 DAYS COLUMN OF TIME INSTEAD OF 60 DAYS 
+
+new_list = function(df, today, tolerance){
+   for (x in 1:length(unique(df$ITEM_ID))){     ###number of items in database? How to best iterate over this))
+     product_temp = unique(df$ITEM_ID)[x]
+     main_count = nrow(shopping_list) + 1
+       
+     if ((df$ITEM_PRCH_PERC[df$ITEM_ID == product_temp] > 0.25 & df$ITEM_ID[df$ITEM_ID == product_temp] %in% 
+          unique(df$ITEM_ID[df$LAST_TRIP == 1])) | 
+         (df$ITEM_PRCH_PERC[df$ITEM_ID == product_temp] > 0.5) |
+         (df$SUM_2[df$ITEM_ID == product_temp] == 2) |
+         (df$SUM_5[df$ITEM_ID == product_temp] >= 3) |
+         (df$CAT_PRCH_PERC[df$ITEM_ID == product_temp] > 0.25 & df$ITEM_RECENCY_RANKED[df$ITEM_ID == product_temp] == 1) |
+         (df$CLASS_PRCH_PERC[df$ITEM_ID == product_temp] > 0.5 & df$CAT_RECENCY_RANKED[df$ITEM_ID == product_temp] == 1 &
+                df$ITEM_RECENCY_RANKED[df$ITEM_ID == product_temp] == 1) |
+         (df$CAT_PRCH_PERC[df$ITEM_ID == product_temp] > 0.25 & df$ITEM_FREQ_RANKED[df$ITEM_ID == product_temp] == 1) |
+         (df$CLASS_PRCH_PERC[df$ITEM_ID == product_temp] > 0.5 & df$CAT_FREQ_RANKED[df$ITEM_ID == product_temp] == 1 &
+                df$ITEM_FREQ_RANKED[df$ITEM_ID == product_temp] == 1) |
+         (df$ITEM_PRCH_PERC[df$ITEM_ID == product_temp] <= 0.25 & df$ITEM_ID[df$ITEM_ID == product_temp] %in%
+                unique(df$ITEM_ID[df$LAST_TRIP == 1])) |
+         (df$CLASS_PRCH_PERC[df$ITEM_ID == product_temp] > 0.15 & df$CAT_RECENCY_RANKED[df$ITEM_ID == product_temp] == 1 &
+                df$ITEM_RECENCY_RANKED[df$ITEM_ID == product_temp] == 1) |
+         (df$ONE_YEAR_AGO[df$ITEM_ID == product_temp] == 1 & df$WITHIN_90[df$ITEM_ID == product_temp] == 0)){
+       
+             shopping_list[main_count,]$USER_ID = unique(df$USER_ID)
+             shopping_list[main_count,]$FAMILY_SIZE = unique(df$FAMILY_SIZE)
+             shopping_list[main_count,]$ITEM_ID = product_temp
+             shopping_list[main_count,]$ITEM_CATEGORY = as.character(df$ITEM_CATEGORY[df$ITEM_ID == product_temp])
+             shopping_list[main_count,]$ITEM_CLASS = as.character(df$ITEM_CLASS[df$ITEM_ID == product_temp])
+             shopping_list[main_count,]$FIRST_SIZE = df$ITEM_SIZE_AVG[df$ITEM_ID == product_temp]
+             shopping_list[main_count,]$ITEM_SIZE = df$ITEM_SIZE_AVG[df$ITEM_ID == product_temp]
+             shopping_list[main_count,]$ITEM_TRUE_SIZE = df$ITEM_SIZE_AVG[df$ITEM_ID == product_temp] * shopping_list[main_count,]$FAMILY_SIZE
+             shopping_list[main_count,]$ITEM_QTY_PRCH = as.integer(df$ITEM_QTY_AVG[df$ITEM_ID == product_temp])
+             shopping_list[main_count,]$ITEM_TOTAL_SIZE = shopping_list[main_count,]$ITEM_TRUE_SIZE * shopping_list[main_count,]$ITEM_QTY_PRCH
+             shopping_list[main_count,]$ITEM_SIZE_AVG = df$ITEM_SIZE_AVG[df$ITEM_ID == product_temp]
+             shopping_list[main_count,]$ITEM_SIZE_STDEV = df$ITEM_SIZE_STDEV[df$ITEM_ID == product_temp]
+             shopping_list[main_count,]$ITEM_SIZE_Z = (shopping_list[main_count,]$ITEM_SIZE -
+                                                                        shopping_list[main_count,]$ITEM_SIZE_AVG) /
+                                                                        shopping_list[main_count,]$ITEM_SIZE_STDEV
+             shopping_list[main_count,]$ITEM_SIZE_ALL_AVG = df$ITEM_SIZE_ALL_AVG[df$ITEM_ID == product_temp]
+             shopping_list[main_count,]$ITEM_SIZE_ALL_STDEV = df$ITEM_SIZE_ALL_STDEV[df$ITEM_ID == product_temp]
+             shopping_list[main_count,]$ITEM_SIZE_ALL_Z = (shopping_list[main_count,]$ITEM_SIZE -
+                                                                         shopping_list[main_count,]$ITEM_SIZE_ALL_AVG) /
+                                                                         shopping_list[main_count,]$ITEM_SIZE_ALL_STDEV
+             shopping_list[main_count,]$PREVIOUS_SHOP_DATE = unique(df$PREVIOUS_SHOP_DATE)
+             shopping_list[main_count,]$DAYS_BETWEEN_AVG = unique(df$DAYS_BETWEEN_AVG[df$DAY == max(df$DAY)])
+             shopping_list[main_count,]$DAYS_BETWEEN_STDEV = unique(df$DAYS_BETWEEN_STDEV[df$DAY == max(df$DAY)])
+             shopping_list[main_count,]$PREV_DATE_Z = (shopping_list[main_count,]$PREVIOUS_SHOP_DATE -
+                                                                         shopping_list[main_count,]$DAYS_BETWEEN_AVG) /
+                                                                         shopping_list[main_count,]$DAYS_BETWEEN_STDEV
+             shopping_list[main_count,]$PREVIOUS_SHOP_SIZE = unique(df$PREVIOUS_SHOP_SIZE)
+             shopping_list[main_count,]$TRIP_SIZE_AVG = unique(df$TRIP_SIZE_AVG[df$DAY == max(df$DAY)])
+             shopping_list[main_count,]$TRIP_SIZE_STDEV = unique(df$TRIP_SIZE_STDEV[df$DAY == max(df$DAY)])
+             shopping_list[main_count,]$PREV_SIZE_Z = (shopping_list[main_count,]$PREVIOUS_SHOP_SIZE -
+                                                                         shopping_list[main_count,]$TRIP_SIZE_AVG) /
+                                                                         shopping_list[main_count,]$TRIP_SIZE_STDEV
+             shopping_list$ITEM_SIZE_Z[is.na(shopping_list$ITEM_SIZE_Z)] = 0
+             shopping_list$ITEM_SIZE_Z[shopping_list$ITEM_SIZE_Z == -Inf] = 0
+             shopping_list$ITEM_SIZE_Z[shopping_list$ITEM_SIZE_Z == Inf] = 0
+             shopping_list$ITEM_SIZE_ALL_Z[is.na(shopping_list$ITEM_SIZE_ALL_Z)] = 0
+             shopping_list$ITEM_SIZE_ALL_Z[shopping_list$ITEM_SIZE_ALL_Z == -Inf] = 0
+             shopping_list$ITEM_SIZE_ALL_Z[shopping_list$ITEM_SIZE_ALL_Z == Inf] = 0
+             shopping_list$PREV_DATE_Z[is.na(shopping_list$PREV_DATE_Z)] = 0
+             shopping_list$PREV_DATE_Z[shopping_list$PREV_DATE_Z == -Inf] = 0
+             shopping_list$PREV_DATE_Z[shopping_list$PREV_DATE_Z == Inf] = 0
+             shopping_list[main_count,]$PREV_Z = shopping_list[main_count,]$PREV_SIZE_Z -
+                                                                         shopping_list[main_count,]$PREV_DATE_Z
+             shopping_list[main_count,]$TIME_LOSS_COUNTER = ifelse(unique(df$PREVIOUS_SHOP_DATE) -
+                                                                 unique(df$ITEM_DURATION[df$ITEM_ID == product_temp]) > 0,
+                                                                 unique(df$PREVIOUS_SHOP_DATE) -
+                                                                 unique(df$ITEM_DURATION[df$ITEM_ID == product_temp]), 0)
+             shopping_list[main_count,]$TIME_LOSS = ifelse(shopping_list[main_count,]$TIME_LOSS_COUNTER == 0, 0,
+                        ifelse(shopping_list[main_count,]$TIME_LOSS_COUNTER < 15, shopping_list[main_count,]$TIME_LOSS_COUNTER *
+                                 2, 30))
+             shopping_list[main_count,]$ITEM_FREQ_RANKED = df$ITEM_FREQ_RANKED[df$ITEM_ID == product_temp]
+             shopping_list[main_count,]$CAT_FREQ_RANKED = df$CAT_FREQ_RANKED[df$ITEM_ID == product_temp]
+             if (df$ITEM_PRCH_PERC[df$ITEM_ID == product_temp] > 0.25 & df$ITEM_ID[df$ITEM_ID == product_temp] %in%
+                unique(df$ITEM_ID[df$LAST_TRIP == 1])){
+                    shopping_list[main_count,]$MARKER = 1
+             } else if (df$ITEM_PRCH_PERC[df$ITEM_ID == product_temp] > 0.5){
+                    shopping_list[main_count,]$MARKER = 2
+             } else if (df$SUM_2[df$ITEM_ID == product_temp] == 2) {
+                    shopping_list[main_count,]$MARKER = 3
+             } else if (df$SUM_5[df$ITEM_ID == product_temp] >= 3) {
+                    shopping_list[main_count,]$MARKER = 4
+             } else if (df$CAT_PRCH_PERC[df$ITEM_ID == product_temp] > 0.25 & df$ITEM_RECENCY_RANKED[df$ITEM_ID == product_temp] == 1) {
+                    shopping_list[main_count,]$MARKER = 5
+             } else if (df$CLASS_PRCH_PERC[df$ITEM_ID == product_temp] > 0.5 & df$CAT_RECENCY_RANKED[df$ITEM_ID == product_temp] == 1 &
+                  df$ITEM_RECENCY_RANKED[df$ITEM_ID == product_temp] == 1){
+                    shopping_list[main_count,]$MARKER = 6
+             } else if (df$CAT_PRCH_PERC[df$ITEM_ID == product_temp] > 0.25 & df$ITEM_FREQ_RANKED[df$ITEM_ID == product_temp] == 1) {
+                    shopping_list[main_count,]$MARKER = 7
+             } else if (df$CLASS_PRCH_PERC[df$ITEM_ID == product_temp] > 0.5 && df$CAT_FREQ_RANKED[df$ITEM_ID == product_temp] == 1 &
+                  df$ITEM_FREQ_RANKED[df$ITEM_ID == product_temp] == 1){
+                    shopping_list[main_count,]$MARKER = 8
+             } else if (df$ITEM_PRCH_PERC[df$ITEM_ID == product_temp] <= 0.25 & df$ITEM_ID[df$ITEM_ID == product_temp] %in%
+                  unique(df$ITEM_ID[df$LAST_TRIP == 1])){
+                    shopping_list[main_count,]$MARKER = 9
+             } else if (df$CLASS_PRCH_PERC[df$ITEM_ID == product_temp] > 0.15 && df$CAT_RECENCY_RANKED[df$ITEM_ID == product_temp] == 1 &
+                  df$ITEM_RECENCY_RANKED[df$ITEM_ID == product_temp] == 1){
+                    shopping_list[main_count,]$MARKER = 10
+             } else if (df$ONE_YEAR_AGO[df$ITEM_ID == product_temp] == 1 & df$WITHIN_90[df$ITEM_ID == product_temp] == 0){
+                    shopping_list[main_count,]$MARKER = 11
+             }
+          }
+       shopping_list$prediction = predict(loss_prediction, shopping_list)
+       if (any(shopping_list$prediction > tolerance)){
+         shopping_list = tolerance_check(shopping_list, tolerance)
+        }
+
+   }
+  #Reorder by Marker Order
+  shopping_list = arrange(shopping_list, MARKER)
+  #This next section takes the list and assigns them to the right category. Those in the variable_list could fall in main or suggested
+    main_list = c(1, 2, 3, 4)
+    seasonal_list = 11
+    suggested_list = c(7, 8, 9, 10)
+    variable_list = c(5, 6)
+    for (x in 1:nrow(shopping_list)){
+       if(shopping_list[x,]$prediction < 0){
+         shopping_list[x,]$prediction = 0
+       } else if (shopping_list[x,]$prediction > 100){
+         shopping_list[x,]$prediction = 100
+       }
+#      print(shopping_list[x,]$MARKER)
+       if (shopping_list[x,]$MARKER %in% main_list){
+         shopping_list[x,]$SECTION = 'main'
+       } else if (shopping_list[x,]$MARKER %in% suggested_list){
+         shopping_list[x,]$SECTION = 'suggested'
+       } else if (shopping_list[x,]$MARKER == 11){
+         shopping_list[x,]$SECTION = 'time'
+       } else if (shopping_list[x,]$MARKER %in% variable_list){
+           if (shopping_list[x,]$MARKER == 5){
+             if (sum(shopping_list$MARKER == 5 & shopping_list$ITEM_CATEGORY == shopping_list[x,]$ITEM_CATEGORY) == 1){
+               shopping_list[x,]$SECTION = 'main'
+             } else {
+               cond5 = subset(shopping_list, shopping_list$MARKER == 5 & shopping_list$ITEM_CATEGORY == shopping_list[x,]$ITEM_CATEGORY)
+               if (shopping_list[x,]$ITEM_FREQ_RANKED == min(cond5$ITEM_FREQ_RANKED) && !shopping_list[x,]$ITEM_CATEGORY %in% 
+                   unique(shopping_list$ITEM_CATEGORY[shopping_list$SECTION == 'main'])) {
+                 shopping_list[x,]$SECTION = 'main'
+               } else {
+                 shopping_list[x,]$SECTION = 'suggested'
+               }
+             }
+           } else if (shopping_list[x,]$MARKER == 6){
+              if (shopping_list[x,]$ITEM_CATEGORY %in% unique(shopping_list$ITEM_CATEGORY[shopping_list$SECTION == 'main'])){
+                shopping_list[x,]$SECTION = 'suggested'
+              } else if (sum(shopping_list$MARKER == 6 & shopping_list$ITEM_CLASS == shopping_list[x,]$ITEM_CLASS) == 1) {
+                 shopping_list[x,]$SECTION = 'main'
+              } else {
+                 cond6 = subset(shopping_list, shopping_list$MARKER == 6 & shopping_list$ITEM_CLASS == shopping_list[x,]$ITEM_CLASS)
+                 cond6a = subset(cond6, min(cond6$CAT_FREQ_RANKED[!cond6$ITEM_CATEGORY %in% 
+                                                                    unique(shopping_list$ITEM_CATEGORY[shopping_list$SECTION == 'main'])]) == 
+                                   TRUE)
+                 if (shopping_list[x,]$ITEM_ID %in% unique(cond6a$ITEM_ID) & shopping_list[x,]$ITEM_FREQ_RANKED == 
+                     min(cond6a$ITEM_FREQ_RANKED)) {
+                     shopping_list[x,]$SECTION = 'main'
+                  } else {
+                     shopping_list[x,]$SECTION = 'suggested'
+               }
+              }
+           }   
+       }
+    }
+   shopping_list = arrange(shopping_list, SECTION)
+   return(shopping_list)
+
+}
+    
+new_list2 = new_list(user_list_prep, 712, 100)
+new_list2
+# new_list3 = new_list(user_list_prep2, 712, 100)
+# new_list3
+# new_list4 = new_list(user_list_prep3, 712, 100)
+# new_list4
+# new_list5 = new_list(user_list_prep4, 712, 100)
+# new_list5
+# new_list6 = new_list(user_list_prep5, 700, 100)
+# new_list6
+# new_list7 = new_list(user_list_prep6, 712, 100)
+# new_list7
+```
+
+```{r}
+#Testing to make sure the predictions look reasonable compared to previous hh numbers
+#User 853 looks far off b/c there is a large time gap between day 718 and previous shopping trip. If reset to a shorter time period, it's much more accurate (70% predicted loss on day 700)
+# mean(new_list2$prediction)
+# mean(new_list3$prediction)
+# mean(new_list4$prediction)
+# mean(new_list5$prediction)
+# mean(new_list6$prediction)
+# mean(new_list7$prediction)
+# print("")
+# mean(receipts7$WASTE_AMT[receipts7$USER_ID == 184])
+# mean(receipts7$WASTE_AMT[receipts7$USER_ID == 660])
+# mean(receipts7$WASTE_AMT[receipts7$USER_ID == 1062])
+# mean(receipts7$WASTE_AMT[receipts7$USER_ID == 670])
+# mean(receipts7$WASTE_AMT[receipts7$USER_ID == 853])
+# mean(receipts7$WASTE_AMT[receipts7$USER_ID == 1])
+```
