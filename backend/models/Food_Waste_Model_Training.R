@@ -1,3 +1,4 @@
+
 if (!require('devtools')) install.packages('devtools',repos = "http://cran.us.r-project.org")
 # install.packages("devtools", repos = "http://cran.us.r-project.org")
 if (!require('DBI')) devtools::install_github("r-dbi/DBI")
@@ -13,19 +14,41 @@ library(car)
 library(dplyr)   #reordering rows in df
 
 username <- "root"
-host <- "0.0.0.0"
+host <- "50.97.219.169"
 dbname <- "FOOD_WASTE_CONSUMER_DB"
-con <- dbConnect(RMariaDB::MariaDB(), host = host, user = username, dbname = dbname, port=3306)
-tables <- dbGetQuery(con, "SHOW tables;")
-
-
+con <- dbConnect(RMariaDB::MariaDB(), host = host, user = username, dbname = dbname)
 
 #get data from MariaDB
 user_profile <- dbGetQuery(con, "SELECT * FROM USER_PROFILE")
-
 data_no_date <- dbGetQuery(con, "SELECT * FROM USER_GROCERY_ITEM_WASTE_PRED")
-user_grocery_item_lookup <- dbGetQuery(con, "SELECT * FROM USER_GROCERY_ITEM_LOOKUP")
-new_receipts1 <- dbGetQuery(con, "SELECT * FROM USER_GROCERY_RECEIPT")
+user_grocery_item_lookup <- dbGetQuery(con, "SELECT ITEM_ID, ITEM_NAME, ITEM_CATEGORY, ITEM_CLASS, ITEM_UNITS, ITEM_DURATION
+                                       FROM USER_GROCERY_ITEM_WASTE_PRED
+                                       GROUP BY ITEM_ID")
+new_receipts1 <- dbGetQuery(con, "SELECT * FROM USER_GROCERY_RECEIPT
+                            WHERE RECEIPT_ID NOT IN (SELECT RECEIPT_ID FROM USER_GROCERY_ITEM_WASTE_PRED)")
+
+#edit new_receipts1 format
+if(nrow(new_receipts1) == 0){
+  stop("No new receipts to add to model")
+} else {
+new_receipts1 <- subset(new_receipts1, select=c("USER_ID", "ITEM_ID", "ITEM_QTY_PRCH", "RECEIPT_ID", "ITEM_TOTAL_PRICE"))
+colnames(new_receipts1)[which(names(new_receipts1) == "ITEM_QTY_PRCH")] <- "ITEM_SIZE"
+new_receipts1$ITEM_QTY_PRCH = 1
+
+upc_codes <- c('030000320631', '077745247526', '812049006901', '012511446413', '226068004075', '894700010335',
+               '681131180467', '071464100056', '681131148344', '845963000021', '894700010052', '078742020532',
+               '037600736169', '028400152242', '894700010328', '707375034219', '260067017667', '0825926606410',
+               '845963000021', '850148003117')
+
+item_ids <- c(1050310, 870515, 1007195, 860776, 822407, 847989, 950118, 999104, 7024927,
+              6979299, 889551, 885356, 844740, 821562, 889551, 12524588, 897306, 866211,
+              6979299, 1081177)
+
+receipt_lookup <- data.frame(upc_codes, item_ids)
+
+new_receipts1 <- merge(new_receipts1, receipt_lookup, by.x = 'ITEM_ID', by.y = 'upc_codes')
+new_receipts1$ITEM_ID <- NULL
+colnames(new_receipts1)[which(names(new_receipts1) == "item_ids")] <- "ITEM_ID"
 
 #change datatypes
 user_profile$USER_ID <- as.integer(user_profile$USER_ID)
@@ -56,7 +79,6 @@ user_grocery_item_lookup$ITEM_DURATION <- as.numeric(user_grocery_item_lookup$IT
 new_receipts1$USER_ID <-as.integer(new_receipts1$USER_ID)
 new_receipts1$ITEM_ID <-as.integer(new_receipts1$ITEM_ID)
 new_receipts1$ITEM_QTY_PRCH <-as.integer(new_receipts1$ITEM_QTY_PRCH)
-new_receipts1$SHOPPING_DATE <-as.integer(new_receipts1$SHOPPING_DATE)
 new_receipts1$RECEIPT_ID <-as.numeric(new_receipts1$RECEIPT_ID)
 new_receipts1$ITEM_TOTAL_PRICE <-as.integer(new_receipts1$ITEM_TOTAL_PRICE)
 
@@ -245,5 +267,7 @@ model_parameters <- data.frame(names(coef(loss_prediction)), loss_prediction$coe
 names(model_parameters) <- c("VARIABLE", "COEFFICIENTS")
 dbWriteTable(con, "MODEL_PARAMETERS", model_parameters, overwrite = TRUE)
 dbWriteTable(con, "MODEL_PARAMETERS_STAGING_TABLE", receipts7, overwrite = TRUE)
-
+dbWriteTable(con, "USER_GROCERY_ITEM_LOOKUP", user_grocery_item_lookup, overwrite = TRUE)
+print("Model Parameters Updated")
+}
 dbDisconnect(con)

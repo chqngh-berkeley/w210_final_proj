@@ -1,9 +1,11 @@
-install.packages("devtools", repos = "http://cran.us.r-project.org")
+if (!require('devtools')) install.packages('devtools',repos = "http://cran.us.r-project.org")
+# install.packages("devtools", repos = "http://cran.us.r-project.org")
 if (!require('DBI')) devtools::install_github("r-dbi/DBI")
 if (!require('RMariaDB')) devtools::install_github("r-dbi/RMariaDB")
 if (!require('sqldf')) install.packages('sqldf',repos = "http://cran.us.r-project.org")
 if (!require('car')) install.packages('car',repos = "http://cran.us.r-project.org")
 if (!require('dplyr')) install.packages('dplyr',repos = "http://cran.us.r-project.org")
+
 
 library(RMariaDB)
 library(DBI)
@@ -11,7 +13,7 @@ library(sqldf)
 library(dplyr)   #reordering rows in df
 
 username <- "root"
-host <- "0.0.0.0"
+host <- "50.97.219.169"
 dbname <- "FOOD_WASTE_CONSUMER_DB"
 con <- dbConnect(RMariaDB::MariaDB(), host = host, user = username, dbname = dbname)
 
@@ -276,7 +278,7 @@ new_list = function(df, today, tolerance){
 
 
 new_list2 = new_list(user_list_prep, current_date, args[2])
-
+print(new_list2)
 dbWriteTable(con, "USER_GROCERY_LIST_PREDICTION", new_list2, overwrite = TRUE)
 
 dbDisconnect(con)
