@@ -11,7 +11,7 @@ con <- dbConnect(RMariaDB::MariaDB(), host = host, user = username, dbname = dbn
 args = commandArgs(trailingOnly=TRUE)
 current_date = 717 #need to make not a static variable
 
-#get data from MariaDB 
+#get data from MariaDB
 intercept <- dbGetQuery(con, "SELECT * FROM MODEL_PARAMETERS LIMIT 1")
 numeric_parameters <- dbGetQuery(con, "SELECT * FROM MODEL_PARAMETERS LIMIT 1,5")
 item_category_parameters <- dbGetQuery(con, "SELECT REPLACE(VARIABLE, 'as.factor(ITEM_CATEGORY)', ''), COEFFICIENTS FROM MODEL_PARAMETERS WHERE VARIABLE LIKE '%ITEM_CATEGORY%'")
@@ -39,13 +39,13 @@ user_list_prep = sqldf('SELECT USER_ID, FAMILY_SIZE, ITEM_ID, DAY, ITEM_CATEGORY
 user_list_prep$PREVIOUS_SHOP_SIZE = last_size
 user_list_prep$PREVIOUS_SHOP_DATE = ifelse(current_date - last_date > 4 * unique(household_purch$DAYS_BETWEEN_AVG), 4 * unique(household_purch$DAYS_BETWEEN_AVG), current_date - last_date)
 
-shopping_list = data_frame(USER_ID = integer(), FAMILY_SIZE = integer(), ITEM_ID = integer(), ITEM_CATEGORY = character(), ITEM_CLASS = 
-                             character(), FIRST_SIZE=numeric(), ITEM_SIZE=numeric(), ITEM_TRUE_SIZE = numeric(), ITEM_TOTAL_SIZE = 
-                             numeric(), ITEM_SIZE_AVG=numeric(), ITEM_SIZE_STDEV=numeric(), ITEM_SIZE_Z = numeric(), ITEM_SIZE_ALL_AVG = 
-                             numeric(), ITEM_SIZE_ALL_STDEV=numeric(), ITEM_SIZE_ALL_Z = numeric(), ITEM_QTY_PRCH = integer(), 
-                           PREVIOUS_SHOP_DATE = integer(), DAYS_BETWEEN_AVG = numeric(), DAYS_BETWEEN_STDEV = numeric(), PREV_DATE_Z = 
+shopping_list = data_frame(USER_ID = integer(), FAMILY_SIZE = integer(), ITEM_ID = integer(), ITEM_CATEGORY = character(), ITEM_CLASS =
+                             character(), FIRST_SIZE=numeric(), ITEM_SIZE=numeric(), ITEM_TRUE_SIZE = numeric(), ITEM_TOTAL_SIZE =
+                             numeric(), ITEM_SIZE_AVG=numeric(), ITEM_SIZE_STDEV=numeric(), ITEM_SIZE_Z = numeric(), ITEM_SIZE_ALL_AVG =
+                             numeric(), ITEM_SIZE_ALL_STDEV=numeric(), ITEM_SIZE_ALL_Z = numeric(), ITEM_QTY_PRCH = integer(),
+                           PREVIOUS_SHOP_DATE = integer(), DAYS_BETWEEN_AVG = numeric(), DAYS_BETWEEN_STDEV = numeric(), PREV_DATE_Z =
                              integer(), PREVIOUS_SHOP_SIZE = numeric(), TRIP_SIZE_AVG = numeric(), TRIP_SIZE_STDEV = numeric(), PREV_SIZE_Z =
-                             numeric(), PREV_Z = numeric(), TIME_LOSS_COUNTER = integer(), TIME_LOSS = integer(), ITEM_FREQ_RANKED = 
+                             numeric(), PREV_Z = numeric(), TIME_LOSS_COUNTER = integer(), TIME_LOSS = integer(), ITEM_FREQ_RANKED =
                              integer(), CAT_FREQ_RANKED = integer(), MARKER = integer(), SECTION = character())
 
 #First Model- Binomial model to predict full use (then remove these from data set and merge these in with the others later)
@@ -75,12 +75,12 @@ tolerance_check = function(df, tolerance){
         df$ITEM_TOTAL_SIZE[x] = df$ITEM_SIZE[x] * df$ITEM_QTY_PRCH[x]
       }
     }
-    df$prediction = intercept$COEFFICIENTS + 
+    df$prediction = intercept$COEFFICIENTS +
       numeric_parameters$COEFFICIENTS[1] * df$ITEM_SIZE_Z +
-      numeric_parameters$COEFFICIENTS[2] * df$ITEM_SIZE_ALL_Z + 
+      numeric_parameters$COEFFICIENTS[2] * df$ITEM_SIZE_ALL_Z +
       numeric_parameters$COEFFICIENTS[3] * df$FAMILY_SIZE +
       numeric_parameters$COEFFICIENTS[4] * df$TIME_LOSS +
-      numeric_parameters$COEFFICIENTS[5] * df$PREV_Z + 
+      numeric_parameters$COEFFICIENTS[5] * df$PREV_Z +
       df$ITEM_CATEGORY_COEF +
       df$USER_ID_COEF
 
@@ -96,9 +96,9 @@ new_list = function(df, today, tolerance){
   for (x in 1:length(unique(df$ITEM_ID))){     ###number of items in database? How to best iterate over this))
     product_temp = unique(df$ITEM_ID)[x]
     main_count = nrow(shopping_list) + 1
-    
-    if ((df$ITEM_PRCH_PERC[df$ITEM_ID == product_temp] > 0.25 & df$ITEM_ID[df$ITEM_ID == product_temp] %in% 
-         unique(df$ITEM_ID[df$LAST_TRIP == 1])) | 
+
+    if ((df$ITEM_PRCH_PERC[df$ITEM_ID == product_temp] > 0.25 & df$ITEM_ID[df$ITEM_ID == product_temp] %in%
+         unique(df$ITEM_ID[df$LAST_TRIP == 1])) |
         (df$ITEM_PRCH_PERC[df$ITEM_ID == product_temp] > 0.5) |
         (df$SUM_2[df$ITEM_ID == product_temp] == 2) |
         (df$SUM_5[df$ITEM_ID == product_temp] >= 3) |
@@ -113,7 +113,7 @@ new_list = function(df, today, tolerance){
         (df$CLASS_PRCH_PERC[df$ITEM_ID == product_temp] > 0.15 & df$CAT_RECENCY_RANKED[df$ITEM_ID == product_temp] == 1 &
          df$ITEM_RECENCY_RANKED[df$ITEM_ID == product_temp] == 1) |
         (df$ONE_YEAR_AGO[df$ITEM_ID == product_temp] == 1 & df$WITHIN_90[df$ITEM_ID == product_temp] == 0)){
-      
+
       shopping_list[main_count,]$USER_ID = unique(df$USER_ID)
       shopping_list[main_count,]$FAMILY_SIZE = unique(df$FAMILY_SIZE)
       shopping_list[main_count,]$ITEM_ID = product_temp
@@ -199,16 +199,16 @@ new_list = function(df, today, tolerance){
     shopping_list = merge(shopping_list, user_category_parameters, by = "USER_ID", all.x=TRUE)
     shopping_list$ITEM_CATEGORY_COEF[is.na(shopping_list$ITEM_CATEGORY_COEF)] <- 0
     shopping_list$USER_ID_COEF[is.na(shopping_list$USER_ID_COEF)] <- 0
-    
-    shopping_list$prediction = intercept$COEFFICIENTS + 
+
+    shopping_list$prediction = intercept$COEFFICIENTS +
       numeric_parameters$COEFFICIENTS[1] * shopping_list$ITEM_SIZE_Z +
-      numeric_parameters$COEFFICIENTS[2] * shopping_list$ITEM_SIZE_ALL_Z + 
+      numeric_parameters$COEFFICIENTS[2] * shopping_list$ITEM_SIZE_ALL_Z +
       numeric_parameters$COEFFICIENTS[3] * shopping_list$FAMILY_SIZE +
       numeric_parameters$COEFFICIENTS[4] * shopping_list$TIME_LOSS +
       numeric_parameters$COEFFICIENTS[5] * shopping_list$PREV_Z +
       shopping_list$ITEM_CATEGORY_COEF +
       shopping_list$USER_ID_COEF
-    
+
     if (any(shopping_list$prediction > tolerance)){
       shopping_list = tolerance_check(shopping_list, tolerance)
     }
@@ -241,7 +241,7 @@ new_list = function(df, today, tolerance){
           shopping_list[x,]$SECTION = 'main'
         } else {
           cond5 = subset(shopping_list, shopping_list$MARKER == 5 & shopping_list$ITEM_CATEGORY == shopping_list[x,]$ITEM_CATEGORY)
-          if (shopping_list[x,]$ITEM_FREQ_RANKED == min(cond5$ITEM_FREQ_RANKED) && !shopping_list[x,]$ITEM_CATEGORY %in% 
+          if (shopping_list[x,]$ITEM_FREQ_RANKED == min(cond5$ITEM_FREQ_RANKED) && !shopping_list[x,]$ITEM_CATEGORY %in%
               unique(shopping_list$ITEM_CATEGORY[shopping_list$SECTION == 'main'])) {
             shopping_list[x,]$SECTION = 'main'
           } else {
@@ -255,22 +255,22 @@ new_list = function(df, today, tolerance){
           shopping_list[x,]$SECTION = 'main'
         } else {
           cond6 = subset(shopping_list, shopping_list$MARKER == 6 & shopping_list$ITEM_CLASS == shopping_list[x,]$ITEM_CLASS)
-          cond6a = subset(cond6, min(cond6$CAT_FREQ_RANKED[!cond6$ITEM_CATEGORY %in% 
-                                                             unique(shopping_list$ITEM_CATEGORY[shopping_list$SECTION == 'main'])]) == 
+          cond6a = subset(cond6, min(cond6$CAT_FREQ_RANKED[!cond6$ITEM_CATEGORY %in%
+                                                             unique(shopping_list$ITEM_CATEGORY[shopping_list$SECTION == 'main'])]) ==
                             TRUE)
-          if (shopping_list[x,]$ITEM_ID %in% unique(cond6a$ITEM_ID) & shopping_list[x,]$ITEM_FREQ_RANKED == 
+          if (shopping_list[x,]$ITEM_ID %in% unique(cond6a$ITEM_ID) & shopping_list[x,]$ITEM_FREQ_RANKED ==
               min(cond6a$ITEM_FREQ_RANKED)) {
             shopping_list[x,]$SECTION = 'main'
           } else {
             shopping_list[x,]$SECTION = 'suggested'
           }
         }
-      }   
+      }
     }
   }
   shopping_list = arrange(shopping_list, SECTION)
   return(shopping_list)
-  
+
 }
 
 
@@ -279,4 +279,3 @@ print(new_list2)
 dbWriteTable(con, "USER_GROCERY_LIST_PREDICTION", new_list2, overwrite = TRUE)
 
 dbDisconnect(con)
-

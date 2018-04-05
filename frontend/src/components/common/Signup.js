@@ -64,9 +64,7 @@ class Signup extends React.Component {
     let spacer = {
       marginLeft : '10px'
     }
-    // <button
-    //     onClick={() => toastr.success('The title', 'The message')}
-    //     type="button">Toastr Success</button>
+
     return (
       <div>
       <h1>
@@ -118,15 +116,17 @@ class Signup extends React.Component {
           floatingLabelFixed = {true}
           floatingLabelText="Family Size"
         />
+      </div>
+      <div>
         <TextField
             onChange = {(e) => {this.setState({num_adults: e.target.value})}}
             floatingLabelFixed = {true}
-            style={spacer}
             floatingLabelText="Number of Adults"/>
+      </div>
+      <div>
         <TextField
             onChange = {(e) => {this.setState({num_kids: e.target.value})}}
             floatingLabelFixed = {true}
-            style={spacer}
             floatingLabelText="Number of Kids"/>
       </div>
       <br />

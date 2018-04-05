@@ -40,7 +40,6 @@ class UserService(object):
         for k,v in self.db_to_ui.items():
             if k in request_json:
                 obj[v] = request_json[k]
-        print(obj)
         data =self.sql_.insertObj('USER_PROFILE', obj)
         return data
 

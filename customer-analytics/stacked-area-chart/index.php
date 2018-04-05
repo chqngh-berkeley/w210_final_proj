@@ -2,12 +2,55 @@
 <?php
 //header("Access-Control-Allow-Origin: *");
 // $db_host="50.97.219.169";
+// $db_host="0.0.0.0";
 $db_host="db";
-
 $mysqli = new mysqli($db_host, "root", "", "FOOD_WASTE_CONSUMER_DB", 3306);
 if ($mysqli->connect_errno) {
     echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 }
+
+
+function CallAPI($method, $url, $data = false)
+{
+    $curl = curl_init();
+
+    switch ($method)
+    {
+        case "POST":
+            // curl_setopt($curl, CURLOPT_POST, 1);
+            $data_string = json_encode($data);
+
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+              'Content-Type: application/json',
+              'Content-Length: ' . strlen($data_string))
+            );
+            $result = curl_exec($ch);
+            return $result;
+        case "PUT":
+            curl_setopt($curl, CURLOPT_PUT, 1);
+            break;
+        default:
+            if ($data)
+                $url = sprintf("%s?%s", $url, http_build_query($data));
+    }
+
+    // Optional Authentication:
+    curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+    curl_setopt($curl, CURLOPT_USERPWD, "username:password");
+
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+
+    $result = curl_exec($curl);
+
+    curl_close($curl);
+
+    return $result;
+};
 
 #echo "Log Start";
 #$f1 = fopen("test1.csv","w");
@@ -59,15 +102,20 @@ $database = "FOOD_WASTE_CONSUMER_DB";
           $selectOption = "2018";
     }
 
-
-    $res1 = exec('python json_manip_test.py ' . escapeshellarg($data2) . ' ' . escapeshellarg($selectOption) . ' 2>&1', $out1);
+    $res2 = CallAPI('GET','http://backend:8090/receipt/test');
+    $array = array(
+        "data1" => $data2,
+        "data2" => $selectOption
+    );
+    $res1 = CallAPI('POST', 'http://backend:8090/util/stacked',$array);
+    #$res1 = exec('python json_manip_test.py ' . escapeshellarg($data2) . ' ' . escapeshellarg($selectOption) . ' 2>&1', $out1);
 
 
     #echo $res1;
 
     $pieces = explode("-", $res1);
-
-
+    // $pieces = json_decode($res1->data);
+    // var_dump($pieces);
     $json_a = json_decode($pieces[0], true);
     $json_b = json_decode($pieces[1], true);
 
