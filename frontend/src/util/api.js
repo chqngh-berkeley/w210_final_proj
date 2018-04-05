@@ -1,5 +1,5 @@
 import {CRUD} from './CRUD';
-import {BASE_URL} from '../constants/constants'
+import {BASE_URL, BASE_HOST} from '../constants/constants'
 
 // const BASE_URL = 'http://50.97.219.169'
 export const api = {
@@ -61,7 +61,11 @@ export const api = {
 
   // Grocery list
   getGroceryListRecommendations : function(userId, count) {
-    return CRUD.get(BASE_URL+'/grocery/recommended', {}, userId).then(res => res.json())
+    let data ={
+      user_id: userId,
+      waste_threshold : count
+    }
+    return CRUD.post(`http://${BASE_HOST}:8282/predict`, data, userId).then(res => res.json())
   },
 
   getGroceryItemSuggestions : function(userId, count) {

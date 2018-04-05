@@ -542,3 +542,10 @@ predict <- function(user_id, waste_threshold) {
 
   dbDisconnect(con)
 }
+
+#* @get /mean
+normalMean <- function(samples=10){
+  print(samples)
+  data <- rnorm(samples)
+  mean(data)
+}
