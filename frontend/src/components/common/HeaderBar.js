@@ -38,7 +38,7 @@ class HeaderBar extends React.Component {
       marginLeft : '5px'
     }
     var el = <span></span>
-    if(this.props.loggedIn) {
+    if(this.props.username) {
       el = (<span className="w3-bar-item w3-button w3-hide-small">
           <i className="fa fa-sign-out"></i>
           <Link style={linkStyle} to='/login' onClick={this.props.logoutUser}>Logout</Link>

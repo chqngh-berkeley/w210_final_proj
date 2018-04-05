@@ -2,7 +2,7 @@ import * as c from '../constants/constants'
 
 let loginInitState = {
   loggedIn : false,
-  username : '184',//'718',
+  username : null, //'184',//'718',
   password : null,
   name : null,
   age : null,
@@ -20,7 +20,6 @@ export function loginReducer(state=loginInitState, action) {
       case c.LOGIN_USER:
         let userinfo = action.userinfo
         return {
-          loggedIn : true,
           username : userinfo.username,
           password : userinfo.password,
           name : userinfo.name,
@@ -31,6 +30,8 @@ export function loginReducer(state=loginInitState, action) {
           num_kids : userinfo.num_kids,
           shopping_freq : userinfo.shop_trip_freq
         };
+      case c.UPDATE_USER:
+        return Object.assign({}, state, action.user)
       case c.LOGOUT_USER:
         return Object.assign({}, state, loginInitState)
       default:

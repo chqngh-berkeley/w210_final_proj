@@ -142,11 +142,6 @@ class ReceiptHistory extends React.Component {
           enableSelectAll={false}
           >
           <TableRow>
-            <TableHeaderColumn colSpan="4" style={{textAlign: 'left'}}>
-              Receipt List History
-            </TableHeaderColumn>
-          </TableRow>
-          <TableRow>
             <TableHeaderColumn tooltip="item">Receipt ID</TableHeaderColumn>
             <TableHeaderColumn tooltip="timestamp">Date</TableHeaderColumn>
 

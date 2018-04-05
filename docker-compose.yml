@@ -29,13 +29,10 @@ services:
       - ./backend:/backend
     networks:
        - overlay
-  #   depends_on:
-  #     db:
-  #       condition: service_started
-  # infomatics:
-  #   build: ./informational-analytics
-  #   ports:
-  #     - "8585:8585"
+  infomatics:
+    build: ./informational-analytics
+    ports:
+      - "8585:8585"
   customeranalytics:
     build: ./customer-analytics
     ports:
@@ -44,10 +41,10 @@ services:
       - ./customer-analytics:/customer_analytics
     networks:
        - overlay
-  # intro:
-  #   build: ./intro
-  #   ports:
-  #     - "8586:8586"
+  intro:
+    build: ./intro
+    ports:
+      - "8586:8586"
   r_api:
     build: ./R_api
     ports:

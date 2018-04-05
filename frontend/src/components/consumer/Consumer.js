@@ -4,6 +4,7 @@ import ReceiptHistory from './grocery_history/receipt_history';
 import  GroceryListRecommender from './grocery_list/grocery_list_recommender';
 import ReceiptUploader from './receipt_uploader/receipt_uploader';
 import Analytics from './Analytics/analytics';
+import Profile from '../common/profile';
 import {connect} from 'react-redux';
 import { push } from 'react-router-redux';
 import {Tabs, Tab} from 'material-ui/Tabs';
@@ -60,19 +61,31 @@ class Consumer extends React.Component {
     <Tabs value={this.state.val}
       onChange={this.onTabChange.bind(this)}>
      <Tab label="Receipt History" value="b">
-       {this.state.val ==  'b' && <ReceiptHistory />}
-
+       <div style={{padding: '20px'}}>
+         {this.state.val ==  'b' && <ReceiptHistory />}
+       </div>
      </Tab>
      <Tab label="Grocery Recommender" value="c">
-       {this.state.val == 'c' && <GroceryListRecommender />}
+       <div style={{padding: '20px'}}>
+         {this.state.val == 'c' && <GroceryListRecommender />}
+       </div>
      </Tab>
      <Tab label="Receipt Uploader" value="a">
-       {this.state.val == 'a'
-         && <ReceiptUploader onTabChange={this.onTabChange.bind(this)}/>}
+       <div style={{padding: '20px'}}>
+         {this.state.val == 'a'
+           && <ReceiptUploader onTabChange={this.onTabChange.bind(this)}/>}
+       </div>
       </Tab>
 
      <Tab label="Analytics" value="d">
-       {this.state.val == 'd' && <Analytics />}
+        <div style={{padding: '20px'}}>
+         {this.state.val == 'd' && <Analytics />}
+        </div>
+      </Tab>
+     <Tab label="Profile" value="e">
+        <div style={{padding: '20px'}}>
+         {this.state.val == 'e' && <Profile />}
+        </div>
       </Tab>
   </Tabs>)
   }

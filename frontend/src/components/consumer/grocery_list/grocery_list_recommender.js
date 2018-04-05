@@ -115,8 +115,7 @@ class GroceryListRecommender extends React.Component {
   }
 
   componentDidMount() {
-
-    this.props.getRecommendations(this.props.username);
+    // this.props.getRecommendations(this.props.username);
   }
 
   handleToggle = (event, toggled) => {
@@ -144,43 +143,57 @@ class GroceryListRecommender extends React.Component {
   updateDefaultListItem = (item, e, newVal) => {
     console.log(newVal, item)
   }
+
+  onUpdateClick = (event) => {
+    console.log(this.state.wasteThreshold)
+  }
+
+  renderSlider = () => {
+    return (<div style={{position: 'relative'}}>
+      <div style={{width: '70%', display: 'inline-block'}}>
+          <Subheader style={sliderStyles.subheader}>
+            {'Wastage Threshold'}
+          </Subheader>
+          <Slider
+            defaultValue={5 / 100}
+            min={0}
+            max={1}
+            step={2 / 100}
+            value={this.state.wasteThreshold / 100}
+            onChange={this.onThresholdChange}
+            label={
+              <div style={sliderStyles.labelStyleOuter}>
+                <div style={sliderStyles.labelStyleInner}>
+                  {this.state.wasteThreshold} %
+                </div>
+              </div>
+            }
+          />
+      </div>
+      <div style={{display: 'inline-block', position: 'absolute',
+        top: '40px', marginLeft:'30px'}}>
+        <RaisedButton primary={true}
+          onClick={this.onUpdateClick.bind(this)}
+          label='Update'></RaisedButton>
+      </div>
+    </div>)
+  }
   render() {
-    if(this.props.recommendedList && this.props.recommendedList.length ==  0) {
-      return (
-        <div>
-          <h1> Grocery List Recommender </h1>
-            <h3 style= {{textAlign : 'center', 'margin': '50px auto'}}>
-            Upload a receipt to get your recommendations!
-          </h3>
-        </div>
-        )
-    }
+    // if(this.props.recommendedList && this.props.recommendedList.length ==  0) {
+    //   return (
+    //     <div>
+    //       <h1> Grocery List Recommender </h1>
+    //         <h3 style= {{textAlign : 'center', 'margin': '50px auto'}}>
+    //         Upload a receipt to get your recommendations!
+    //       </h3>
+    //     </div>
+    //     )
+    // }
     return (
       <div>
         <h1> Grocery List Recommender </h1>
-        <br />
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vulputate cursus scelerisque. Phasellus at laoreet mi. Morbi non nibh facilisis, viverra dui luctus, vestibulum metus. Aliquam suscipit mauris dui, quis hendrerit tellus sagittis ut. Nam leo mi, dignissim sit amet dapibus eget, pharetra at neque. Integer ut facilisis purus. Aliquam erat volutpat.</p>
-        <h3>Recommended Grocery Items</h3>
-        <div>
-            <Subheader style={sliderStyles.subheader}>
-              {'Wastage Threshold'}
-            </Subheader>
-            <Slider
-              defaultValue={5 / 100}
-              min={0}
-              max={1}
-              step={5 / 100}
-              value={this.state.wasteThreshold / 100}
-              onChange={this.onThresholdChange}
-              label={
-                <div style={sliderStyles.labelStyleOuter}>
-                  <div style={sliderStyles.labelStyleInner}>
-                    {this.state.wasteThreshold} %
-                  </div>
-                </div>
-              }
-            />
-        </div>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
+
         <Table
           height={this.state.height}
           fixedHeader={this.state.fixedHeader}
@@ -225,6 +238,7 @@ class GroceryListRecommender extends React.Component {
               ))}
           </TableBody>
         </Table>
+        {this.renderSlider()}
       </div>
     );
   }

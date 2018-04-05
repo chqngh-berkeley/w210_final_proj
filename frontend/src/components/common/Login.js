@@ -9,7 +9,7 @@ import {api} from './../../util/api';
 import { Link } from 'react-router-dom'
 import { Redirect } from 'react-router'
 import {toastr} from 'react-redux-toastr'
-
+import { withRouter } from 'react-router-dom'
 const st = {
   backgroundColor : '#FAFAFA',
   // color: 'black',
@@ -26,7 +26,7 @@ const mapStateToProps = function(state){
 
 const mapDispatchToProps =(dispatch) => {
   return {
-    loginUser : (username, password) => {
+    loginUser : (username, password, cb) => {
       api.loginUser(username, password).then(function(res) {
         if(res['error']) {
           toastr.error('Failed to login:', res['error']);
@@ -34,8 +34,9 @@ const mapDispatchToProps =(dispatch) => {
         }
         console.log(res['data'])
         if(res['data']) {
+
           dispatch(loginUser(res['data']));
-          dispatch(push('/consumer'));
+          cb();
         }
       }, function(err) {
         console.log(err)
@@ -60,9 +61,12 @@ class Login extends React.Component {
     let username = this.state.username;
     let password = this.state.password;
     if(!username || !password) {
-      toastr.success('The title', 'The message')
+        toastr.error('The fields cannot be empty', '')
+        return;
     }
-    this.props.loginUser(username, password)
+    this.props.loginUser(username, password, () => {
+      this.props.history.push('/consumer')
+    })
   }
 
   render() {
@@ -94,4 +98,4 @@ class Login extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login))

@@ -19,3 +19,10 @@ export const signUpUser = (username) => {
     username
   }
 }
+
+export const updateUser = (user) => {
+  return {
+    type: c.UPDATE_USER,
+    user
+  }
+}

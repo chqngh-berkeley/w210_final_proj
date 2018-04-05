@@ -18,7 +18,7 @@ export const api = {
   },
 
   updateUserInfo : function(user_id, info) {
-    return CRUD.put(BASE_URL+'/user/'+user_id, info).then(res => res.json())
+    return CRUD.put(BASE_URL+'/user/'+user_id, info, user_id).then(res => res.json())
   },
 
 
