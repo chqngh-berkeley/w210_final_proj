@@ -13,7 +13,9 @@ library(sqldf)
 library(dplyr)   #reordering rows in df
 
 username <- "root"
-host <- "50.97.219.169"
+# host <- "50.97.219.169"
+host <- "0.0.0.0"
+
 dbname <- "FOOD_WASTE_CONSUMER_DB"
 con <- dbConnect(RMariaDB::MariaDB(), host = host, user = username, dbname = dbname)
 

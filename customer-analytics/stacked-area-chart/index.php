@@ -1,8 +1,10 @@
 
 <?php
 //header("Access-Control-Allow-Origin: *");
+// $db_host="50.97.219.169";
+$db_host="db";
 
-$mysqli = new mysqli("50.97.219.169", "root", "", "FOOD_WASTE_CONSUMER_DB", 3306);
+$mysqli = new mysqli($db_host, "root", "", "FOOD_WASTE_CONSUMER_DB", 3306);
 if ($mysqli->connect_errno) {
     echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 }

@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 import { Redirect } from 'react-router';
 import {api} from './../../../util/api';
 import { cyan500 } from 'material-ui/styles/colors';
-
+import {BASE_HOST} from '../../../constants/constants'
 import {
   Table,
   TableBody,
@@ -111,7 +111,7 @@ class Analytics extends React.Component {
         'bubble_chart-gh-pages',
         'stacked-area-chart'
       ]
-      let url = "http://50.97.219.169:8065/"+options[this.state.selection]+"/index.php?user_id=" + this.props.username;
+      let url = `http://${BASE_HOST}:8065/`+options[this.state.selection]+"/index.php?user_id=" + this.props.username;
       return (
         <div>
           <SelectField

@@ -37,7 +37,8 @@ def groceryTest():
         return {'result': 'grocery test'}
     except Exception as e:
         print e
-        return {'error': e}
+        response.status = 400
+        return {'error': str(e)}
 
 
 @grocery_app.route(path='/grocery/recommended', method=['GET', 'OPTIONS'])
@@ -55,7 +56,8 @@ def getRecommendedGrocery():
         return { 'data': rec_grocery_data}
     except Exception as e:
         print e
-        return {'error': e}
+        response.status = 400
+        return {'error': str(e)}
 
 @grocery_app.route(path='/grocery/training', method=['GET', 'OPTIONS'])
 @enable_cors
@@ -66,7 +68,8 @@ def train():
         return { 'data': user_id}
     except Exception as e:
         print e
-        return {'error': e}
+        response.status = 400
+        return {'error': str(e)}
 
 @grocery_app.route(path='/grocery/predict', method=['GET', 'OPTIONS'])
 @enable_cors
@@ -81,7 +84,8 @@ def predict():
         return { 'data': command}
     except Exception as e:
         print e
-        return {'error': e}
+        response.status = 400
+        return {'error': str(e)}
 
 if __name__ == '__main__':
     from optparse import OptionParser

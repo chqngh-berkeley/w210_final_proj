@@ -13,7 +13,7 @@ try:
 	datum1 = json.loads(sys.argv[1])
 	datum2 = sys.argv[2]
 	#print datum2
-	
+
 except:
 	print "Something went wrong!!"
 
@@ -47,7 +47,7 @@ for i in yrs:
     for j in productDict.values():
         j[i] = []
 
-        
+
 for i in metrics:
     for j in yrs:
         for k in items:
@@ -78,5 +78,3 @@ print json.dumps(productDict[datum2]), "-", json.dumps(seriesDict[datum2]) #, js
 
 
 #print df
-
-

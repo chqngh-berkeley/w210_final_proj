@@ -1,6 +1,7 @@
-
-// export const BASE_URL = 'http://0.0.0.0:8090'
-export const BASE_URL = 'http://50.97.219.169:8090'
+export const BASE_HOST='0.0.0.0'
+export const BASE_PORT='8090'
+export const BASE_URL = `http://${BASE_HOST}:${BASE_PORT}`;
+// export const BASE_URL = 'http://50.97.219.169:8090'
 export const LOGIN_USER = 'LOGIN_USER'
 export const LOGOUT_USER = 'LOGOUT_USER'
 export const SIGN_UP = 'SIGN_UP'

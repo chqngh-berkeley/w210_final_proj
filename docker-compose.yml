@@ -7,28 +7,52 @@ services:
       - '3306:3306'
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - ./sql:/sql
+    networks:
+       - overlay
+    expose:
+     - "3306"
     # command:
       # - script.sh
-  # frontend:
-  #   build: ./frontend
-  #   ports:
-  #     - "8000:8000"
-  # backend:
-  #   build: ./backend
-  #   ports:
-  #     - "8090:8090"
+  frontend:
+    build: ./frontend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./frontend:/frontend
+  backend:
+    build: ./backend
+    ports:
+      - "8090:8090"
+    volumes:
+      - ./backend:/backend
+    networks:
+       - overlay
   #   depends_on:
   #     db:
   #       condition: service_started
-  infomatics:
-    build: ./informational-analytics
-    ports:
-      - "8585:8585"
+  # infomatics:
+  #   build: ./informational-analytics
+  #   ports:
+  #     - "8585:8585"
   customeranalytics:
     build: ./customer-analytics
     ports:
       - "8065:8065"
-  intro:
-    build: ./intro
+    volumes:
+      - ./customer-analytics:/customer_analytics
+    networks:
+       - overlay
+  # intro:
+  #   build: ./intro
+  #   ports:
+  #     - "8586:8586"
+  r_api:
+    build: ./R_api
     ports:
-      - "8586:8586"
+      - "8282:8282"
+    networks:
+      - overlay
+networks:
+  overlay:

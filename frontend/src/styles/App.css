@@ -32,7 +32,14 @@ p {
   display: block;
 }
 
-
+.clickable {
+  padding: 5px;
+}
+.clickable:hover {
+  cursor: pointer;
+  background-color: #FAFAFA;
+  border: 1px solid black;
+}
 
 .index .notice {
   margin: 20px auto;

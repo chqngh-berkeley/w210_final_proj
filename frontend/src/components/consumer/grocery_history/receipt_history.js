@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 import { Redirect } from 'react-router'
 import {setAllReceipts, setReceipt} from './../../../actions/receiptAction'
 import {api} from './../../../util/api';
+import {toastr} from 'react-redux-toastr'
 import {
   Table,
   TableBody,
@@ -68,6 +69,7 @@ const mapDispatchToProps =(dispatch) => {
         api.deleteReceiptDataById(username, receipt['receipt_id']).then(function(res) {
           api.getAllReceipts(username).then(function(res) {
               dispatch(setAllReceipts(res['data']));
+              toastr.success('Deleted Receipt Id:', receipt['receipt_id']);
           })
         })
       }

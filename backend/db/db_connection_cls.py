@@ -10,7 +10,8 @@ class MysqlDBPython(object):
     """
 
     __instance   = None
-    __host       = '50.97.219.169'
+    __host       = 'db'
+    # __host       = '50.97.219.169'
     __user       = None
     __port       = '3306'
     __password   = None
@@ -24,9 +25,10 @@ class MysqlDBPython(object):
         return cls.__instance
     ## End def __new__
 
-    def __init__(self, host='50.97.219.169', user='root', \
+    def __init__(self, host=None, user='root', \
     password='', database='FOOD_WASTE_CONSUMER_DB'):
-        self.__host     = host
+        if not host is None:
+            self.__host     = host
         self.__user     = user
         self.__password = password
         self.__database = database

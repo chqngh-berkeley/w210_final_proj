@@ -6,14 +6,13 @@ import json, sys
 from collections import defaultdict
 import numpy as np
 import simplejson
-from orderedset import OrderedSet
 
 try:
 	#datum =  eval(sys.argv[1])[0]
 	datum1 = json.loads(sys.argv[1])
 	datum2 = int(sys.argv[2])
 	#print datum2
-	
+
 except:
 	print "Something went wrong!!"
 
@@ -51,5 +50,3 @@ print json.dumps(testDict[datum2]), "-", json.dumps(column_order) #, json.dumps(
 
 
 #print df
-
-

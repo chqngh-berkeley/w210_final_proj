@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import {connect} from 'react-redux';
 import { push } from 'react-router-redux';
 import {logoutUser} from '../../actions/loginAction'
-import {BASE_URL} from '../../constants/constants'
+import {BASE_HOST} from '../../constants/constants'
 const st = {
   backgroundColor : 'white',
   color: 'black',
@@ -54,11 +54,11 @@ class HeaderBar extends React.Component {
     }
     return (
       <header>
-          <a href="http://50.97.219.169:8586/#home" className="w3-bar-item w3-button"><i className="fa fa-home"></i> Home</a>
-          <a href="http://50.97.219.169:8586/#introduction" className="w3-bar-item w3-button w3-hide-small"><i className="fa fa-circle"></i> Introduction</a>
-          <a href="http://50.97.219.169:8586/#data" className="w3-bar-item w3-button w3-hide-small"><i className="fa fa-database"></i> The Data</a>
-          <a href="http://50.97.219.169:8586/#about" className="w3-bar-item w3-button w3-hide-small"><i className="fa fa-user"></i> About Us</a>
-         <a href="http://50.97.219.169:8585" className="w3-bar-item w3-button w3-hide-small"><i className="fa fa-area-chart"></i> Infomatics </a>
+          <a href={`http://${BASE_HOST}:8586/#home`} className="w3-bar-item w3-button"><i className="fa fa-home"></i> Home</a>
+          <a href={`http://${BASE_HOST}:8586/#introduction`} className="w3-bar-item w3-button w3-hide-small"><i className="fa fa-circle"></i> Introduction</a>
+          <a href={`http://${BASE_HOST}:8586/#data`} className="w3-bar-item w3-button w3-hide-small"><i className="fa fa-database"></i> The Data</a>
+          <a href={`http://${BASE_HOST}:8586/#about`} className="w3-bar-item w3-button w3-hide-small"><i className="fa fa-user"></i> About Us</a>
+         <a href={`http://${BASE_HOST}:8585`} className="w3-bar-item w3-button w3-hide-small"><i className="fa fa-area-chart"></i> Infomatics </a>
          {el}
      </header>
    );

@@ -30,7 +30,11 @@ class ReceiptService(object):
 
     # POST
     def storeReceiptAndWastageInfo(self, user_id, receiptData):
-        ocr_data = self.ocr_.ocr({'image': receiptData})
+        args = {
+            'image': receiptData,
+            'user_id': user_id
+        }
+        ocr_data = self.ocr_.ocr(args)
         import datetime
         now = datetime.date.today()
         for row in ocr_data:
@@ -95,7 +99,7 @@ class ReceiptService(object):
         for item in data:
             obj = {}
             for k,v in self.db_to_ui.items():
-                obj[k] = item[v]
+                obj[k] = str(item[v])
             d.append(obj)
         return d
     # Delete
@@ -128,10 +132,7 @@ class ReceiptService(object):
             print item
             obj = {}
             for k,v in mapping_obj.items():
-                if k == 'WASTE_DATA_ENTRY_DT':
-                    obj[v] = str(item[k])
-                else :
-                    obj[v] = item[k]
+                obj[v] = str(item[k])
             d.append(obj)
         return d
     # PUT
@@ -147,7 +148,8 @@ class ReceiptService(object):
             "ITEM_TOTAL_PRICE" : "price",
             "ITEM_CATEGORY" : "category",
             "ITEM_CLASS" : "class",
-            "WASTE_AMT": "wastage"
+            "WASTE_AMT": "wastage",
+            "WASTE_UNITS": "waste_unit"
         }
         result = []
         for item in receiptData:
@@ -171,7 +173,8 @@ class ReceiptService(object):
             "ITEM_NAME" : "food_name",
             "ITEM_TOTAL_PRICE" : "price",
             "ITEM_CATEGORY" : "category",
-            "WASTE_AMT": "wastage"
+            "WASTE_AMT": "wastage",
+            "WASTE_UNITS": "waste_unit"
         }
         result = []
         import datetime

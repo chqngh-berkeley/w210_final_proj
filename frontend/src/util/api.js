@@ -33,6 +33,10 @@ export const api = {
     return CRUD.get(BASE_URL+'/receipt/'+receiptId, {}, userId).then(res => res.json())
   },
 
+  getReceiptImageById : function(path) {
+    return CRUD.get(BASE_URL+'/receipt_image/'+path, {}, null).then(res => res.json())
+  },
+
   updateReceiptDataById : function(userId,receiptId, info) {
     return CRUD.put(BASE_URL+'/receipt/'+receiptId, info, userId).then(res => res.json())
   },

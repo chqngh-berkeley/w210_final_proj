@@ -28,11 +28,18 @@ const mapDispatchToProps =(dispatch) => {
   return {
     loginUser : (username, password) => {
       api.loginUser(username, password).then(function(res) {
+        if(res['error']) {
+          toastr.error('Failed to login:', res['error']);
+          return;
+        }
         console.log(res['data'])
         if(res['data']) {
           dispatch(loginUser(res['data']));
           dispatch(push('/consumer'));
         }
+      }, function(err) {
+        console.log(err)
+        toastr.error('Failed to login:', err);
       });
       //
     }

@@ -1,6 +1,7 @@
 from gevent import monkey; monkey.patch_all()
-from bottle import Bottle, route, run, request, response, install, HTTPResponse, hook, error, static_file
-from bottle import static_file
+from bottle import Bottle, route, run, request, response, \
+install, HTTPResponse, hook, error, static_file
+
 
 import re
 import json
@@ -55,6 +56,15 @@ def receiptData(id):
         response.status = 400
         return {'error': str(e)}
 
+@receipt_app.route(path='/receipt_image/<path>', method=['GET', 'OPTIONS'])
+@enable_cors
+def receiptImage(path):
+    try:
+        return static_file('%s.png'%(path), root='/backend/images')
+    except Exception as e:
+        print e
+        response.status = 400
+        return {'error': str(e)}
 @receipt_app.route(path='/receipt/all', method=['GET'])
 @enable_cors
 def getAllReceiptData():
@@ -146,11 +156,13 @@ def upload_receipt():
         if not upload:
             response.status = 400
             return {'data': 'upload cannot be empty'}
+
         print user_id
         data = receipt_serv.storeReceiptAndWastageInfo(user_id, upload.file)
         return {'data': data}
     except Exception as e:
         print e
+        response.status = 400
         return {'error': str(e)}
 
 if __name__ == '__main__':

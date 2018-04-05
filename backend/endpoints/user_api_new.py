@@ -40,7 +40,8 @@ def createUser():
         return {'data': data}
     except Exception as e:
         print e
-        return {'error': e}
+        response.status = 400
+        return {'error': str(e)}
 
 
 @user_app.route(path='/user/login', method=['POST', 'OPTIONS'])
@@ -54,7 +55,8 @@ def loginUser():
         return {'data': data}
     except Exception as e:
         print e
-        return {'error': e}
+        response.status = 400
+        return {'error': str(e)}
 
 
 @user_app.route(path='/user/<id>', method='GET')
@@ -66,7 +68,8 @@ def getUser(id):
         return {'data': data}
     except Exception as e:
         print e
-        return {'error': e}
+        response.status = 400
+        return {'error': str(e)}
 
 @user_app.route(path='/user/<id>', method=['PUT','OPTION'])
 @enable_cors
@@ -78,7 +81,8 @@ def updateUser(id):
         return { 'data' : data }
     except Exception as e:
         print e
-        return {'error': e}
+        response.status = 400
+        return {'error': str(e)}
 
 
 @user_app.route(path='/user/<id>', method=['DELETE','OPTION'])
@@ -94,7 +98,8 @@ def deleteUser():
         return {'data': data }
     except Exception as e:
         print e
-        return {'error': e}
+        response.status = 400
+        return {'error': str(e)}
 @user_app.route(path='/user/test', method='GET')
 @enable_cors
 def userTest():
@@ -103,7 +108,8 @@ def userTest():
         return {'data': 'user test'}
     except Exception as e:
         print e
-        return {'error': e}
+        response.status = 400
+        return {'error': str(e)}
 
 
 if __name__ == '__main__':
