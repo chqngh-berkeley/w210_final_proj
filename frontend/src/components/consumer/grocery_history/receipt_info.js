@@ -68,7 +68,7 @@ class ReceiptInfo extends React.Component {
       enableSelectAll: false,
       deselectOnClickaway: true,
       showCheckboxes: true,
-      height: '300px',
+      height: '270px'
     };
   }
 

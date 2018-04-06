@@ -41,7 +41,7 @@ class Consumer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      val : 'b'
+      val : 'a'
     }
   }
 
@@ -60,6 +60,12 @@ class Consumer extends React.Component {
     return (
     <Tabs value={this.state.val}
       onChange={this.onTabChange.bind(this)}>
+      <Tab label="Receipt Scanner" value="a">
+        <div style={{padding: '20px'}}>
+          {this.state.val == 'a'
+            && <ReceiptUploader onTabChange={this.onTabChange.bind(this)}/>}
+        </div>
+       </Tab>
      <Tab label="Receipt History" value="b">
        <div style={{padding: '20px'}}>
          {this.state.val ==  'b' && <ReceiptHistory />}
@@ -70,12 +76,7 @@ class Consumer extends React.Component {
          {this.state.val == 'c' && <GroceryListRecommender />}
        </div>
      </Tab>
-     <Tab label="Receipt Uploader" value="a">
-       <div style={{padding: '20px'}}>
-         {this.state.val == 'a'
-           && <ReceiptUploader onTabChange={this.onTabChange.bind(this)}/>}
-       </div>
-      </Tab>
+
 
      <Tab label="Analytics" value="d">
         <div style={{padding: '20px'}}>

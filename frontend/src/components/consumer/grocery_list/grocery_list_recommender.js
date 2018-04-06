@@ -8,6 +8,8 @@ import { Link } from 'react-router-dom'
 import { Redirect } from 'react-router';
 import {api} from './../../../util/api';
 import { cyan500 } from 'material-ui/styles/colors';
+var Loader = require('react-loader');
+import {toastr} from 'react-redux-toastr'
 
 import {
   Table,
@@ -82,9 +84,26 @@ const mapDispatchToProps =(dispatch) => {
       removeFromSuggestedList : (item) => {
         dispatch(removeFromSuggestedList(item))
       },
-      getRecommendations : (username) => {
-        api.getGroceryListRecommendations(username).then(function(res) {
-          dispatch(setRecommendedGroceryList(res['data']))
+      getRecommendations : (username, threshold, cb) => {
+        function convertData(item) {
+          return {
+            'section': item['SECTION'],
+            'name' : item['ITEM_CATEGORY'],
+            'size': item['ITEM_TRUE_SIZE'],
+            'quantity' : item['ITEM_QTY_PRCH'],
+            'class' : item['ITEM_CLASS']
+          }
+        }
+        api.getGroceryListRecommendations(username, threshold).then(function(res) {
+          console.log(res);
+          let data = res['data']
+          let arr = []
+          for(var i =0 ; i< data.length; i++) {
+            let obj = convertData(data[i])
+            arr.push(obj)
+          }
+          dispatch(setRecommendedGroceryList(arr))
+          cb(false);
         })
       },
       getItemSuggestion : (username) => {
@@ -100,6 +119,7 @@ class GroceryListRecommender extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+    loading: true,
     wasteThreshold: 50,
     fixedHeader: true,
     fixedFooter: true,
@@ -110,12 +130,19 @@ class GroceryListRecommender extends React.Component {
     enableSelectAll: false,
     deselectOnClickaway: true,
     showCheckboxes: false,
-    height: '250px'
+    height: '400px'
     };
   }
 
+  setLoader = (b) => {
+      this.setState({loading: b})
+  }
+
   componentDidMount() {
-    // this.props.getRecommendations(this.props.username);
+    this.props.getRecommendations(this.props.username,
+      this.state.wasteThreshold,
+      this.setLoader
+     );
   }
 
   handleToggle = (event, toggled) => {
@@ -145,7 +172,9 @@ class GroceryListRecommender extends React.Component {
   }
 
   onUpdateClick = (event) => {
-    console.log(this.state.wasteThreshold)
+    // console.log(this.state.wasteThreshold)
+    this.setLoader(true);
+    this.props.getRecommendations(this.props.username, this.state.wasteThreshold, this.setLoader);
   }
 
   renderSlider = () => {
@@ -193,52 +222,55 @@ class GroceryListRecommender extends React.Component {
       <div>
         <h1> Grocery List Recommender </h1>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
-
-        <Table
-          height={this.state.height}
-          fixedHeader={this.state.fixedHeader}
-          fixedFooter={this.state.fixedFooter}
-          selectable={this.state.selectable}
-          multiSelectable={this.state.multiSelectable}
-        >
-          <TableHeader
-            displaySelectAll={this.state.showCheckboxes}
-            adjustForCheckbox={this.state.showCheckboxes}
-            enableSelectAll={this.state.enableSelectAll}
-          >
-
-            <TableRow>
-              <TableHeaderColumn tooltip="item">Name</TableHeaderColumn>
-              <TableHeaderColumn tooltip="Quantity">Quantity</TableHeaderColumn>
-              <TableHeaderColumn tooltip="Size">Size</TableHeaderColumn>
-              <TableHeaderColumn tooltip="Category">Category</TableHeaderColumn>
-            </TableRow>
-          </TableHeader>
-          <TableBody
-            displayRowCheckbox={this.state.showCheckboxes}
-            deselectOnClickaway={this.state.deselectOnClickaway}
-            showRowHover={this.state.showRowHover}
-            stripedRows={this.state.stripedRows}
-          >
-            {this.props.recommendedList && this.props.recommendedList.map( (row, index) => (
-              <TableRow key={index}>
-                <TableRowColumn>{row.name}</TableRowColumn>
-                <TableRowColumn>
-                  <TextField value = {row.quantity ? row.quantity : '-N/A-'} />
-                </TableRowColumn>
-                <TableRowColumn>
-                  <TextField value = {row.size ? row.size : '-N/A-'} />
-                </TableRowColumn>
-
-                <TableRowColumn>
-                  {row.class}
-                </TableRowColumn>
-
-              </TableRow>
-              ))}
-          </TableBody>
-        </Table>
         {this.renderSlider()}
+        <Loader loaded={!this.state.loading}>
+          <Table
+            height={this.state.height}
+            fixedHeader={this.state.fixedHeader}
+            fixedFooter={this.state.fixedFooter}
+            selectable={this.state.selectable}
+            multiSelectable={this.state.multiSelectable}
+          >
+            <TableHeader
+              displaySelectAll={this.state.showCheckboxes}
+              adjustForCheckbox={this.state.showCheckboxes}
+              enableSelectAll={this.state.enableSelectAll}
+            >
+
+              <TableRow>
+                <TableHeaderColumn tooltip="category">Category</TableHeaderColumn>
+                <TableHeaderColumn tooltip="item">Name</TableHeaderColumn>
+                <TableHeaderColumn tooltip="Quantity">Quantity</TableHeaderColumn>
+                <TableHeaderColumn tooltip="Size">Size</TableHeaderColumn>
+                <TableHeaderColumn tooltip="Category">Category</TableHeaderColumn>
+              </TableRow>
+            </TableHeader>
+            <TableBody
+              displayRowCheckbox={this.state.showCheckboxes}
+              deselectOnClickaway={this.state.deselectOnClickaway}
+              showRowHover={this.state.showRowHover}
+              stripedRows={this.state.stripedRows}
+            >
+              {this.props.recommendedList && this.props.recommendedList.map( (row, index) => (
+                <TableRow key={index}>
+                  <TableRowColumn>{row.section}</TableRowColumn>
+                  <TableRowColumn>{row.name}</TableRowColumn>
+                  <TableRowColumn>
+                    {row.quantity ? row.quantity : '-N/A-'}
+                  </TableRowColumn>
+                  <TableRowColumn>
+                    {row.size ? row.size : '-N/A-'}
+                  </TableRowColumn>
+                  <TableRowColumn>
+                    {row.class}
+                  </TableRowColumn>
+
+                </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </Loader>
+
       </div>
     );
   }

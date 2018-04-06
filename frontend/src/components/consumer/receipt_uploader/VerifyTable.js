@@ -80,7 +80,7 @@ class VerifyTable extends Component {
     enableSelectAll: false,
     deselectOnClickaway: true,
     showCheckboxes: false,
-    height: '250x',
+    height: '400px',
   };
 
   componentDidMount() {

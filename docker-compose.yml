@@ -13,8 +13,6 @@ services:
        - overlay
     expose:
      - "3306"
-    # command:
-      # - script.sh
   frontend:
     build: ./frontend
     ports:
@@ -51,5 +49,6 @@ services:
       - "8282:8282"
     networks:
       - overlay
+
 networks:
   overlay:

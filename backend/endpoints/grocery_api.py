@@ -9,7 +9,7 @@ import sys
 from datetime import datetime
 import uuid
 import base64
-
+import requests
 from grocery import grocery_service
 import bottle
 bottle.BaseRequest.MEMFILE_MAX = 1024 * 1024
@@ -63,8 +63,7 @@ def getRecommendedGrocery():
 @enable_cors
 def train():
     try:
-        import os
-        os.system("sh ./models/train.sh")
+
         return { 'data': user_id}
     except Exception as e:
         print e
@@ -77,11 +76,14 @@ def predict():
     try:
         user_id = request.query['user_id']
         threshold = request.query['threshold']
-        import os
-        command = ("sh ./models/predict.sh %s %s")%(user_id, threshold)
-        print command
-        os.system(command)
-        return { 'data': command}
+        obj = {
+            'user_id': user_id,
+            'waste_threshold' : threshold
+        }
+        r = requests.post('http://r_api:8282/predict', data = obj)
+        res_obj = r.json()
+        print(res_obj)
+        return {'data' : res_obj}
     except Exception as e:
         print e
         response.status = 400

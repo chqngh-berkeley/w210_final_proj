@@ -4,6 +4,15 @@ library(sqldf)
 # library(car)
 library(dplyr)   #reordering rows in df
 
+
+#
+# cors <- function(res) {
+#     res$setHeader("Access-Control-Allow-Origin", "*")
+#     res$setHeader('Access-Control-Allow-Methods','GET, POST, PUT, DELETE, OPTIONS')
+#     plumber::forward()
+# }
+
+#* @options /train
 #* @get /train
 train<- function() {
   username <- "root"
@@ -211,7 +220,10 @@ train<- function() {
 
   item_freq_ranked$ITEM_RECENCY_RANKED = item_recency_ranked$ITEM_RECENCY_RANKED[item_freq_ranked$USER_ID == item_recency_ranked$USER_ID &&
                                                                                    item_freq_ranked$ITEM_ID == item_recency_ranked$ITEM_ID]
+
+
   #Category Data
+  print("finished setting up Ranks")
   chance_of_purch_cat = sqldf('SELECT USER_ID, ITEM_CATEGORY, ITEM_CLASS, max(DAY) as LAST_PURCH_DAY_CAT, count(ITEM_CATEGORY) as
                               CAT_TOTAL_COUNT, count(DISTINCT(DAY)) as CAT_TRIP_COUNT, SHOP_TRIP_COUNT, avg(ITEM_SIZE) as
                               CAT_SIZE_AVG,
@@ -226,7 +238,7 @@ train<- function() {
                                 from receipts2
                                 group by USER_ID, ITEM_CLASS')
   chance_of_purch_class$CLASS_PRCH_PERC = chance_of_purch_class$CLASS_TRIP_COUNT/chance_of_purch_class$SHOP_TRIP_COUNT
-
+  print("finished setting up Class")
   #Creating Descr rank variables
   cat_freq_ranked = chance_of_purch_cat %>% arrange(USER_ID, ITEM_CLASS) %>% group_by(USER_ID, ITEM_CLASS) %>% mutate(CAT_FREQ_RANKED =
                                                                                                                         rank(-CAT_PRCH_PERC, ties.method="min"))
@@ -252,11 +264,11 @@ train<- function() {
                     FOURTH_LAST_TRIP + FIFTH_LAST_TRIP) AS SUM_5, MAX(IN_30) AS WITHIN_30, MAX(IN_90) AS WITHIN_90, MAX(YEAR_AGO) AS
                     ONE_YEAR_AGO  FROM receipts5 GROUP BY USER_ID, ITEM_ID')
   receipts7 = merge(receipts5, receipts6, by = c('USER_ID', 'ITEM_ID'))
-
+  print("finished setting up all receipts")
   #Train a model
   #Train on all items. Using data_complete because data newly added has no expectation of loss data. Will use new receipt 5 data when using regression in new shopping list
   loss_prediction = lm(WASTE_AMT ~ ITEM_SIZE_Z + ITEM_SIZE_ALL_Z + FAMILY_SIZE + TIME_LOSS + PREV_Z + as.factor(ITEM_CATEGORY) + as.factor(USER_ID), data = subset(data_complete, (data_complete$DAY - today) < -3))
-
+  print("finished setting up training")
   model_parameters <- data.frame(names(coef(loss_prediction)), loss_prediction$coefficients)
   names(model_parameters) <- c("VARIABLE", "COEFFICIENTS")
   dbWriteTable(con, "MODEL_PARAMETERS", model_parameters, overwrite = TRUE)
@@ -267,12 +279,11 @@ train<- function() {
   dbDisconnect(con)
 }
 
+#* @options /predict
 #* @post /predict
 predict <- function(user_id, waste_threshold) {
   username <- "root"
-  # host <- "50.97.219.169"
   host <- "db"
-
   dbname <- "FOOD_WASTE_CONSUMER_DB"
   con <- dbConnect(RMariaDB::MariaDB(), host = host, user = username, dbname = dbname)
 
@@ -325,14 +336,20 @@ predict <- function(user_id, waste_threshold) {
   tolerance_check = function(df, tolerance){
     repeat{
       for (x in 1:nrow(df)){
-        if (df$prediction[x] > tolerance){
+        if (df$prediction[x] > tolerance & df$ITEM_SIZE[x] > 2){
           df$ITEM_SIZE[x] = df$ITEM_SIZE[x] * 0.9
           df$ITEM_SIZE_Z[x] = (df$ITEM_SIZE[x] -
                                  df$ITEM_SIZE_AVG[x]) /
             df$ITEM_SIZE_STDEV[x]
+          df$ITEM_SIZE_Z[is.na(df$ITEM_SIZE_Z)] = 0
+          df$ITEM_SIZE_Z[df$ITEM_SIZE_Z == -Inf] = 0
+          df$ITEM_SIZE_Z[df$ITEM_SIZE_Z == Inf] = 0
           df$ITEM_SIZE_ALL_Z[x] = (df$ITEM_SIZE[x] -
                                      df$ITEM_SIZE_ALL_AVG[x]) /
             df$ITEM_SIZE_ALL_STDEV[x]
+          df$ITEM_SIZE_ALL_Z[is.na(df$ITEM_SIZE_ALL_Z)] = 0
+          df$ITEM_SIZE_ALL_Z[df$ITEM_SIZE_ALL_Z == -Inf] = 0
+          df$ITEM_SIZE_ALL_Z[df$ITEM_SIZE_ALL_Z == Inf] = 0
           df$ITEM_TRUE_SIZE[x] = df$ITEM_SIZE[x] * df$FAMILY_SIZE[x]
           df$ITEM_TOTAL_SIZE[x] = df$ITEM_SIZE[x] * df$ITEM_QTY_PRCH[x]
         }
@@ -346,7 +363,7 @@ predict <- function(user_id, waste_threshold) {
         df$ITEM_CATEGORY_COEF +
         df$USER_ID_COEF
 
-      if (any(df$prediction > tolerance)){
+      if (any(df$prediction > tolerance & df$ITEM_SIZE > 2)){
       } else {
         break
       }
@@ -536,11 +553,12 @@ predict <- function(user_id, waste_threshold) {
   }
 
 
-  new_list2 = new_list(user_list_prep, current_date, waste_threshold)
-  print(new_list2)
-  dbWriteTable(con, "USER_GROCERY_LIST_PREDICTION", new_list2, overwrite = TRUE)
-
+  new_list2 = new_list(user_list_prep, current_date, as.integer(waste_threshold))
   dbDisconnect(con)
+  # print(new_list2)
+  # dbWriteTable(con, "USER_GROCERY_LIST_PREDICTION", new_list2, overwrite = TRUE)
+  return(new_list2)
+
 }
 
 #* @get /mean

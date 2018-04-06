@@ -60,12 +60,11 @@ export const api = {
   },
 
   // Grocery list
-  getGroceryListRecommendations : function(userId, count) {
+  getGroceryListRecommendations : function(userId, threshold) {
     let data ={
-      user_id: userId,
-      waste_threshold : count
+      threshold : threshold
     }
-    return CRUD.post(`http://${BASE_HOST}:8282/predict`, data, userId).then(res => res.json())
+    return CRUD.get(`${BASE_URL}/grocery/predict`, data, userId).then(res => res.json())
   },
 
   getGroceryItemSuggestions : function(userId, count) {

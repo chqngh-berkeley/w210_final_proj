@@ -136,7 +136,7 @@ $database = "FOOD_WASTE_CONSUMER_DB";
 
 <body>
 
-<div id="container" style="min-width: 310px; height: 800px; margin: 0 auto"></div>
+<div id="container" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
 
 <!--div class="Year"-->
 <div class='select-container'>
@@ -160,7 +160,7 @@ $database = "FOOD_WASTE_CONSUMER_DB";
 <!--/div-->
 
 
-<div id='container' style="height: 400px; width:750px;"></div>
+<div id='container' style="height: 400px; width:500px;"></div>
 <script type="text/javascript">
 
 var data_series = <?php echo $data; ?>;

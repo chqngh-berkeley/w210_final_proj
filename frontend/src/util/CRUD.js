@@ -45,13 +45,18 @@ export const CRUD = {
     return fetch(url, cs);
   },
 
-  post(url, data, user_id) {
+  post(url, data, user_id, params) {
     var cs = getCRUDSetting('POST', user_id);
     cs.body = JSON.stringify(data);
+    if(params) {
+      url += appendQueryParams(params);
+      return fetch(url, cs);
+    }
     let p = {
       'user_id' : user_id
     }
     url += appendQueryParams(p);
+
     return fetch(url, cs);
   },
 

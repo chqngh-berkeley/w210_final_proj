@@ -13,6 +13,7 @@ import base64
 from receipt import receipt_service
 import bottle
 bottle.BaseRequest.MEMFILE_MAX = 1024 * 1024
+import requests
 
 def enable_cors(fn):
     def _enable_cors(*args, **kwargs):
