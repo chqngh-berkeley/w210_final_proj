@@ -1,7 +1,10 @@
 /* Base Application Styles */
+/* * {
+  font-size: 1.05em;
+} */
 body {
   color: black;
-  background: white;
+  background: #FBFBFB;
 }
 
 p {

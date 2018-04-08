@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS USER_GROCERY_RECEIPT
  DROP TABLE IF EXISTS USER_GROCERY_ITEM_WASTE_ACTUAL;
 
  CREATE TABLE IF NOT EXISTS USER_GROCERY_ITEM_WASTE_ACTUAL
- (USER_ID bigint,
+ (USER_ID VARCHAR(128),
   RECEIPT_ID bigint,
   WASTE_DATA_ENTRY_DT date,
   ITEM_ID bigint,
@@ -294,81 +294,3 @@ CREATE TABLE IF NOT EXISTS USER_GROCERY_LIST_PREDICTION
  prediction VARCHAR(30),
  CONSTRAINT groceries_pk PRIMARY KEY (USER_ID, ITEM_ID)
  );
- --
- -- INSERT INTO USER_PROFILE (
- --   USER_ID,
- --   USER_NM,
- --   PASSWORD,
- --   USER_AGE,
- --   FAMILY_SIZE,
- --   NUM_ADULTS,
- --   NUM_KIDS,
- --   ANNUAL_HOUSEHOLD_INCOME,
- --   SHOP_TRIP_FREQ
- -- )
- -- VALUES ("bob", "Bob McBob","bobpass", 30, 3, 2, 1, 1000000, 5);
- -- INSERT INTO USER_PROFILE (
- --   USER_ID,
- --   USER_NM,
- --   PASSWORD,
- --   USER_AGE,
- --   FAMILY_SIZE,
- --   NUM_ADULTS,
- --   NUM_KIDS,
- --   ANNUAL_HOUSEHOLD_INCOME,
- --   SHOP_TRIP_FREQ
- -- )
- -- VALUES ("jane", "jane o jane","janepass", 30, 3, 2, 1, 1000000, 5);
- --
- -- INSERT INTO USER_PROFILE (
- --   USER_ID,
- --   USER_NM,
- --   PASSWORD,
- --   USER_AGE,
- --   FAMILY_SIZE,
- --   NUM_ADULTS,
- --   NUM_KIDS,
- --   ANNUAL_HOUSEHOLD_INCOME,
- --   SHOP_TRIP_FREQ
- -- )
- -- VALUES ("chu", "cq","chuchu", 30, 3, 2, 1, 1000000, 5);
-
- --
- --
- -- INSERT INTO USER_GROCERY_RECEIPT (
- --   USER_ID,
- --   RECEIPT_ID,
- --   RECEIPT_UPLOAD_DT,
- --   ITEM_ID,
- --   ITEM_NAME,
- --   ITEM_QTY_PRCH,
- --   ITEM_UNITS,
- --   ITEM_TOTAL_PRICE,
- --   ITEM_CATEGORY,
- -- )
- -- VALUES ("bob", "1234","2017-05-05", 1, "Apple", 5, "oz", 10, "FRUITS");
- -- INSERT INTO USER_GROCERY_RECEIPT (
- --   USER_ID,
- --   RECEIPT_ID,
- --   RECEIPT_UPLOAD_DT,
- --   ITEM_ID,
- --   ITEM_NAME,
- --   ITEM_QTY_PRCH,
- --   ITEM_UNITS,
- --   ITEM_TOTAL_PRICE,
- --   ITEM_CATEGORY,
- -- )
- -- VALUES ("bob", "1234","2017-05-05", 2, "Banana", 2, "oz", 10, "FRUITS");
- -- INSERT INTO USER_GROCERY_RECEIPT (
- --   USER_ID,
- --   RECEIPT_ID,
- --   RECEIPT_UPLOAD_DT,
- --   ITEM_ID,
- --   ITEM_NAME,
- --   ITEM_QTY_PRCH,
- --   ITEM_UNITS,
- --   ITEM_TOTAL_PRICE,
- --   ITEM_CATEGORY,
- -- )
- -- VALUES ("bob", "1234","2017-05-05", 1, "Oranges", 4, "oz", 10, "FRUITS");
- --

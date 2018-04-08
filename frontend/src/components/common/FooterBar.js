@@ -25,11 +25,15 @@ class FooterBar extends React.Component {
     }
     return (
       <footer style = {st}>
-        <a style={lstSt} href='/'>Adam Reilly</a> |
-        <a style={lstSt} href='/'>Peter Zhou</a> |
-        <a style={lstSt} href='/'>Varadarajan Srinivasan</a> |
-        <a style={lstSt} href='/'>Chuqing He</a>
-
+        <div>
+          <a style={lstSt} href='mailto:adam.reilly@ischool.berkeley.edu'>Adam Reilly</a> |
+          <a style={lstSt} href='mailto:pzhou11@berkeley.edu'>Peter Zhou</a> |
+          <a style={lstSt} href='mailto:svaradarajan1982@berkeley.edu'>Varadarajan Srinivasan</a> |
+          <a style={lstSt} href='mailto:chqngh@berkeley.edu'>Chuqing He</a>
+        </div>
+        <div>
+          <a target='_blank' href='https://security.berkeley.edu/privacy-statement-uc-berkeley-websites'>Privacy Notice</a>
+        </div>
       </footer>
     );
   }

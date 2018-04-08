@@ -195,7 +195,7 @@ class ReceiptUploader extends React.Component {
         <h1>
           Upload Receipt
         </h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vulputate cursus scelerisque. Phasellus at laoreet mi. Morbi non nibh facilisis, viverra dui luctus, vestibulum metus. Aliquam suscipit mauris dui, quis hendrerit tellus sagittis ut. Nam leo mi, dignissim sit amet dapibus eget, pharetra at neque. Integer ut facilisis purus. Aliquam erat volutpat.</p>
+        <p>Upload your shopping receipts by taking a picture and uploading the picture here. Then be sure to enter how much food is wasted in the Receipt History section. The more accurate waste data you enter, the more money GrocerySaver can help you keep in your pocket!</p>
         <Stepper activeStep={stepIndex}>
           <Step>
             <StepLabel>Upload Receipt</StepLabel>

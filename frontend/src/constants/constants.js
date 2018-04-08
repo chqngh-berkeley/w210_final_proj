@@ -1,5 +1,5 @@
-// export const BASE_HOST='50.97.219.173'
-export const BASE_HOST='localhost'
+export const BASE_HOST='50.97.219.173'
+// export const BASE_HOST='localhost'
 export const BASE_PORT='8090'
 export const BASE_URL = `http://${BASE_HOST}:${BASE_PORT}`;
 // export const BASE_URL = 'http://50.97.219.169:8090'

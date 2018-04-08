@@ -37,7 +37,7 @@ def createUser():
     try:
         request_json = dict(request.json)
         data = user_serv.createUser(request_json)
-        return {'data': data}
+        return {'data': request_json}
     except Exception as e:
         print e
         response.status = 400
@@ -71,7 +71,7 @@ def getUser(id):
         response.status = 400
         return {'error': str(e)}
 
-@user_app.route(path='/user/<id>', method=['PUT','OPTION'])
+@user_app.route(path='/user/<id>', method=['PUT','OPTIONS'])
 @enable_cors
 def updateUser(id):
     try:

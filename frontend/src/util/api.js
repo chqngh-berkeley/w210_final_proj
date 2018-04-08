@@ -20,6 +20,9 @@ export const api = {
   updateUserInfo : function(user_id, info) {
     return CRUD.put(BASE_URL+'/user/'+user_id, info, user_id).then(res => res.json())
   },
+  getUserInfo : function(user_id) {
+    return CRUD.get(BASE_URL+'/user/'+user_id, {}, user_id).then(res => res.json())
+  },
 
 
 
@@ -65,6 +68,9 @@ export const api = {
       threshold : threshold
     }
     return CRUD.get(`${BASE_URL}/grocery/predict`, data, userId).then(res => res.json())
+  },
+  trainModel : function() {
+    return CRUD.get(`${BASE_URL}/grocery/train`, {}, null).then(res => res.json())
   },
 
   getGroceryItemSuggestions : function(userId, count) {

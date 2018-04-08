@@ -40,31 +40,31 @@ def groceryTest():
         response.status = 400
         return {'error': str(e)}
 
+#
+# @grocery_app.route(path='/grocery/recommended', method=['GET', 'OPTIONS'])
+# @enable_cors
+# def getRecommendedGrocery():
+#     try:
+#         user_id = request.query['user_id']
+#         print('user id:', user_id)
+#         rec_grocery_data = grocery_serv.getPredictedList(user_id)
+#         if len(rec_grocery_data) == 0:
+#             import os
+#             command = ("sh ./models/predict.sh %s %s")%(user_id, 50)
+#             print command
+#             os.system(command)
+#         return { 'data': rec_grocery_data}
+#     except Exception as e:
+#         print e
+#         response.status = 400
+#         return {'error': str(e)}
 
-@grocery_app.route(path='/grocery/recommended', method=['GET', 'OPTIONS'])
-@enable_cors
-def getRecommendedGrocery():
-    try:
-        user_id = request.query['user_id']
-        print('user id:', user_id)
-        rec_grocery_data = grocery_serv.getPredictedList(user_id)
-        if len(rec_grocery_data) == 0:
-            import os
-            command = ("sh ./models/predict.sh %s %s")%(user_id, 50)
-            print command
-            os.system(command)
-        return { 'data': rec_grocery_data}
-    except Exception as e:
-        print e
-        response.status = 400
-        return {'error': str(e)}
-
-@grocery_app.route(path='/grocery/training', method=['GET', 'OPTIONS'])
+@grocery_app.route(path='/grocery/train', method=['GET', 'OPTIONS'])
 @enable_cors
 def train():
     try:
-
-        return { 'data': user_id}
+        r = requests.get('http://r_api:8282/train')
+        return {'data': 'training'}
     except Exception as e:
         print e
         response.status = 400

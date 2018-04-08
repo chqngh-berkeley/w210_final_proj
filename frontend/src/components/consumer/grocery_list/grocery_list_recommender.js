@@ -42,6 +42,7 @@ const st = {
 const sliderStyles = {
   subheader: {
     textTransform: 'capitalize',
+    textAlign: 'left'
   },
   labelStyleOuter: {
     width: '40px',
@@ -96,11 +97,20 @@ const mapDispatchToProps =(dispatch) => {
         }
         api.getGroceryListRecommendations(username, threshold).then(function(res) {
           console.log(res);
+          if(res['error']) {
+            dispatch(setRecommendedGroceryList([]))
+            cb(false);
+            return;
+          }
           let data = res['data']
           let arr = []
+          let item_name_arr = []
           for(var i =0 ; i< data.length; i++) {
             let obj = convertData(data[i])
-            arr.push(obj)
+            if(!item_name_arr.includes(obj['name'])) {
+                arr.push(obj)
+            }
+            item_name_arr.push(obj['name']);
           }
           dispatch(setRecommendedGroceryList(arr))
           cb(false);
@@ -178,8 +188,8 @@ class GroceryListRecommender extends React.Component {
   }
 
   renderSlider = () => {
-    return (<div style={{position: 'relative'}}>
-      <div style={{width: '70%', display: 'inline-block'}}>
+    return (<div style={{position: 'relative', textAlign : 'center'}}>
+      <div style={{width: '60%', display: 'inline-block', 'textAlign': 'left'}}>
           <Subheader style={sliderStyles.subheader}>
             {'Wastage Threshold'}
           </Subheader>
@@ -207,24 +217,34 @@ class GroceryListRecommender extends React.Component {
       </div>
     </div>)
   }
+  titleCase(str) {
+    if(!str) {
+      return str
+    }
+    return str.toLowerCase().split(' ').map(function(word) {
+      return word.length > 0 ? word.replace(word[0], word[0].toUpperCase()) : word;
+    }).join(' ');
+  }
   render() {
-    // if(this.props.recommendedList && this.props.recommendedList.length ==  0) {
-    //   return (
-    //     <div>
-    //       <h1> Grocery List Recommender </h1>
-    //         <h3 style= {{textAlign : 'center', 'margin': '50px auto'}}>
-    //         Upload a receipt to get your recommendations!
-    //       </h3>
-    //     </div>
-    //     )
-    // }
+    if(this.props.recommendedList && this.props.recommendedList.length ==  0) {
+      return (
+        <div>
+          <h1> Grocery List Recommender </h1>
+            <h3 style= {{textAlign : 'center', 'margin': '50px auto'}}>
+            Upload a receipt to get your recommendations!
+          </h3>
+        </div>
+        )
+    }
     return (
       <div>
         <h1> Grocery List Recommender </h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
+        <p>Click 'Update' to get a custom grocery list based on your past purchase patterns!
+Move the wastage threshold bar to set a target for the maximize amount of food you would like to waste. As you move the threshold lower, you'll save more money!</p>
         {this.renderSlider()}
         <Loader loaded={!this.state.loading}>
           <Table
+            style={{backgroundColor:"transparent"}}
             height={this.state.height}
             fixedHeader={this.state.fixedHeader}
             fixedFooter={this.state.fixedFooter}
@@ -232,17 +252,18 @@ class GroceryListRecommender extends React.Component {
             multiSelectable={this.state.multiSelectable}
           >
             <TableHeader
+              style={{color: 'gray'}}
               displaySelectAll={this.state.showCheckboxes}
               adjustForCheckbox={this.state.showCheckboxes}
               enableSelectAll={this.state.enableSelectAll}
             >
 
               <TableRow>
-                <TableHeaderColumn tooltip="category">Category</TableHeaderColumn>
-                <TableHeaderColumn tooltip="item">Name</TableHeaderColumn>
-                <TableHeaderColumn tooltip="Quantity">Quantity</TableHeaderColumn>
-                <TableHeaderColumn tooltip="Size">Size</TableHeaderColumn>
-                <TableHeaderColumn tooltip="Category">Category</TableHeaderColumn>
+                <TableHeaderColumn style={{color: 'black'}} tooltip="Section">Section</TableHeaderColumn>
+                <TableHeaderColumn style={{color: 'black'}} tooltip="item">Name</TableHeaderColumn>
+                <TableHeaderColumn style={{color: 'black'}} tooltip="Quantity">Quantity(oz)</TableHeaderColumn>
+                <TableHeaderColumn style={{color: 'black'}} tooltip="Size">Size</TableHeaderColumn>
+                <TableHeaderColumn style={{color: 'black'}} tooltip="Category">Category</TableHeaderColumn>
               </TableRow>
             </TableHeader>
             <TableBody
@@ -253,8 +274,8 @@ class GroceryListRecommender extends React.Component {
             >
               {this.props.recommendedList && this.props.recommendedList.map( (row, index) => (
                 <TableRow key={index}>
-                  <TableRowColumn>{row.section}</TableRowColumn>
-                  <TableRowColumn>{row.name}</TableRowColumn>
+                  <TableRowColumn>{row.section =='main'? 'Recommended' : 'Suggested' }</TableRowColumn>
+                  <TableRowColumn>{this.titleCase(row.name)}</TableRowColumn>
                   <TableRowColumn>
                     {row.quantity ? row.quantity : '-N/A-'}
                   </TableRowColumn>
@@ -262,7 +283,7 @@ class GroceryListRecommender extends React.Component {
                     {row.size ? row.size : '-N/A-'}
                   </TableRowColumn>
                   <TableRowColumn>
-                    {row.class}
+                    {this.titleCase(row.class)}
                   </TableRowColumn>
 
                 </TableRow>

@@ -32,11 +32,14 @@ const mapDispatchToProps =(dispatch) => {
           toastr.error('Failed to login:', res['error']);
           return;
         }
+        if( Object.keys(res['data']).length === 0) {
+          toastr.error('Failed to login:', 'User does not exist');
+          return
+        }
         console.log(res['data'])
         if(res['data']) {
-
           dispatch(loginUser(res['data']));
-          cb();
+          cb(true);
         }
       }, function(err) {
         console.log(err)
@@ -64,8 +67,11 @@ class Login extends React.Component {
         toastr.error('The fields cannot be empty', '')
         return;
     }
-    this.props.loginUser(username, password, () => {
-      this.props.history.push('/consumer')
+    this.props.loginUser(username, password, (isSuccess) => {
+      console.log(isSuccess)
+      if(isSuccess) {
+          this.props.history.push('/consumer')
+      }
     })
   }
 
@@ -81,6 +87,7 @@ class Login extends React.Component {
       <TextField
         onChange = {(e) => {this.setState({username: e.target.value})}}
         floatingLabelText="Username"
+        hintText='Enter 184 as a sample'
         floatingLabelFixed = {true}
       />
       <br />
@@ -88,6 +95,7 @@ class Login extends React.Component {
         onChange = {(e) => {this.setState({password: e.target.value})}}
         floatingLabelText="Password"
         floatingLabelFixed = {true}
+        hintText='Enter NA as a sample'
         type="password" />
       <br />
       <Link to='/signup'>Sign up</Link>

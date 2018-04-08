@@ -298,7 +298,7 @@ predict <- function(user_id, waste_threshold) {
   names(item_category_parameters) <- c("ITEM_CATEGORY", "ITEM_CATEGORY_COEF")
   names(user_category_parameters) <- c("USER_ID", "USER_ID_COEF")
 
-  sqlquery <- paste("SELECT * FROM MODEL_PARAMETERS_STAGING_TABLE WHERE USER_ID = ", user_id)
+  sqlquery <- paste("SELECT * FROM MODEL_PARAMETERS_STAGING_TABLE WHERE USER_ID = ",  as.character(user_id))
   household_purch <- dbGetQuery(con, sqlquery)
 
   #change datatypes

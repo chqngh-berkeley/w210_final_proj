@@ -48,7 +48,7 @@ class HeaderBar extends React.Component {
       el = (<span className="w3-bar-item w3-button w3-hide-small">
         <i className="fa fa-binoculars"></i>
         <Link style={linkStyle} to='/login'>
-          Our Solution
+          Grocery Saver
         </Link>
         </span>)
     }

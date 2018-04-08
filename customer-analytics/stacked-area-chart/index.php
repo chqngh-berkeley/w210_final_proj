@@ -70,7 +70,7 @@ $database = "FOOD_WASTE_CONSUMER_DB";
 
 
     FROM     USER_GROCERY_ITEM_WASTE_ACTUAL
-    WHERE USER_ID =  $user_id /*hardcoded right now - need to change */
+    WHERE USER_ID =  '$user_id' /*hardcoded right now - need to change */
     GROUP BY 1,2,3
     ;
 
@@ -166,53 +166,101 @@ $database = "FOOD_WASTE_CONSUMER_DB";
 var data_series = <?php echo $data; ?>;
 var axis_series = <?php echo $axis; ?>;
 var title_name = <?php echo $title; ?>;
+//
+// Highcharts.chart('container', {
+//     chart: {
+//         type: 'area'
+//     },
+//     title: {
+//         text: title_name
+//     },
+//     subtitle: {
+//         text: 'Source: Food Waste Estimator Application'
+//     },
+//     xAxis: {
+//         categories: axis_series,
+//         tickmarkPlacement: 'on',
+//         title: {
+//             enabled: false
+//         }
+//     },
+//     yAxis: {
+//         title: {
+//             text: 'Dollars'
+//         },
+//         labels: {
+//             formatter: function () {
+//                 return this.value;
+//             }
+//         }
+//     },
+//     tooltip: {
+//         split: true,
+//         valueSuffix: ' Dollars'
+//     },
+//     plotOptions: {
+//         area: {
+//             stacking: 'normal',
+//             lineColor: '#666666',
+//             lineWidth: 1,
+//             marker: {
+//                 lineWidth: 1,
+//                 lineColor: '#666666'
+//             }
+//         }
+//     },
+//     series: data_series
+// });
 
 Highcharts.chart('container', {
     chart: {
-        type: 'area'
+        type: 'column'
     },
     title: {
         text: title_name
     },
-    subtitle: {
-        text: 'Source: Food Waste Estimator Application'
-    },
     xAxis: {
-        categories: axis_series,
-        tickmarkPlacement: 'on',
-        title: {
-            enabled: false
-        }
+        categories: axis_series
     },
     yAxis: {
+        min: 0,
         title: {
-            text: 'Dollars'
+            text: 'Total Wasted Dollars'
         },
-        labels: {
-            formatter: function () {
-                return this.value;
+        stackLabels: {
+            enabled: true,
+            style: {
+                fontWeight: 'bold',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
             }
         }
     },
+    legend: {
+        align: 'center',
+        x: -30,
+        verticalAlign: 'bottom',
+        y: 20,
+        //floating: true,
+        backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+        borderColor: '#CCC',
+        borderWidth: 1,
+        shadow: false
+    },
     tooltip: {
-        split: true,
-        valueSuffix: ' Dollars'
+        headerFormat: '<b>{point.x}</b><br/>',
+        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
     },
     plotOptions: {
-        area: {
+        column: {
             stacking: 'normal',
-            lineColor: '#666666',
-            lineWidth: 1,
-            marker: {
-                lineWidth: 1,
-                lineColor: '#666666'
+            dataLabels: {
+                enabled: true,
+                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
             }
         }
     },
     series: data_series
 });
-
-
 
 </script>
 

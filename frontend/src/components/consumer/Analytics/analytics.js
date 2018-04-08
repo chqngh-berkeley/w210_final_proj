@@ -34,7 +34,8 @@ const styles = {
 
 const mapStateToProps = function(state){
   return {
-    username: state.loginReducer.username
+    username: state.loginReducer.username,
+    receipts: state.receiptReducer.receipts
   };
 };
 
@@ -86,6 +87,14 @@ class Analytics extends React.Component {
     }
 
     render() {
+      if(!this.props.receipts || this.props.receipts.length == 0) {
+        return <div>
+          <h1>Analytics</h1>
+          <h3 style= {{textAlign : 'center', 'margin': '50px auto'}}>
+            Upload a receipt to get your analytics!
+          </h3>
+        </div>
+      }
       // <iframe src='https://public.tableau.com/shared/7MGG6C86Z?:display_count=yes:embed=y' width='600px' height='400px'></iframe>
       // <span dangerouslySetInnerHTML={template}></span>
       let iframe_st = {

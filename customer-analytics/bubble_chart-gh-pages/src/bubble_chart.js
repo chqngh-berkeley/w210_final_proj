@@ -58,19 +58,19 @@ function bubbleChart() {
 
   // Locations to move bubbles towards, depending
   // on which view mode is selected.
-  var center = { x: width / 2, y: height / 2 };
+  var center = { x: width / 2, y: height / 2.5 };
 
   var yearCenters = {
-    1: { x: width / 3, y: height / 2 },
-    2: { x: width / 2, y: height / 2 },
-    3: { x: 2 * width / 3, y: height / 2 }
+    1: { x: width / 4, y: height / 2.5 },
+    2: { x: width / 2, y: height / 2.5 },
+    3: { x: 2 * width / 2.75, y: height / 2.5 }
   };
 
   // X locations of the year titles.
   var yearsTitleX = {
-    "Most Recent Shopping Trip": 160,
-    "One trip before recent Trip": width / 2,
-    "Two trips before recent Trip": width - 160
+    "Most Recent Shopping Trip": 200,
+    "One trip before recent Trip": width / 2 - 50,
+    "Two trips before recent Trip": width - 260
   };
 
   // Used when setting up force and

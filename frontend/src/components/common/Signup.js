@@ -9,7 +9,16 @@ import {api} from './../../util/api';
 import { Link } from 'react-router-dom'
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import {toastr} from 'react-redux-toastr'
+import {toastr} from 'react-redux-toastr';
+import { withRouter } from 'react-router-dom';
+var Loader = require('react-loader');
+import Checkbox from 'material-ui/Checkbox';
+import {
+  teal500, teal700,
+  pinkA200, lightBlueA700, indigo100,
+  grey100, grey300, grey400, grey500,
+  white, darkBlack, fullBlack,amber200
+} from 'material-ui/styles/colors';
 
 const st = {
   backgroundColor : '#FAFAFA',
@@ -27,10 +36,16 @@ const mapStateToProps = function(state){
 
 const mapDispatchToProps =(dispatch) => {
   return {
-    signupUser : (info) => {
+    signupUser : (info, cb) => {
       api.signup(info).then(function(res) {
-        dispatch(signUpUser(info))
-        dispatch(push('/login'))
+        console.log(res)
+        if(res['error']) {
+          cb(false)
+          toastr.error('There is an error creating your account', res['error'])
+        } else {
+          cb(true)
+          toastr.success('Your account has been created','')
+        }
       });
       // dispatch(push('/consumer'));
     }
@@ -42,100 +57,122 @@ class Signup extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      loading: false,
       username : '',
       password : '',
-      email : '',
-      name : '',
+      name : 'bob',
       age : '',
-      income : '',
+      income : 0,
       family_size : '',
       num_adults : '',
       num_kids : '',
-      shop_trip_freq : ''
+      shop_trip_freq : 0
      }
   }
 
   onSignup(e) {
     let info = this.state;
-    this.props.signupUser(info)
+    this.setState({loading: true})
+    this.props.signupUser(info, (isSuccess)=> {
+      this.setState({loading: false});
+      if(isSuccess) {
+          this.props.history.push('/login');
+      }
+    })
+  }
+  updateCheck(e,v) {
+    console.log(e,v);
+    this.setState({checked: v})
   }
 
   render() {
     let spacer = {
       marginLeft : '10px'
     }
-
+    // <div>
+    //     <TextField
+    //       onChange = {(e) => {this.setState({shop_trip_freq: e.target.value})}}
+    //       floatingLabelFixed = {true}
+    //       style = {spacer}
+    //       floatingLabelText="Shopping frequency"/>
+    // </div>
+    // <TextField
+    //     onChange = {(e) => {this.setState({name: e.target.value})}}
+    //     floatingLabelFixed = {true}
+    //     floatingLabelText="Name" />
+    let privacy_notice = 'By signing up, you are providing consent to use your data in anonymized form for research purpose only.';
     return (
       <div>
-      <h1>
-        Signup
-      </h1>
+      <Loader loaded={!this.state.loading}>
+        <h1>
+          Signup
+        </h1>
 
-      <div>
-      <TextField
-        onChange = {(e) => {this.setState({username: e.target.value})}}
-        floatingLabelFixed = {true}
-        floatingLabelText="Username"
-      />
-      <TextField
-          onChange = {(e) => {this.setState({password: e.target.value})}}
-          floatingLabelFixed = {true}
-          style={spacer}
-          floatingLabelText="Password"
-          type="password" />
-      </div>
-      <br />
-      <div>
-      <TextField
-          onChange = {(e) => {this.setState({name: e.target.value})}}
-          floatingLabelFixed = {true}
-          floatingLabelText="Name" />
+        <div>
         <TextField
-        onChange = {(e) => {this.setState({age: e.target.value})}}
-        floatingLabelFixed = {true}
-        style = {spacer}
-        floatingLabelText="Age" />
-
-      </div>
-      <div>
-          <TextField
-          onChange = {(e) => {this.setState({income: e.target.value})}}
+          onChange = {(e) => {this.setState({username: e.target.value})}}
           floatingLabelFixed = {true}
-          floatingLabelText="Income in $" />
-          <TextField
-            onChange = {(e) => {this.setState({shop_trip_freq: e.target.value})}}
+          floatingLabelShrinkStyle = {{color:'gray'}}
+          floatingLabelText="Username"
+        />
+        <TextField
+            onChange = {(e) => {this.setState({password: e.target.value})}}
+            floatingLabelFixed = {true}
+            style={spacer}
+            floatingLabelText="Password"
+            floatingLabelShrinkStyle = {{color:'gray'}}
+            type="password" />
+            <TextField
+            onChange = {(e) => {this.setState({age: e.target.value})}}
             floatingLabelFixed = {true}
             style = {spacer}
-            floatingLabelText="Shopping frequency"/>
-      </div>
-      <br />
-      <h4>Family Details</h4>
-      <div>
-        <TextField
-          onChange = {(e) => {this.setState({family_size: e.target.value})}}
-          floatingLabelFixed = {true}
-          floatingLabelText="Family Size"
-        />
-      </div>
-      <div>
-        <TextField
-            onChange = {(e) => {this.setState({num_adults: e.target.value})}}
+            floatingLabelShrinkStyle = {{color:'gray'}}
+            floatingLabelText="Age" />
+        </div>
+        <br />
+        <br />
+        <br />
+        <h4>Family Details</h4>
+        <div>
+          <TextField
+            onChange = {(e) => {this.setState({family_size: e.target.value})}}
             floatingLabelFixed = {true}
-            floatingLabelText="Number of Adults"/>
-      </div>
-      <div>
-        <TextField
-            onChange = {(e) => {this.setState({num_kids: e.target.value})}}
-            floatingLabelFixed = {true}
-            floatingLabelText="Number of Kids"/>
-      </div>
-      <br />
-      <Link to='/login'>Back to Login</Link>
-      <span style={{'paddingRight':'20px'}}></span>
-      <RaisedButton primary={true} onClick={this.onSignup.bind(this)} label = 'Signup'></RaisedButton>
+            floatingLabelShrinkStyle = {{color:'gray'}}
+            floatingLabelText="Family Size"
+          />
+
+          <TextField
+              onChange = {(e) => {this.setState({num_adults: e.target.value})}}
+              floatingLabelFixed = {true}
+              style={spacer}
+              floatingLabelShrinkStyle = {{color:'gray'}}
+              floatingLabelText="Number of Adults"/>
+
+          <TextField
+              onChange = {(e) => {this.setState({num_kids: e.target.value})}}
+              floatingLabelFixed = {true}
+              style={spacer}
+              floatingLabelShrinkStyle = {{color:'gray'}}
+              floatingLabelText="Number of Kids"/>
+        </div>
+        <br />
+        <div style={{textAlign: 'left', display: 'inline-block'}}>
+          <Checkbox
+              style={{width: '700px'}}
+              label={privacy_notice}
+              checked={this.state.checked}
+              onCheck={this.updateCheck.bind(this)}
+            />
+        </div>
+        <br />
+        <br />
+        <Link to='/login'>Back to Login</Link>
+        <span style={{'paddingRight':'20px'}}></span>
+        <RaisedButton primary={true} disabled={!this.state.checked} onClick={this.onSignup.bind(this)} label = 'Signup'></RaisedButton>
+        </Loader>
       </div>
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Signup)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Signup))

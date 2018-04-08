@@ -56,7 +56,10 @@ const mapDispatchToProps =(dispatch) => {
           return;
         }
         cb(true)
-        toastr.success('Updated Receipt:', receipt_id);
+        api.trainModel().then(function() {
+          console.log('train model...');
+        })
+        toastr.success('Updated Receipt:'+receipt_id, 'Retraining our Grocery Recommendation Model');
 
       });
     }
@@ -82,7 +85,6 @@ class VerifyTable extends Component {
     showCheckboxes: false,
     height: '400px',
   };
-
   componentDidMount() {
     // this.props.getReceiptData(this.props.receiptId)
   }
@@ -108,6 +110,15 @@ class VerifyTable extends Component {
           this.props.onTabChange('b')
       }
     });
+  }
+
+  titleCase(str) {
+    if(!str) {
+      return str
+    }
+    return str.toLowerCase().split(' ').map(function(word) {
+      return word.length > 0 ? word.replace(word[0], word[0].toUpperCase()) : word;
+    }).join(' ');
   }
 
   render() {
@@ -157,9 +168,14 @@ class VerifyTable extends Component {
   }
 
   getUploadedReceipt() {
+    let strSt = {
+      whiteSpace : 'normal',
+      overflow: 'auto'
+    }
     return (
       <Table
         height={this.state.height}
+        style={{backgroundColor:"transparent"}}
         fixedHeader={this.state.fixedHeader}
         fixedFooter={this.state.fixedFooter}
         selectable={this.state.selectable}
@@ -176,11 +192,11 @@ class VerifyTable extends Component {
             </TableHeaderColumn>
           </TableRow>
           <TableRow>
-          <TableHeaderColumn tooltip="item">Food Name</TableHeaderColumn>
-          <TableHeaderColumn tooltip="unit">Unit</TableHeaderColumn>
-          <TableHeaderColumn tooltip="category">Category</TableHeaderColumn>
-          <TableHeaderColumn tooltip="quantity">Quantity</TableHeaderColumn>
-          <TableHeaderColumn tooltip="price">Price($)</TableHeaderColumn>
+          <TableHeaderColumn style={{color: 'black'}} tooltip="item">Food Name</TableHeaderColumn>
+          <TableHeaderColumn style={{color: 'black'}} tooltip="unit">Unit</TableHeaderColumn>
+          <TableHeaderColumn style={{color: 'black'}} tooltip="category">Category</TableHeaderColumn>
+          <TableHeaderColumn style={{color: 'black'}} tooltip="quantity">Quantity</TableHeaderColumn>
+          <TableHeaderColumn style={{color: 'black'}} tooltip="price">Price($)</TableHeaderColumn>
           </TableRow>
         </TableHeader>
         <TableBody
@@ -192,13 +208,13 @@ class VerifyTable extends Component {
           {this.props.current_receipt &&this.props.current_receipt.receipt &&this.props.current_receipt.receipt.length > 0 &&
             this.props.current_receipt.receipt.map( (row, index) => (
             <TableRow key={index}>
-              <TableRowColumn tooltip={row.name}>{row.name}</TableRowColumn>
+              <TableRowColumn style={strSt} tooltip={row.name}>{this.titleCase(row.name)}</TableRowColumn>
                 <TableRowColumn>
                   <TextField value = {row.unit}
                     onChange={this.handleOnUnitEdit.bind(this,index,row)} value={row.unit}
                     />
                 </TableRowColumn>
-              <TableRowColumn tooltip={row.name}>{row.category}</TableRowColumn>
+              <TableRowColumn style={strSt} tooltip={row.category}>{this.titleCase(row.category)}</TableRowColumn>
               <TableRowColumn>
                 <TextField value = {row.quantity}
                   onChange={this.handleOnQuantityEdit.bind(this,index,row)} value={row.quantity}

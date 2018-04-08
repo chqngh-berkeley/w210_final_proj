@@ -133,6 +133,7 @@ class ReceiptHistory extends React.Component {
       <Table
         height={this.state.height}
         selectable = {false}
+        style={{backgroundColor:"transparent"}}
         fixedHeader={this.state.fixedHeader}
         fixedFooter={this.state.fixedFooter}
       >
@@ -140,13 +141,14 @@ class ReceiptHistory extends React.Component {
           displaySelectAll={false}
           adjustForCheckbox={false}
           enableSelectAll={false}
+          style={{color: 'gray'}}
           >
           <TableRow>
-            <TableHeaderColumn tooltip="item">Receipt ID</TableHeaderColumn>
-            <TableHeaderColumn tooltip="timestamp">Date</TableHeaderColumn>
+            <TableHeaderColumn style={{color: 'black'}} tooltip="item">Receipt ID</TableHeaderColumn>
+            <TableHeaderColumn style={{color: 'black'}} tooltip="timestamp">Date</TableHeaderColumn>
 
-            <TableHeaderColumn tooltip="action">Edit</TableHeaderColumn>
-            <TableHeaderColumn tooltip="action"></TableHeaderColumn>
+            <TableHeaderColumn style={{color: 'black'}} tooltip="action">Edit</TableHeaderColumn>
+            <TableHeaderColumn style={{color: 'black'}} tooltip="action"></TableHeaderColumn>
           </TableRow>
         </TableHeader>
         <TableBody
@@ -156,7 +158,7 @@ class ReceiptHistory extends React.Component {
         >
           {this.props.receipts && this.props.receipts.sort(this.sortDate).map( (row, index) => (
             <TableRow key={index}>
-              <TableRowColumn>{row.receipt_id}</TableRowColumn>
+              <TableRowColumn>{row.receipt_id ? parseInt(row.receipt_id) : row.receipt_id}</TableRowColumn>
               <TableRowColumn>{this.convertDate(row.upload_date)}</TableRowColumn>
 
               <TableRowColumn>
@@ -223,7 +225,9 @@ class ReceiptHistory extends React.Component {
       <div>
         <h1> Past Grocery Receipts </h1>
         <br />
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vulputate cursus scelerisque. Phasellus at laoreet mi. Morbi non nibh facilisis, viverra dui luctus, vestibulum metus. Aliquam suscipit mauris dui, quis hendrerit tellus sagittis ut. Nam leo mi, dignissim sit amet dapibus eget, pharetra at neque. Integer ut facilisis purus. Aliquam erat volutpat.</p>
+        <p>
+          Click 'edit' to see all items on a past receipt and enter how much food was wasted. The more accurate waste data you enter, the more money GrocerySaver can help you keep in your pocket!
+        </p>
         <br />
 
         {this.renderTable()}
