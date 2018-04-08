@@ -71,7 +71,6 @@ class UtilService(object):
         #df = pd.read_json(json.loads(sys.argv[1]), orient='index')
         yrs = df['yr'].unique()
 
-
         table = pd.pivot_table(df, values='WASTED_DOLLARS', index=['yr', 'ITEM_CLASS'], columns=['MTH'], aggfunc=np.sum)
 
         column_order = ['Jan', 'Feb', 'Mar','Apr', 'May', 'Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
