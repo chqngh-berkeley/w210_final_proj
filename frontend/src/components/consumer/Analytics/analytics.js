@@ -7,6 +7,7 @@ import { push } from 'react-router-redux';
 import { Link } from 'react-router-dom'
 import { Redirect } from 'react-router';
 import {api} from './../../../util/api';
+import {setAllReceipts, setReceipt} from './../../../actions/receiptAction'
 import { cyan500 } from 'material-ui/styles/colors';
 import {BASE_HOST} from '../../../constants/constants'
 import {
@@ -51,7 +52,12 @@ const mapDispatchToProps =(dispatch) => {
         api.getGroceryItemSuggestions(username).then(function(res) {
           // dispatch(setSuggestedItemsList(res['data']))
         })
-      }
+      },
+      getAllReceipts: (username) => {
+        api.getAllReceipts(username).then(function(res) {
+            dispatch(setAllReceipts(res['data']));
+        })
+      },
     }
 };
 
@@ -77,14 +83,11 @@ class Analytics extends React.Component {
   handleChange = (e, val) => {
     this.setState({selection: val})
   }
-    componentDidMount() {
-      // var divElement = document.getElementById('viz1517880550497');
-      // var vizElement = divElement.getElementsByTagName('object')[0];
-      // vizElement.style.width='1200px';vizElement.style.height='827px';
-      // var scriptElement = document.createElement('script');
-      // scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
-      // vizElement.parentNode.insertBefore(scriptElement, vizElement);
+  componentDidMount() {
+    if(!this.props.receipts || this.props.receipts.length == 0) {
+      this.props.getAllReceipts(this.props.username);
     }
+  }
 
     render() {
       if(!this.props.receipts || this.props.receipts.length == 0) {
@@ -128,9 +131,9 @@ class Analytics extends React.Component {
           value={this.state.selection}
           onChange={this.handleChange.bind(this)}
           >
-            <MenuItem value={0} primaryText={options[0]} />
-            <MenuItem value={1} primaryText={options[1]} />
-            <MenuItem value={2} primaryText={options[2]} />
+            <MenuItem value={0} primaryText={'Bar Chart'} />
+            <MenuItem value={1} primaryText={'Bubble Chart'} />
+            <MenuItem value={2} primaryText={'Stacked Bar Chart'} />
         </SelectField>
           <br />
           <iframe src={url} width='100%' height='700px' style={iframe_st}></iframe>
