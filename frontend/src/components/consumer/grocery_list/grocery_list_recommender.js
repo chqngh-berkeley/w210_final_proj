@@ -10,7 +10,7 @@ import {api} from './../../../util/api';
 import { cyan500 } from 'material-ui/styles/colors';
 var Loader = require('react-loader');
 import {toastr} from 'react-redux-toastr'
-
+let logo = require('../../../images/logo.png')
 import {
   Table,
   TableBody,
@@ -45,23 +45,23 @@ const sliderStyles = {
     textAlign: 'left'
   },
   labelStyleOuter: {
-    width: '40px',
-    height: '40px',
+    width: '50px',
+    height: '50px',
     borderRadius: '50% 50% 50% 0',
     position: 'absolute',
-    background: cyan500,
+    background: 'rgb(50, 79, 225)',
     transform: 'rotate(-45deg)',
-    top: '-53px',
-    left: '-14px',
+    top: '-60px',
+    left: '-20px',
   },
   labelStyleInner: {
     transform: 'rotate(45deg)',
     color: 'white',
     textAlign: 'center',
     position: 'relative',
-    top: '10px',
+    top: '15px',
     right: '0px',
-    fontSize: '10px',
+    fontSize: '14px',
   },
 };
 const mapStateToProps = function(state){
@@ -90,9 +90,10 @@ const mapDispatchToProps =(dispatch) => {
           return {
             'section': item['SECTION'],
             'name' : item['ITEM_CATEGORY'],
-            'size': item['ITEM_TRUE_SIZE'],
+            'size': item['ITEM_SIZE'],
             'quantity' : item['ITEM_QTY_PRCH'],
-            'class' : item['ITEM_CLASS']
+            'class' : item['ITEM_CLASS'],
+            'avg' : item['FIRST_SIZE']
           }
         }
         api.getGroceryListRecommendations(username, threshold).then(function(res) {
@@ -130,7 +131,7 @@ class GroceryListRecommender extends React.Component {
     super(props)
     this.state = {
     loading: true,
-    wasteThreshold: 50,
+    wasteThreshold: 20,
     fixedHeader: true,
     fixedFooter: true,
     stripedRows: false,
@@ -188,7 +189,7 @@ class GroceryListRecommender extends React.Component {
   }
 
   renderSlider = () => {
-    return (<div style={{position: 'relative', textAlign : 'center'}}>
+    return (<div style={{position: 'relative', textAlign : 'left'}}>
       <div style={{width: '60%', display: 'inline-block', 'textAlign': 'left'}}>
           <Subheader style={sliderStyles.subheader}>
             {'Wastage Threshold'}
@@ -225,11 +226,54 @@ class GroceryListRecommender extends React.Component {
       return word.length > 0 ? word.replace(word[0], word[0].toUpperCase()) : word;
     }).join(' ');
   }
+  recommendation(row) {
+    // if(row['section'] == 'suggested') {
+    //   return <span></span>
+    // }
+    let avg = parseFloat(row['avg']);
+    let recommended = parseFloat(row['size']);
+    let percentDiff = 100. * ((avg - recommended) / avg);
+    percentDiff = Math.round(percentDiff * 100) / 100
+    if(avg > recommended) {
+      return (<TableRowColumn>
+        <span style={{color: 'firebrick', fontSize: '1.2em'}}>
+          <i className="fa fa-angle-double-down"></i>
+          <span style={{marginLeft: '5px'}}>
+            {percentDiff} % less {this.titleCase(row['name'])}
+          </span>
+        </span>
+      </TableRowColumn>)
+    } else {
+      return <TableRowColumn>
+        <span style={{color: 'green', fontSize: '1.2em'}}>
+          <i className="fa fa-angellist"></i>
+            <span style={{marginLeft: '5px'}}>
+              Doing great!
+            </span>
+        </span>
+      </TableRowColumn>
+    }
+  }
+  getStyle(row) {
+    console.log(row);
+    if(row['section'] == 'main') {
+      return {
+        backgroundColor: 'aliceblue'
+      }
+    } else {
+      return {
+        backgroundColor: '#FCFCE3'
+      }
+    }
+  }
   render() {
     if(this.props.recommendedList && this.props.recommendedList.length ==  0) {
       return (
         <div>
-          <h1> Grocery List Recommender </h1>
+          <h1>
+            <img style={{width: 25, height: 25, marginRight: 10}} src={logo} />
+            Grocery List Recommender
+          </h1>
             <h3 style= {{textAlign : 'center', 'margin': '50px auto'}}>
             Upload a receipt to get your recommendations!
           </h3>
@@ -238,9 +282,17 @@ class GroceryListRecommender extends React.Component {
     }
     return (
       <div>
-        <h1> Grocery List Recommender </h1>
+        <div style={{textAlign: 'center'}}>
+          <img style={{width: 50, height: 50}} src={logo} />
+        </div>
+
+        <h1>
+          Grocery List Recommender
+        </h1>
         <p>Click 'Update' to get a custom grocery list based on your past purchase patterns!
-Move the wastage threshold bar to set a target for the maximize amount of food you would like to waste. As you move the threshold lower, you'll save more money!</p>
+Move the wastage threshold bar to set a target for the maximize amount of food you would like to waste. As you move the threshold lower, you'll save more money!
+</p>
+<i>Our advice is calculated by comparing our recommended size to your average purchases over the past trips for that item.</i>
         {this.renderSlider()}
         <Loader loaded={!this.state.loading}>
           <Table
@@ -258,12 +310,15 @@ Move the wastage threshold bar to set a target for the maximize amount of food y
               enableSelectAll={this.state.enableSelectAll}
             >
 
-              <TableRow>
-                <TableHeaderColumn style={{color: 'black'}} tooltip="Section">Section</TableHeaderColumn>
-                <TableHeaderColumn style={{color: 'black'}} tooltip="item">Name</TableHeaderColumn>
-                <TableHeaderColumn style={{color: 'black'}} tooltip="Quantity">Quantity(oz)</TableHeaderColumn>
-                <TableHeaderColumn style={{color: 'black'}} tooltip="Size">Size</TableHeaderColumn>
-                <TableHeaderColumn style={{color: 'black'}} tooltip="Category">Category</TableHeaderColumn>
+              <TableRow style={{backgroundColor: '#324fe1'}}>
+                <TableHeaderColumn style={{color: 'white', fontSize: '1.2em'}} tooltip="Section">Section</TableHeaderColumn>
+                <TableHeaderColumn style={{color: 'white', fontSize: '1.2em'}} tooltip="item">Name</TableHeaderColumn>
+                <TableHeaderColumn style={{color: 'white', fontSize: '1.2em'}} tooltip="Quantity">Quantity</TableHeaderColumn>
+                <TableHeaderColumn style={{color: 'white', fontSize: '1.2em'}} tooltip="Size">Size(oz)</TableHeaderColumn>
+                <TableHeaderColumn style={{color: 'white', fontSize: '1.2em'}} tooltip="Category">Category</TableHeaderColumn>
+                <TableHeaderColumn style={{color: 'white', fontSize: '1.2em'}} tooltip="Our Advice based on your past grocery trips">
+                  Advice
+                </TableHeaderColumn>
               </TableRow>
             </TableHeader>
             <TableBody
@@ -273,18 +328,20 @@ Move the wastage threshold bar to set a target for the maximize amount of food y
               stripedRows={this.state.stripedRows}
             >
               {this.props.recommendedList && this.props.recommendedList.map( (row, index) => (
-                <TableRow key={index}>
-                  <TableRowColumn>{row.section =='main'? 'Recommended' : 'Suggested' }</TableRowColumn>
-                  <TableRowColumn>{this.titleCase(row.name)}</TableRowColumn>
-                  <TableRowColumn>
+                <TableRow key={index} style={this.getStyle(row)}>
+                  <TableRowColumn style={{fontSize: '1.15em'}}>{row.section =='main'? 'Recommended' : 'Suggested' }</TableRowColumn>
+                  <TableRowColumn style={{fontSize: '1.15em'}}>{this.titleCase(row.name)}</TableRowColumn>
+                  <TableRowColumn style={{fontSize: '1.15em'}}>
                     {row.quantity ? row.quantity : '-N/A-'}
                   </TableRowColumn>
-                  <TableRowColumn>
+                  <TableRowColumn style={{fontSize: '1.15em'}}>
                     {row.size ? row.size : '-N/A-'}
                   </TableRowColumn>
-                  <TableRowColumn>
+                  <TableRowColumn style={{fontSize: '1.15em'}}>
                     {this.titleCase(row.class)}
                   </TableRowColumn>
+
+                  {this.recommendation(row)}
 
                 </TableRow>
                 ))}

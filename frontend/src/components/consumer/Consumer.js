@@ -60,30 +60,29 @@ class Consumer extends React.Component {
     return (
     <Tabs value={this.state.val}
       onChange={this.onTabChange.bind(this)}>
-      <Tab label="Receipt Scanner" value="a">
+      <Tab label="Receipt Scanner" value="a" style={{fontSize: '1.2em'}}>
         <div style={{padding: '20px'}}>
           {this.state.val == 'a'
             && <ReceiptUploader onTabChange={this.onTabChange.bind(this)}/>}
         </div>
        </Tab>
-     <Tab label="Receipt History" value="b">
+     <Tab label="Receipt History" value="b" style={{fontSize: '1.2em'}}>
        <div style={{padding: '20px'}}>
          {this.state.val ==  'b' && <ReceiptHistory />}
        </div>
      </Tab>
-     <Tab label="Grocery Recommender" value="c">
+     <Tab label="Grocery Saver" value="c" style={{fontSize: '1.2em'}}>
        <div style={{padding: '20px'}}>
          {this.state.val == 'c' && <GroceryListRecommender />}
        </div>
      </Tab>
 
-
-     <Tab label="Analytics" value="d">
+     <Tab label="Analytics" value="d" style={{fontSize: '1.2em'}}>
         <div style={{padding: '20px'}}>
          {this.state.val == 'd' && <Analytics />}
         </div>
       </Tab>
-     <Tab label="Profile" value="e">
+     <Tab label="Profile" value="e" style={{fontSize: '1.2em'}}>
         <div style={{padding: '20px'}}>
          {this.state.val == 'e' && <Profile />}
         </div>

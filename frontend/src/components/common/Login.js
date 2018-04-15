@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom'
 import { Redirect } from 'react-router'
 import {toastr} from 'react-redux-toastr'
 import { withRouter } from 'react-router-dom'
+let logo = require('../../images/logo.png')
 const st = {
   backgroundColor : '#FAFAFA',
   // color: 'black',
@@ -81,6 +82,7 @@ class Login extends React.Component {
     }
     return (
       <div>
+      <img src={logo} />
       <h1>
         Login
       </h1>

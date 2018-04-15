@@ -143,12 +143,12 @@ class ReceiptHistory extends React.Component {
           enableSelectAll={false}
           style={{color: 'gray'}}
           >
-          <TableRow>
-            <TableHeaderColumn style={{color: 'black'}} tooltip="item">Receipt ID</TableHeaderColumn>
-            <TableHeaderColumn style={{color: 'black'}} tooltip="timestamp">Date</TableHeaderColumn>
+          <TableRow style={{backgroundColor: '#324fe1'}}>
+            <TableHeaderColumn style={{color: 'white', fontSize: '1.2em'}} tooltip="item">Receipt ID</TableHeaderColumn>
+            <TableHeaderColumn style={{color: 'white', fontSize: '1.2em'}} tooltip="timestamp">Date</TableHeaderColumn>
 
-            <TableHeaderColumn style={{color: 'black'}} tooltip="action">Edit</TableHeaderColumn>
-            <TableHeaderColumn style={{color: 'black'}} tooltip="action"></TableHeaderColumn>
+            <TableHeaderColumn style={{color: 'white', fontSize: '1.2em'}} tooltip="action">Edit</TableHeaderColumn>
+            <TableHeaderColumn style={{color: 'white', fontSize: '1.2em'}} tooltip="action"></TableHeaderColumn>
           </TableRow>
         </TableHeader>
         <TableBody
@@ -157,18 +157,18 @@ class ReceiptHistory extends React.Component {
           stripedRows={this.state.stripedRows}
         >
           {this.props.receipts && this.props.receipts.sort(this.sortDate).map( (row, index) => (
-            <TableRow key={index}>
-              <TableRowColumn>{row.receipt_id ? parseInt(row.receipt_id) : row.receipt_id}</TableRowColumn>
-              <TableRowColumn>{this.convertDate(row.upload_date)}</TableRowColumn>
+            <TableRow key={index} style={{  backgroundColor: '#FCFCE3' }}>
+              <TableRowColumn style={{fontSize: '1.15em'}}>{row.receipt_id ? parseInt(row.receipt_id) : row.receipt_id}</TableRowColumn>
+              <TableRowColumn style={{fontSize: '1.15em'}}>{this.convertDate(row.upload_date)}</TableRowColumn>
 
-              <TableRowColumn>
+              <TableRowColumn style={{fontSize: '1.15em'}}>
                 <Link
                   to = '/receiptInfo'
                   onClick = {this.handleOnReceiptEdit.bind(this, null, row)}>
                 Edit
               </Link>
               </TableRowColumn>
-              <TableRowColumn>
+              <TableRowColumn style={{fontSize: '1.15em'}}>
                 <FlatButton
                   secondary={true}
                   onClick = {this.handleOnReceiptRemove.bind(this, null, row)}>

@@ -146,6 +146,23 @@ class ReceiptInfo extends React.Component {
         return new Date(d).toLocaleDateString("en-US",options);
       }
   }
+  getDollarsWasted() {
+    if(!this.props.currentReceipt.receipt) {
+      return 0
+    }
+    // let total = 0;
+    // for(var i =0; i< this.props.currentReceipt.receipt.length; i ++) {
+    //   let item = this.props.currentReceipt.receipt[i];
+    //   total += parseFloat(item['price'])
+    // }
+    let wastedAmount = 0;
+    for(var i =0; i< this.props.currentReceipt.wastage.length; i ++) {
+      let itemPrice = this.props.currentReceipt.receipt[i]['price'];
+      let itemWasted = this.props.currentReceipt.wastage[i]['wastage'];
+      wastedAmount += (parseFloat(itemPrice) * parseFloat(itemWasted) / 100.)
+    }
+    return Math.round(wastedAmount * 100) / 100
+  }
   getTotalPrice(receipt) {
     if(!receipt) {
       return 0
@@ -182,6 +199,10 @@ class ReceiptInfo extends React.Component {
         <label style={spacer}>Total Price($):</label>
         <span>{this.getTotalPrice(this.props.currentReceipt.receipt)}</span>
       </div>
+      <div style={receipt_stats_st}>
+        <label style={{marginRight: '5px','color': 'firebrick' ,'fontWeight': 'bold'}}>Total Wasted($):</label>
+        <span style={{'color': 'firebrick'}}><b>{this.getDollarsWasted()}</b></span>
+      </div>
     </div>)
   }
   titleCase(str) {
@@ -201,16 +222,18 @@ class ReceiptInfo extends React.Component {
     }
     let strSt = {
       whiteSpace : 'normal',
-      overflow: 'auto'
+      overflow: 'auto',
+      fontSize: '1.15em'
     }
     let unitSt = {
+      fontSize: '1.15em'
     }
     let items = []
     for(var i =0; i< this.props.currentReceipt.wastage.length; i ++) {
       let receipt = this.props.currentReceipt.receipt[i];
       let wastage = this.props.currentReceipt.wastage[i];
       let el = (
-        <TableRow key={i}>
+        <TableRow key={i} style={{  backgroundColor: '#FCFCE3' }}>
           <TableRowColumn style={strSt}>{this.titleCase(receipt['name'])}</TableRowColumn>
           <TableRowColumn style={unitSt}>{receipt['quantity']}</TableRowColumn>
           <TableRowColumn style={unitSt}>{receipt['unit']}</TableRowColumn>
@@ -247,18 +270,13 @@ class ReceiptInfo extends React.Component {
             adjustForCheckbox={false}
             enableSelectAll={false}
             >
-            <TableRow>
-              <TableHeaderColumn colSpan="6" style={{textAlign: 'left'}}>
-                Receipt Info
-              </TableHeaderColumn>
-            </TableRow>
-            <TableRow>
-            <TableHeaderColumn tooltip="item">Food Name</TableHeaderColumn>
-            <TableHeaderColumn tooltip="quantity">Quantity</TableHeaderColumn>
-            <TableHeaderColumn tooltip="unit">Unit</TableHeaderColumn>
-            <TableHeaderColumn tooltip="price">Price($)</TableHeaderColumn>
-            <TableHeaderColumn tooltip="category">Category</TableHeaderColumn>
-            <TableHeaderColumn tooltip="wastage_info">Wastage Amount(%)</TableHeaderColumn>
+            <TableRow style={{backgroundColor: '#324fe1'}}>
+            <TableHeaderColumn  style={{color: 'white', fontSize: '1.2em'}} tooltip="item">Food Name</TableHeaderColumn>
+            <TableHeaderColumn style={{color: 'white', fontSize: '1.2em'}} tooltip="quantity">Quantity</TableHeaderColumn>
+            <TableHeaderColumn  style={{color: 'white', fontSize: '1.2em'}} tooltip="unit">Unit</TableHeaderColumn>
+            <TableHeaderColumn  style={{color: 'white', fontSize: '1.2em'}} tooltip="price">Price($)</TableHeaderColumn>
+            <TableHeaderColumn style={{color: 'white', fontSize: '1.2em'}} tooltip="category">Category</TableHeaderColumn>
+            <TableHeaderColumn style={{color: 'white', fontSize: '1.2em'}} tooltip="wastage_info">Wastage Amount(%)</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody

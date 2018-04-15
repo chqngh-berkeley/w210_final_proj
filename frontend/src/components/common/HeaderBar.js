@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom'
 import {connect} from 'react-redux';
 import { push } from 'react-router-redux';
 import {logoutUser} from '../../actions/loginAction'
-import {BASE_HOST} from '../../constants/constants'
+import {BASE_HOST} from '../../constants/constants';
+let logo = require('../../images/logo.png')
 const st = {
   backgroundColor : 'white',
   color: 'black',
@@ -45,8 +46,9 @@ class HeaderBar extends React.Component {
         </span>)
     } else {
       //
+      // <i className="fa fa-binoculars"></i>
       el = (<span className="w3-bar-item w3-button w3-hide-small">
-        <i className="fa fa-binoculars"></i>
+        <img style={{width: 19, height: 19}} src={logo} />
         <Link style={linkStyle} to='/login'>
           Grocery Saver
         </Link>
