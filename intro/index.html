@@ -78,7 +78,7 @@ body, html {
     <a href="#introduction" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-circle"></i> Introduction</a>
     <a href="#data" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-database"></i> The Data</a>
     <a href="#about" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-user"></i> About Us</a>
-    <a href="http://50.97.219.173:8585/" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-area-chart"></i> Infomatics</a>
+    <a href="http://people.ischool.berkeley.edu/~chqngh/w210/informational-analytics/" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-area-chart"></i> Infomatics</a>
     <a href="http://50.97.219.173/login" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-binoculars"></i> Grocery Saver</a>
     <!-- <a href="http://0.0.0.0:8585/" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-area-chart"></i> Infomatics</a>
     <a href="http://0.0.0.0:8000/login" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-binoculars"></i> Grocery Saver</a> -->
@@ -87,8 +87,11 @@ body, html {
 
 <!-- First Parallax Image with Project Title -->
 <div class="bgimg-1 w3-display-container w3-opacity-min" id="home">
-  <div class="w3-display-middle" style="white-space:nowrap;">
-    <span class="w3-center w3-padding-large w3-black w3-xxlarge w3-wide w3-animate-opacity">Predicting Food Purchase and Consumption Patterns to Prevent Waste <span class="w3-hide-small"></span>
+  <div class="w3-display-middle">
+    <p style="background-color:black!important" class="w3-center w3-padding-large w3-black w3-xxlarge w3-wide w3-animate-opacity">
+      Predicting Food Purchase and Consumption Patterns to Prevent Waste
+      <span class="w3-hide-small"></span>
+    </p>
   </div>
 </div>
 
@@ -104,21 +107,21 @@ body, html {
   <div style="margin-left:90px; margin-right:90px; margin-top:30px">
     <p class="w3-center w3-large"><em><font face = 'times' size = '5px' color="#F1C40F">The Problem</font></em></p>
     <p class="w3-large" style="text-align:justify">
-      Studies estimate that 40% of food is thrown away each year, the majority of which is thrown away by consumers. Researchers estimate that American waste $165 billion worth of food each year. However, the environmental impact is even more costly. Almost 30% of our water supply is used and large amounts of fossil fuels are burned in growing this food. Additionally, food in landfills releases harmful methane. In fact, according the UN Food and Agriculture Organization, food wastage ranks as the third top emitter after the U.S. and China.
+      Studies estimate that 52% of food produced in the United States is thrown away each year; almost 30% of that discarded food is wasted by consumers. This translates into $30 billion dollars a year that consumers are effectively throwing into the trash.
       <br />
-      Further complicating matters is the difficulty in measuring food loss. It's hard enough to estimate aggregated food loss, but it's next to impossible to study who wastes food and why. There is no centralized system that allows for the easy collection of this data, which could be critical in designing ways to fight food waste.
+      Further complicating matters is the difficulty in measuring food loss. It's hard enough to estimate aggregated food loss, but it's next to impossible to study who wastes food and why. There is no centralized system that allows for the easy collection of this data, which could be critical in both understanding why people throw away food and designing ways to fight food waste.
     </p>
     <p class="w3-center w3-large"><em><font face = 'times' size = '5px' color="#F1C40F">Our Product</font></em></p>
     <p class="w3-large">
-      We have created GrocerySaver, a consumer oriented application with two key purposes. The first is to offer consumers an easy to use, tailored grocery list designed to minimize food loss. This directly helps people better control their own food wastage. The second purpose is that this system allows for the easy collection of waste data.
-      <br/>
-      Our product allows consumers to upload grocery receipts and note how much of each item they wasted. The next time the consumer is ready to shop, we run a regression to predict how much of each item the user should buy to achieve their desired waste target. Finally, we provide several visual dashboards so that users can see for themselves what foods they are wasting the most and how much money they are tossing into the trash.
+      We have created GrocerySaver, a consumer oriented application with two key purposes. The first is to offer consumers an easy to use, tailored grocery list designed to minimize food loss. This directly helps people better control their food wastage. The second purpose is that this system allows for the easy collection of waste data that does not otherwise exist.
+      <br />
+      Our product allows consumers to upload grocery receipts and note how much of each item they wasted. The next time the consumer is ready to shop, we run an algorithm to create a customized grocery list based on past purchase patterns, and then use regression to predict how much of each item the user should buy to achieve their desired waste target. Finally, we provide several visual dashboards so that users can see for themselves what foods they are wasting the most and how much money they are tossing into the trash. Our product highlights money savings because both a John Hopkins study and our own surveys corroborate that saving money is one of the primary reasons that people try to avoid wasting food. We use this tactic to incentivize users to enter their food wastage.
     </p>
     <p class="w3-center w3-large"><em><font face = 'times' size = '5px' color="#F1C40F">Potential Impact</font></em></p>
     <p class="w3-large" style="text-align:justify">
-      By offering consumers an easy method to save both time and money when grocery shopping, we empower consumers to save food. A NRDC report noted that trouble making grocery lists is one issue that leads to food wastage. While there are other list making systems, they often require tedious manual entry. Using optimal character recognition to scan receipts, we minimize data entry. Our algorithm then brings up a suggested grocery list, whereas many other list-making software require the user to populate the list themselves.
-      <br/>
-      The second impact is that this system allows for the collection of data that was impossible before. Governments around the world spend a lot of money trying to prevent food waste, and having in-depth data regarding the patterns that surround waste could provide critical insight. Users input their food waste data as this helps the system save them money by making more accurate predictions. This type of data collection is an opt-in system.
+      By offering consumers an easy method to save both time and money when grocery shopping, we empower consumers to save food, time and money. A NRDC report noted that trouble making grocery lists is one issue that leads to food wastage. While there are other list making systems, they often require tedious manual entry. Using optimal character recognition to scan receipts, we minimize data entry. Our algorithm then brings up a suggested grocery list, whereas many other list-making software require the user to populate the list themselves.  Furthermore, we provide users critical feedback that allows them to better understand what they are wasting.
+      <br />
+      The second impact is that this system allows for the collection of data that was impossible before. Governments around the world spend a lot of money trying to prevent food waste, and having in-depth data regarding the patterns that surround waste could provide critical insight. This type of data collection is an opt-in system.
     </p>
   </div>
 </div>
@@ -135,7 +138,7 @@ body, html {
   <div style="margin-left:80px; margin-right:80px;">
     <p class="w3-center w3-large"><em><font face = 'times' size = '5px' color="#F1C40F">The Data</font></em></p>
     <p class="w3-large" style="text-align:justify">
-      Our regression was built on data from DunnHumby, which contained grocery purchase data for hundreds of families over approximately 2 years. Since food loss data does not exist, we created simulated data using a Mechnical Turk survey. We asked three thousand users to complete their food wastage for their last grocery trip; we then matched the variance in the simulated loss for the DunnHumby data to the survey. This was simulation was achieved using variables based on demographic data, personal shopping patterns, global shopping patterns, lagged variables, and random noise.
+      Our regression was built on data from DunnHumby: The Complete Journey, which contained grocery purchase data for 2,500 American families over approximately 2 years. Since individual food loss data does not exist, we created simulated data using a Mechanical Turk survey. We asked three thousand users to complete their food wastage for their last grocery trip; we then matched the variance in the simulated loss for the DunnHumby data to the survey and the mean to the studies on aggregated food waste. We used variables based on demographic data, personal shopping patterns, global shopping patterns, lagged variables, and random noise in order to accomplish this.
     </p>
   </div>
 </div>
@@ -150,7 +153,15 @@ body, html {
   <div style="margin-left:80px; margin-right:80px;">
     <p class="w3-center w3-large"><em><font face = 'times' size = '5px' color="#F1C40F">The Grocery Saver Demo Site</font></em></p>
     <p class="w3-large" style="text-align:justify">
-      Please click on the Grocery Saver button on the top toolbar to see our demo. The system works overnight to ingest and compute new data, so the demo works best if you use an already established account (User ID: 184, Password: na). Here you can upload a set of new receipts (our system is designed to use Walmart receipts as it utilizes the Walmart API. You can upload new Walmart receipts, but due to the fact that the DunnHumby data and the Walmart receipts do not use the same product id, new receipts will have trouble lining up with the database), view past receipts and change past food waste levels, create a new grocery list with a customizable food waste tolerance, and visually explore purchase and wastage patterns.
+      Please click on the Grocery Saver button on the top toolbar to see our demo product. The system is designed to work best over time, so you need to use an already established account to have a complete experience (User ID: 184, Password: na). Here you can upload a set of new receipts (our system is designed to use Walmart receipts as it utilizes the Walmart API. You can upload new Walmart receipts, but due to the fact that the DunnHumby data and the Walmart receipts do not use the same product id, new receipts will have trouble lining up with the database), view past receipts and change past food waste levels, create a new grocery list with a customizable food waste tolerance, and visually explore purchase and wastage patterns.
+      <hr />
+      You can also watch the video below to see a walkthrough of Grocery Saver.
+      <div style='text-align: center'>
+        <video width="768" height="432" controls>
+          <source src="video/Food_Waste_Demo_Final.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+      </div>
     </p>
   </div>
 </div>

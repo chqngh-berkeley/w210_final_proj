@@ -335,7 +335,7 @@ Move the wastage threshold bar to set a target for the maximize amount of food y
                     {row.quantity ? row.quantity : '-N/A-'}
                   </TableRowColumn>
                   <TableRowColumn style={{fontSize: '1.15em'}}>
-                    {row.size ? row.size : '-N/A-'}
+                    {row.size ? Math.round(parseFloat(row.size)) : '-N/A-'}
                   </TableRowColumn>
                   <TableRowColumn style={{fontSize: '1.15em'}}>
                     {this.titleCase(row.class)}
